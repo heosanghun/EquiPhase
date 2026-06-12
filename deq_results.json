@@ -1,0 +1,190 @@
+{
+  "run_metadata": {
+    "run_id": "run_gate3_deq_complete_20260612",
+    "config_hash": "c5b6b5f1c5360f879b84d970d8d85ab5",
+    "esm_backbone": "facebook/esm2_t33_650M_UR50D",
+    "stability_contingency_engaged": true,
+    "damping_factor_eta": 0.5,
+    "matched_unroll_depth_K": 40
+  },
+  "model_results": {
+    "DEQ (candidate)": {
+      "AUPRC_mean": 0.6542147621607953,
+      "AUPRC_median": 0.6569788765620568,
+      "AUPRC_ci": [
+        0.5645533543428508,
+        0.7227955063860587
+      ],
+      "AUROC_mean": 0.47131922277729454,
+      "AUROC_median": 0.4713977729122836,
+      "AUROC_ci": [
+        0.3872004997404931,
+        0.5462515415623683
+      ]
+    },
+    "Ablation A: K=8": {
+      "AUPRC_mean": 0.7718668366226181,
+      "AUPRC_median": 0.7700798947474538,
+      "AUPRC_ci": [
+        0.689427222761164,
+        0.8546568499940812
+      ],
+      "AUROC_mean": 0.6245158833768899,
+      "AUROC_median": 0.6154054291175581,
+      "AUROC_ci": [
+        0.5303651413376012,
+        0.7280227169710247
+      ]
+    },
+    "Ablation A: K=16": {
+      "AUPRC_mean": 0.7636009431132624,
+      "AUPRC_median": 0.7619603474894558,
+      "AUPRC_ci": [
+        0.6827801335001056,
+        0.8443643319963846
+      ],
+      "AUROC_mean": 0.6205378346172625,
+      "AUROC_median": 0.6145279116649316,
+      "AUROC_ci": [
+        0.5299828552744608,
+        0.7203292769866567
+      ]
+    },
+    "Ablation A: K=matched": {
+      "AUPRC_mean": 0.769473131473102,
+      "AUPRC_median": 0.7675484777648611,
+      "AUPRC_ci": [
+        0.684822227211979,
+        0.8525299772348928
+      ],
+      "AUROC_mean": 0.6233788139227241,
+      "AUROC_median": 0.6151126168496862,
+      "AUROC_ci": [
+        0.533591261787654,
+        0.7246911970496411
+      ]
+    },
+    "Ablation B: no condition coupling": {
+      "AUPRC_mean": 0.6414868385325212,
+      "AUPRC_median": 0.6463182401819545,
+      "AUPRC_ci": [
+        0.5586013769739532,
+        0.7006184732022549
+      ],
+      "AUROC_mean": 0.4653200133877384,
+      "AUROC_median": 0.4689160862560596,
+      "AUROC_ci": [
+        0.3809383437984126,
+        0.5269359049571859
+      ]
+    },
+    "ESM-2 embedding + MLP": {
+      "AUPRC_mean": 0.7312045133092453,
+      "AUPRC_median": 0.7248174340161282,
+      "AUPRC_ci": [
+        0.6631356394350016,
+        0.8303788843712717
+      ],
+      "AUROC_mean": 0.5844952587267997,
+      "AUROC_median": 0.5758565388541546,
+      "AUROC_ci": [
+        0.5118160600195589,
+        0.6899195930077417
+      ]
+    },
+    "Condition-aware MLP": {
+      "AUPRC_mean": 0.7337485692401972,
+      "AUPRC_median": 0.729454113621985,
+      "AUPRC_ci": [
+        0.6626433742192864,
+        0.8295519369399869
+      ],
+      "AUROC_mean": 0.5923632575877028,
+      "AUROC_median": 0.5846775313564763,
+      "AUROC_ci": [
+        0.5162715326878886,
+        0.696014625725851
+      ]
+    },
+    "DiG-inspired energy-based baseline": {
+      "AUPRC_mean": 0.7219850642823666,
+      "AUPRC_median": 0.716096045936665,
+      "AUPRC_ci": [
+        0.6528126522757973,
+        0.8167930187710675
+      ],
+      "AUROC_mean": 0.578405496354279,
+      "AUROC_median": 0.5703072552767221,
+      "AUROC_ci": [
+        0.5058589930526807,
+        0.6757709506860989
+      ]
+    }
+  },
+  "compute_and_stability_profile": {
+    "DEQ (candidate)": {
+      "parameter_count": 198017,
+      "peak_vram_mb": 62.857421875,
+      "wall_clock_sec": 213.8092031955719,
+      "final_epoch_residual": 0.014444199714343997,
+      "final_epoch_lipschitz_mean": 4.062615966796875,
+      "final_epoch_lipschitz_max": 6.426682376861573
+    },
+    "Ablation A: K=8": {
+      "parameter_count": 198017,
+      "peak_vram_mb": 64.6865234375,
+      "wall_clock_sec": 24.836085653305055,
+      "final_epoch_residual": 0.6230250152945519,
+      "final_epoch_lipschitz_mean": 3.0157516479492186,
+      "final_epoch_lipschitz_max": 9.39811840057373
+    },
+    "Ablation A: K=16": {
+      "parameter_count": 198017,
+      "peak_vram_mb": 64.9404296875,
+      "wall_clock_sec": 44.293615388870236,
+      "final_epoch_residual": 0.4080716839432716,
+      "final_epoch_lipschitz_mean": 2.788848543167114,
+      "final_epoch_lipschitz_max": 6.41382417678833
+    },
+    "Ablation A: K=matched": {
+      "parameter_count": 198017,
+      "peak_vram_mb": 64.8896484375,
+      "wall_clock_sec": 104.25485439300537,
+      "final_epoch_residual": 0.2086769196391106,
+      "final_epoch_lipschitz_mean": 2.377601385116577,
+      "final_epoch_lipschitz_max": 4.6761869430542
+    },
+    "Ablation B: no condition coupling": {
+      "parameter_count": 198017,
+      "peak_vram_mb": 62.0390625,
+      "wall_clock_sec": 213.09523606300354,
+      "final_epoch_residual": 0.07158166074485052,
+      "final_epoch_lipschitz_mean": 4.97050895690918,
+      "final_epoch_lipschitz_max": 7.491762351989746
+    },
+    "ESM-2 embedding + MLP": {
+      "parameter_count": 172289,
+      "peak_vram_mb": 21.48095703125,
+      "wall_clock_sec": 2.9896260261535645,
+      "final_epoch_residual": 0.0,
+      "final_epoch_lipschitz_mean": 0.0,
+      "final_epoch_lipschitz_max": 0.0
+    },
+    "Condition-aware MLP": {
+      "parameter_count": 172801,
+      "peak_vram_mb": 21.80419921875,
+      "wall_clock_sec": 3.0101675033569335,
+      "final_epoch_residual": 0.0,
+      "final_epoch_lipschitz_mean": 0.0,
+      "final_epoch_lipschitz_max": 0.0
+    },
+    "DiG-inspired energy-based baseline": {
+      "parameter_count": 172866,
+      "peak_vram_mb": 21.80419921875,
+      "wall_clock_sec": 3.0020238399505614,
+      "final_epoch_residual": 0.0,
+      "final_epoch_lipschitz_mean": 0.0,
+      "final_epoch_lipschitz_max": 0.0
+    }
+  }
+}

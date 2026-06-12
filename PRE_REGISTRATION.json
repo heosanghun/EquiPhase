@@ -1,0 +1,72 @@
+{
+  "project": "EquiPhase Track-1",
+  "run_id": "run_gate1_freeze_20260612",
+  "config_hash": "c5b6b5f1c5360f879b84d970d8d85ab5",
+  "timestamp": "2026-06-12T12:14:30+09:00",
+  "task_definitions": {
+    "primary_task": {
+      "name": "Condition-Dependent Binary LLPS Classification",
+      "description": "Predict whether a protein sequence undergoes liquid-liquid phase separation (LLPS) under specific environmental conditions (concentration, salt, pH, temperature). This avoids the noise in experimental solute concentration as a proxy for C_sat.",
+      "inputs": {
+        "sequence": "Amino acid sequence",
+        "solute_concentration": "Experimental solute concentration (parsed to uM)",
+        "salt": "Salt concentration (parsed to mM)",
+        "pH": "pH value (extracted from buffer)",
+        "temperature": "Temperature (parsed to Celsius)"
+      },
+      "targets": {
+        "llps_binary": "Binary LLPS status (1: underwent LLPS, 0: did not undergo LLPS)"
+      }
+    },
+    "secondary_task": {
+      "name": "Condition-Dependent Saturation Boundary Interpolation",
+      "description": "Predict the critical saturation concentration (C_sat) threshold by interpolating the binary LLPS decision boundary where P(LLPS) = 0.5. C_sat regression is demoted to an illustrative output excluded from the benchmark verdict."
+    }
+  },
+  "metrics": {
+    "primary_decisive_metric": "AUPRC",
+    "secondary_illustrative_metrics": [
+      "AUROC"
+    ],
+    "implementation_source": "equiphase/eval/metrics.py"
+  },
+  "evaluation_protocol": {
+    "random_seeds": [
+      42,
+      100,
+      2026,
+      777,
+      999
+    ],
+    "bootstrap_ci": {
+      "iterations": 1000,
+      "confidence_level": 0.95,
+      "method": "Non-parametric cluster block bootstrap resampling of pairwise model differences (resampling families/clusters, not rows), ensuring the evaluation harness is identical to the power simulation."
+    }
+  },
+  "win_condition_3_part": {
+    "part_1_extrapolation_margin": {
+      "metric": "AUPRC_difference",
+      "threshold": 0.05,
+      "requirement": "The 95% bootstrap confidence interval of the pairwise difference delta (AUPRC_DEQ - AUPRC_best_baseline) on the out-of-condition extrapolation test set (using cluster block-bootstrap resampling sequence families) must have a lower bound strictly greater than 0, with a median difference >= 0.05, consistently across all 5 seeds. This pairwise difference CI resolves the statistical power issue of overlapping independent CIs on small test sets.",
+      "power_audits": {
+        "minimum_detectable_effect_80_power": "≈ 0.06–0.07 AUPRC",
+        "power_at_threshold_0_05": "~49%",
+        "statement": "A null result cannot distinguish 'no effect' from 'true effect < ~0.06'.",
+        "variance_assumption": "σ_family = 0.10 is provisional and will be re-checked against the empirical per-family variance once baselines exist."
+      }
+    },
+    "part_2_indistribution_performance": {
+      "requirement": "DEQ must match or beat the best baseline in-distribution (AUPRC difference 95% CI lower bound >= 0)."
+    },
+    "part_3_memory_efficiency": {
+      "requirement": "DEQ's O(1) memory footprint (constant peak VRAM usage during training and inference relative to effective depth) must be quantified and confirmed on a single NVIDIA RTX 4090 GPU."
+    }
+  },
+  "null_result_policy": {
+    "policy": "If any part of the 3-part win condition is not satisfied, the null result will be reported honestly. No post-hoc hyperparameter tuning, model retuning against the locked-test, or modification of the frozen data splits is permitted."
+  },
+  "known_limitations_and_confounders": {
+    "salt_reentrance": "Many LLPS proteins (e.g. FUS) exhibit non-monotonic (reentrant) phase behavior, separating at both low and high salt but not intermediate. Extrapolating from low-salt to high-salt might violate this physics, which we note as a physical confounder for the extrapolation gap."
+  }
+}

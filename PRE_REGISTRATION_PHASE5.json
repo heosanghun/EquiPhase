@@ -1,0 +1,55 @@
+{
+  "project": "EquiPhase Track-1 Phase 5",
+  "run_id": "run_phase5_h2_20260612",
+  "config_hash": "8f0c2e64efdb80387b99cbe7cf31a89f",
+  "timestamp": "2026-06-12T17:21:40+09:00",
+  "hypothesis": {
+    "name": "H2: Feature-driven Generalization under Low-Salt Family Extrapolation",
+    "description": "Improving feature representations with per-residue embeddings, attention pooling, and explicit biophysical descriptors, combined with monotonic constraints on solute concentration to handle label noise, will enable models (specifically XGBoost and improved MLP) to generalize significantly above the no-skill baseline on unseen sequence families under low-salt conditions."
+  },
+  "splits": {
+    "train_split": {
+      "file": "train_phase5.tsv",
+      "records": 2340,
+      "families": 122,
+      "positive_rate": 0.685
+    },
+    "val_split": {
+      "file": "val_phase5.tsv",
+      "records": 621,
+      "families": 26,
+      "positive_rate": 0.681
+    },
+    "heldout_test_split": {
+      "file": "test_phase5.tsv",
+      "records": 290,
+      "families": 27,
+      "positive_rate": 0.645
+    }
+  },
+  "metrics": {
+    "primary_decisive_metric": "AUPRC",
+    "secondary_illustrative_metrics": [
+      "AUROC"
+    ],
+    "no_skill_baseline_val": 0.6811,
+    "no_skill_baseline_test": 0.6448
+  },
+  "win_condition": {
+    "description": "A model satisfies H2 if its validation and locked-test AUPRC values are statistically above the no-skill baseline, meaning the lower bound of the 95% cluster block-bootstrap confidence interval of the model's AUPRC is strictly greater than the no-skill baseline (positive rate) on the respective split, consistently across 5 seeds."
+  },
+  "evaluation_protocol": {
+    "random_seeds": [
+      42,
+      100,
+      2026,
+      777,
+      999
+    ],
+    "bootstrap": {
+      "iterations": 1000,
+      "confidence_level": 0.95,
+      "method": "Cluster block bootstrap resampling of sequence families"
+    }
+  }
+}

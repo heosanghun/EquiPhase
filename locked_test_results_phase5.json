@@ -1,0 +1,41 @@
+{
+  "run_metadata": {
+    "run_id": "run_phase5_h2_test_20260612",
+    "config_hash": "8f0c2e64efdb80387b99cbe7cf31a89f"
+  },
+  "locked_test_no_skill_baseline": 0.6448275862068965,
+  "models": {
+    "AttentionMLP": {
+      "AUPRC_mean": 0.7688179900915878,
+      "AUPRC_median": 0.7697347731363553,
+      "AUPRC_ci": [
+        0.6264355376825879,
+        0.882539471570791
+      ],
+      "AUROC_mean": 0.6701452798169273,
+      "AUROC_median": 0.6671229612152811,
+      "AUROC_ci": [
+        0.5412006730928524,
+        0.8016197810059751
+      ]
+    },
+    "Tab-Monotone XGBoost": {
+      "AUPRC_mean": 0.8240022285694779,
+      "AUPRC_median": 0.8312570436502107,
+      "AUPRC_ci": [
+        0.7023781225436527,
+        0.9190168572517526
+      ],
+      "AUROC_mean": 0.7236550193536518,
+      "AUROC_median": 0.7233634784887804,
+      "AUROC_ci": [
+        0.6251022896608509,
+        0.8271245364995364
+      ]
+    }
+  },
+  "win_status": {
+    "AttentionMLP_win": false,
+    "Tab-Monotone XGBoost_win": true
+  }
+}

@@ -1,0 +1,22 @@
+# Phase 5 Task List: H2 Study
+
+- [x] **1. Pre-Registration & Split Design**
+  - [x] Re-derive family-disjoint splits from the low-salt pool (Train / Val / Held-Out Test)
+  - [x] Write `PRE_REGISTRATION_PHASE5.json` with hypotheses, metrics, and win conditions
+- [x] **2. Feature Extraction Pipeline**
+  - [x] Implement biophysical feature extractor (`equiphase/data/biophysical.py`)
+  - [x] Implement residue-level ESM-2 embedding extraction and attention-pooling model
+  - [x] Compute and cache features for Train, Val, and Held-Out splits
+- [x] **3. Modeling & Training**
+  - [x] Train XGBoost/LightGBM with concentration monotonic constraints on the new splits
+  - [x] Train improved attention-pooled MLP on the new splits
+- [x] **4. Evaluation & Verification**
+  - [x] Evaluate models on the validation set using 5 seeds and cluster block-bootstrap CIs
+  - [x] Verify if the validation AUPRC clears the no-skill baseline (0.6812)
+- [x] **5. Locked Test Evaluation & Reporting**
+  - [x] Evaluate models on the locked test set `test_phase5.tsv`
+  - [x] Run cluster block bootstrap CI on the locked test set
+  - [x] Generate `locked_test_results_phase5.json` and update `final_report.md` and `DEVIATIONS.md`
+- [x] **6. GitHub Upload**
+  - [x] Initialize git repository and commit code, data, reports, and results
+  - [x] Push all codebase files to the user's GitHub repository: https://github.com/heosanghun/EquiPhase

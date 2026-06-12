@@ -1,0 +1,90 @@
+{
+  "run_metadata": {
+    "run_id": "run_gate1_freeze_20260612",
+    "config_hash": "c5b6b5f1c5360f879b84d970d8d85ab5",
+    "esm_backbone": "facebook/esm2_t33_650M_UR50D"
+  },
+  "baselines": {
+    "ESM-2 embedding + MLP": {
+      "AUPRC_mean": 0.7312045133092453,
+      "AUPRC_median": 0.7248174340161282,
+      "AUPRC_ci": [
+        0.6631356394350016,
+        0.8303788843712717
+      ],
+      "AUROC_mean": 0.5844952587267997,
+      "AUROC_median": 0.5758565388541546,
+      "AUROC_ci": [
+        0.5118160600195589,
+        0.6899195930077417
+      ]
+    },
+    "Condition-aware MLP": {
+      "AUPRC_mean": 0.7337485692401972,
+      "AUPRC_median": 0.729454113621985,
+      "AUPRC_ci": [
+        0.6626433742192864,
+        0.8295519369399869
+      ],
+      "AUROC_mean": 0.5923632575877028,
+      "AUROC_median": 0.5846775313564763,
+      "AUROC_ci": [
+        0.5162715326878886,
+        0.696014625725851
+      ]
+    },
+    "DiG-inspired energy-based baseline": {
+      "AUPRC_mean": 0.7219850642823666,
+      "AUPRC_median": 0.716096045936665,
+      "AUPRC_ci": [
+        0.6528126522757973,
+        0.8167930187710675
+      ],
+      "AUROC_mean": 0.578405496354279,
+      "AUROC_median": 0.5703072552767221,
+      "AUROC_ci": [
+        0.5058589930526807,
+        0.6757709506860989
+      ]
+    },
+    "active-learning baseline (inspired by condensate active-ML)": {
+      "AUPRC_mean": 0.7137651686743021,
+      "AUPRC_median": 0.7132517150927773,
+      "AUPRC_ci": [
+        0.6507454490628433,
+        0.7768940562254926
+      ],
+      "AUROC_mean": 0.5645819365048362,
+      "AUROC_median": 0.5632653952034256,
+      "AUROC_ci": [
+        0.5121890659968864,
+        0.6245638079200398
+      ]
+    },
+    "Biophysical Heuristic Floor (catGRANULE/FuzDrop proxy)": {
+      "AUPRC_mean": 0.7004949723876075,
+      "AUPRC_median": 0.7022964030705653,
+      "AUPRC_ci": [
+        0.6294546967059896,
+        0.7631020222159053
+      ],
+      "AUROC_mean": 0.5409588335211708,
+      "AUROC_median": 0.5413175939891626,
+      "AUROC_ci": [
+        0.4746336492943013,
+        0.6117958283912258
+      ]
+    }
+  },
+  "empirical_power_check": {
+    "empirical_sigma_family": 0.19784880962029786,
+    "test_set_families": 49,
+    "test_set_records": 269,
+    "power_at_0_05": 0.08,
+    "minimum_detectable_effect_80_power": 0.07,
+    "statement": "Power is sufficient if MDE is <= 0.08, otherwise flagged for discussion."
+  },
+  "not_reproduced_baselines": {
+    "DiG-style equilibrium-distribution baseline": "DiG (Distributional Graphormer, Nat. Mach. Intell. 2024) is a 3D molecular structure ensemble predictor, not a sequence-based binary LLPS classifier. No public code/description exists for sequence-based binary LLPS classification. Relabeled and implemented a 'DiG-inspired energy-based baseline' instead."
+  }
+}

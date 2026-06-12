@@ -1,0 +1,9 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Large data and models
+equiphase/data/esm2_residue_embeddings.pkl
+models/
