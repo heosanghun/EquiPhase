@@ -20,3 +20,8 @@
 - [x] **6. GitHub Upload**
   - [x] Initialize git repository and commit code, data, reports, and results
   - [x] Push all codebase files to the user's GitHub repository: https://github.com/heosanghun/EquiPhase
+- [x] **7. Protocol Corrections & Multiplicity Remediation**
+  - [x] Apply final report corrections (reclassify XGBoost, correct H2 verdict)
+  - [x] Apply walkthrough corrections
+  - [x] Log deviations in DEVIATIONS.md
+  - [x] Commit corrections locally and hold git push

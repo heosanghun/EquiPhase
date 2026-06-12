@@ -4,7 +4,7 @@ EquiPhase is a rigorous, pre-registered benchmarking framework designed to evalu
 
 The project evaluates two primary tracks:
 1. **Track-1 (Hypothesis H1):** Testing whether implicit fixed-point representations via Deep Equilibrium (DEQ) models improve condition-dependent LLPS classification under out-of-distribution environmental (salt concentration) extrapolation. (**Verdict: Rejected / NULL**)
-2. **Phase 5 (Hypothesis H2):** Evaluating if per-residue PLM embeddings, attention pooling, explicit biophysical descriptors, and monotonic concentration constraints can enable sequence family generalization under low-salt conditions. (**Verdict: Partially Supported / Monotone-XGBoost Cleared Locked Test**)
+2. **Phase 5 (Hypothesis H2):** Evaluating if per-residue PLM embeddings, attention pooling, explicit biophysical descriptors, and monotonic concentration constraints can enable sequence family generalization under low-salt conditions. (**Verdict: Rejected / NULL**)
 
 ---
 
@@ -18,11 +18,13 @@ The project evaluates two primary tracks:
 
 ### 2. Hypothesis H2: Feature-Driven Sequence Family Generalization (Phase 5)
 * **Hypothesis:** Biophysical descriptors + attention pooling over ESM-2 residue-level embeddings, combined with monotone solute constraints, enable generalization above the no-skill baseline on unseen sequence families.
-* **Verdict:** **Partially Supported.** (H2 is formally rejected under strict dual-split rules since the validation winner AttentionMLP did not clear the test baseline, but Tab-Monotone XGBoost successfully cleared the locked test set baseline).
+* **Verdict:** **Formal Rejection (NULL).** 
 * **Results:** 
-  * **AttentionMLP** cleared the validation baseline (AUPRC **0.7883** vs. **0.6812** no-skill) but fell slightly short on test statistical power.
-  * **Tab-Monotone XGBoost** achieved AUPRC **0.8313** (95% CI: `[0.7024, 0.9190]`) on the locked test set, strictly clearing the **0.6448** no-skill test baseline and achieving an AUROC of **0.7234**.
-* **Takeaway:** Imposing physical monotonic constraints (higher protein concentration $\rightarrow$ higher phase separation probability) successfully mitigates experimental starting-concentration noise.
+  * **AttentionMLP (Pre-registered Winner):** Cleared the validation baseline (AUPRC **0.7883** vs. **0.6812** no-skill) but failed to confirm on the locked test set (AUPRC **0.7697**, 95% CI: `[0.6264, 0.8825]`, lower bound 0.6264 < 0.6448 no-skill) due to statistical power constraints (only 26–27 families per split).
+  * **Tab-Monotone XGBoost (Exploratory / Off-Protocol):** Failed validation clearance (CI lower bound 0.6660 < 0.6812) and was ineligible for confirmatory testing. On the spent locked test set, it achieved an exploratory AUPRC of **0.8313** (95% CI: `[0.7024, 0.9190]`, AUROC **0.7234**).
+* **Takeaways:**
+  * **Label-Noise Bottleneck:** We diagnosed that **45.71%** of low-salt database records contain conflicting labels for identical sequences due to starting solute concentration variation, capping classifier performance.
+  * **Monotonic Constraints as a Future Lead:** Enforcing positive monotonic constraints on concentration is a promising lead to bypass label noise, but the current XGBoost success is post-hoc and exploratory, requiring a new pre-registration and fresh test set to validate.
 
 ---
 
@@ -51,11 +53,11 @@ Evaluated across **5 seeds** (`42, 100, 2026, 777, 999`) using cached sequence e
 Evaluated under low-salt conditions ($\le 150$ mM) on family-disjoint splits constructed using Jaccard 3-mer proxy clustering.
 
 * **Validation Set (No-Skill Baseline AUPRC: 0.6812)**
-  * **AttentionMLP:** AUPRC **0.7883** (95% CI: `[0.6885, 0.8822]`) | **Clears Baseline: YES**
-  * **Tab-Monotone XGBoost:** AUPRC **0.7742** (95% CI: `[0.6660, 0.8895]`) | **Clears Baseline: NO**
+  * **AttentionMLP (Pre-registered Winner):** AUPRC **0.7883** (95% CI: `[0.6885, 0.8822]`) | **Clears Baseline: YES**
+  * **Tab-Monotone XGBoost (Exploratory):** AUPRC **0.7742** (95% CI: `[0.6660, 0.8895]`) | **Clears Baseline: NO**
 * **Locked Test Set (No-Skill Baseline AUPRC: 0.6448)**
-  * **AttentionMLP:** AUPRC **0.7697** (95% CI: `[0.6264, 0.8825]`) | **Clears Baseline: NO**
-  * **Tab-Monotone XGBoost:** AUPRC **0.8313** (95% CI: `[0.7024, 0.9190]`) | **Clears Baseline: YES** (AUROC: **0.7234**, 95% CI: `[0.6251, 0.8271]`)
+  * **AttentionMLP (Confirmatory):** AUPRC **0.7697** (95% CI: `[0.6264, 0.8825]`) | **Clears Baseline: NO**
+  * **Tab-Monotone XGBoost (Exploratory / Off-Protocol):** AUPRC **0.8313** (95% CI: `[0.7024, 0.9190]`) | **Clears Baseline: YES** (AUROC: **0.7234**, 95% CI: `[0.6251, 0.8271]`)
 
 ---
 

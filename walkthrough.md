@@ -135,17 +135,21 @@ We pre-registered **Hypothesis H2** (features and monotonic constraints resolve 
 
 ### 7.3. Empirical Validation Results
 Validation evaluations were run over 5 random seeds (`42`, `100`, `2026`, `777`, `999`) and evaluated with 1,000-iteration cluster block bootstrapping (Baseline Validation No-Skill: **0.6812**):
-- **AttentionMLP:** Median AUPRC **0.7883** (95% CI: `[0.6885, 0.8822]`) | **Clears Baseline: YES**
-- **Tab-Monotone XGBoost:** Median AUPRC **0.7742** (95% CI: `[0.6660, 0.8895]`) | **Clears Baseline: NO**
+- **AttentionMLP (Pre-registered Winner):** Median AUPRC **0.7883** (95% CI: `[0.6885, 0.8822]`) | **Clears Baseline: YES** (razor-thin margin ≈ 0.007 on 26 families)
+- **Tab-Monotone XGBoost (Exploratory):** Median AUPRC **0.7742** (95% CI: `[0.6660, 0.8895]`) | **Clears Baseline: NO**
 
-AttentionMLP was selected as the validation winner for satisfying the pre-registered validation clearing condition.
+AttentionMLP was selected as the sole pre-registered validation winner eligible for confirmatory testing.
 
 ### 7.4. Empirical Locked Test Results
-The locked test set (`test_phase5.tsv`) was opened exactly once to compute final metrics (Baseline Test No-Skill: **0.6448**):
-- **AttentionMLP:** Median AUPRC **0.7697** (95% CI: `[0.6264, 0.8825]`) | **Clears Baseline: NO**
-- **Tab-Monotone XGBoost:** Median AUPRC **0.8313** (95% CI: `[0.7024, 0.9190]`) | **Clears Baseline: YES** (AUROC: **0.7234**, 95% CI: `[0.6251, 0.8271]`)
+The locked test set (`test_phase5.tsv`) was evaluated (Baseline Test No-Skill: **0.6448**):
+- **AttentionMLP (Confirmatory):** Median AUPRC **0.7697** (95% CI: `[0.6264, 0.8825]`) | **Clears Baseline: NO**
+- **Tab-Monotone XGBoost (Off-Protocol / Exploratory):** Median AUPRC **0.8313** (95% CI: `[0.7024, 0.9190]`) | **Clears Baseline: YES** (AUROC: **0.7234**, 95% CI: `[0.6251, 0.8271]`)
+
+> [!WARNING]
+> Because Tab-Monotone XGBoost did not clear the validation baseline, evaluating it on the locked test set is an off-protocol analysis that constitutes test-set peeking and introduces model multiplicity. Its results must not be framed as confirmatory.
 
 ### 7.5. Key Scientific Findings
-1. **H2 Rejected on strict dual-split criteria:** Under the pre-registered rules (requiring the same model to clear the baseline on both splits), H2 is rejected.
-2. **Tab-Monotone XGBoost demonstrates excellent OOD generalization:** Enforcing monotonic constraints on solute concentration to physically resolve label noise successfully unlocked strong out-of-distribution family generalization. It scored a median AUPRC of **0.8313** and AUROC of **0.7234**, strictly clearing the 0.6448 test baseline.
-3. **AttentionMLP shows promise but lacks statistical power:** AttentionMLP achieved validation generalization, but on the small test split, its CI lower bound overlapped slightly with the baseline, highlighting the difficulty of OOD family generalization.
+1. **Hypothesis H2 is Rejected:** The pre-registered, validation-selected model (**AttentionMLP**) failed to confirm on the locked test set (AUPRC 0.7697, CI `[0.6264, 0.8825]`, lower bound 0.6264 < 0.6448). Under the pre-registered protocol, H2 is formally rejected.
+2. **XGBoost Locked Test Success is Exploratory:** Although the Tab-Monotone XGBoost model's AUPRC (0.8313) cleared the test baseline, this is strictly a post-hoc, exploratory observation on a now-spent test set, confounded by model multiplicity. It is a lead for a future pre-registered study, not a confirmed result.
+3. **Statistical Power Bottleneck:** Although both models failed to achieve formal confirmatory clearance due to wide confidence intervals, their median point estimates (0.7697 and 0.8313) sit above the no-skill baseline on both splits. The primary bottleneck is statistical power (the splits contain only 26–27 sequence families, yielding wide bootstrap intervals), not necessarily the absence of a biological or physical effect. The results are promising but underpowered.
+4. **Dominant Finding:** The most significant, confirmed finding of Phase 5 is the label-noise diagnosis showing that **45.71%** of the low-salt database records have conflicting binary labels for identical sequences due to starting solute concentration variation, capping the maximum achievable performance of sequence-only classifiers. Monotonic modeling remains a promising avenue to address this.

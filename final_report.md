@@ -126,21 +126,27 @@ Using Jaccard 3-mer proxy clustering, we constructed family-disjoint splits to s
 All models were trained across **5 seeds** (`42, 100, 2026, 777, 999`) and evaluated using 1,000-iteration cluster block bootstrapping.
 
 * **Validation Set (No-Skill Baseline AUPRC: 0.6812)**
-  * **AttentionMLP:** AUPRC **0.7883** (95% CI: `[0.6885, 0.8822]`) | **Clears Baseline: YES**
-  * **Tab-Monotone XGBoost:** AUPRC **0.7742** (95% CI: `[0.6660, 0.8895]`) | **Clears Baseline: NO**
+  * **AttentionMLP (Pre-registered Winner):** AUPRC **0.7883** (95% CI: `[0.6885, 0.8822]`) | **Clears Baseline: YES** (Margin ≈ 0.007 on 26 families)
+  * **Tab-Monotone XGBoost (Exploratory):** AUPRC **0.7742** (95% CI: `[0.6660, 0.8895]`) | **Clears Baseline: NO**
 * **Locked Test Set (No-Skill Baseline AUPRC: 0.6448)**
-  * **AttentionMLP:** AUPRC **0.7697** (95% CI: `[0.6264, 0.8825]`) | **Clears Baseline: NO**
-  * **Tab-Monotone XGBoost:** AUPRC **0.8313** (95% CI: `[0.7024, 0.9190]`) | **Clears Baseline: YES** (AUROC: **0.7234**, 95% CI: `[0.6251, 0.8271]`)
+  * **AttentionMLP (Confirmatory):** AUPRC **0.7697** (95% CI: `[0.6264, 0.8825]`) | **Clears Baseline: NO**
+  * **Tab-Monotone XGBoost (Off-Protocol / Exploratory):** AUPRC **0.8313** (95% CI: `[0.7024, 0.9190]`) | **Clears Baseline: YES** (AUROC: **0.7234**, 95% CI: `[0.6251, 0.8271]`)
+
+> [!WARNING]
+> Because Tab-Monotone XGBoost failed to clear the validation baseline, it was not eligible for confirmatory testing under the pre-registered protocol. Evaluating it on the locked test set constitutes test-set peeking and introduces model multiplicity. Its locked test results must be treated strictly as exploratory and post-hoc, not as confirmed confirmatory evidence.
 
 ### 6.4. Verdict on Hypothesis H2
-Under our strict pre-registered criteria (requiring the same model to statistically clear the baseline on *both* splits), **H2 is formally rejected**. However, the results show strong OOD generalization:
-1. **AttentionMLP** successfully generalizes on validation but falls slightly short on test statistical power.
-2. **Tab-Monotone XGBoost** achieves excellent test generalization, strictly clearing the test baseline with an AUPRC of 0.8313 (vs. 0.6448). This demonstrates that physical monotonic constraints combined with pooled PLM embeddings and biophysical features successfully resolve starting-concentration noise.
+Under our strict pre-registered criteria (requiring the single validation-winning model to statistically clear the baseline on *both* splits), **H2 is formally rejected**. 
+1. **H2 Rejected:** The pre-registered, validation-selected model (**AttentionMLP**) failed to statistically confirm on the locked test set (AUPRC 0.7697, CI `[0.6264, 0.8825]`), as the lower bound of the CI (0.6264) overlapped the no-skill baseline (0.6448).
+2. **Tab-Monotone XGBoost is Post-Hoc / Exploratory:** Although Tab-Monotone XGBoost cleared the test baseline (AUPRC 0.8313, CI `[0.7024, 0.9190]`), this observation is an exploratory, post-hoc analysis on a now-spent test set. It is confounded by model multiplicity and does not constitute a validated scientific claim. Confirming this finding requires a new pre-registration with the monotone XGBoost model as the single pre-specified candidate, evaluated on a fresh, unspent held-out test set.
+3. **Statistical Power Bottleneck:** Although both models failed to achieve formal confirmatory clearance due to wide confidence intervals, their median point estimates (0.7697 and 0.8313) sit well above the no-skill baseline. The primary obstacle is statistical power (the held-out splits contain only 26–27 sequence families, yielding wide bootstrap intervals), not necessarily the absence of a biological or physical effect. The results are promising but underpowered.
+4. **Dominant Finding:** The most significant, confirmed finding of Phase 5 is the label-noise diagnosis showing that **45.71%** of the low-salt database records have conflicting binary labels for identical sequences due to starting solute concentration variation, capping the maximum achievable performance of sequence-only classifiers.
 
 ---
 
 ## 7. Conclusion & Future Work
 1. **Hypothesis H1 is Rejected:** The equilibrium inductive bias does not improve condition-dependent LLPS classification under out-of-distribution salt extrapolation.
 2. **Implicit Formulation is Ill-posed:** Standard DEQ cells with residual connections and layer normalization cannot maintain contractivity ($L_{max} \ge 1.0$) using naive linear-layer spectral normalization. This violates the assumptions of the Implicit Function Theorem and corrupts training gradients.
-3. **Monotonic Constraints and Feature Engineering Work:** While H2 is not fully supported due to split-level discrepancies, incorporating explicit biophysical descriptors, attention-pooled PLM embeddings, and enforcing positive monotonic constraints on concentration (XGBoost) successfully mitigates label noise and achieves strong generalization (AUPRC 0.8313, AUROC 0.7234) on sequence family extrapolation.
-4. **Future Recommendations:** To deploy implicit models successfully for phase separation, future research must utilize strictly contractive formulations, such as Monotone DEQs (using semi-definite programming constraints) or invertible network blocks, to guarantee a well-posed fixed point during both forward and backward passes.
+3. **Hypothesis H2 is Rejected:** The pre-registered, validation-selected model (AttentionMLP) failed to confirm on the locked test set due to statistical power limitations and wide confidence intervals. 
+4. **Monotonic Modeling is a Future Lead:** Enforcing physical monotonic constraints (e.g., in monotone XGBoost) is a promising lead to mitigate the 45.71% starting-concentration label noise, but its post-hoc test success (AUPRC 0.8313) remains strictly exploratory and requires validation in a future pre-registered study on a fresh held-out dataset.
+5. **Future Recommendations:** To deploy implicit models successfully for phase separation, future research must utilize strictly contractive formulations (e.g., Monotone DEQs) to guarantee a well-posed fixed point. Furthermore, condition-dependent models should utilize datasets with standardized saturation concentrations ($C_{sat}$) rather than starting concentration labels to bypass severe label-noise bottlenecks.
