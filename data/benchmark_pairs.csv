@@ -1,0 +1,157 @@
+pdb1,pdb2,is_switcher,source,verification,pair_rmsd
+5tpn_A,1g2c_F,1,Chakravarty & Porter 2022,Verified Switcher,25.106552228699336
+1h38_D,1qln_A,1,Chakravarty & Porter 2022,Verified Switcher,22.329239372282977
+1k0n_A,1rk4_B,1,Chakravarty & Porter 2022,Verified Switcher,14.973444026423866
+1mnm_C,1mnm_D,1,Chakravarty & Porter 2022,Verified Switcher,22.11853042663776
+1nqd_A,1nqj_B,1,Chakravarty & Porter 2022,Verified Switcher,9.23961179254921
+1qom_B,1noc_A,1,Chakravarty & Porter 2022,Verified Switcher,34.35108193726318
+1qs8_B,1miq_B,1,Chakravarty & Porter 2022,Verified Switcher,18.969021503708955
+1rep_C,2z9o_B,1,Chakravarty & Porter 2022,Verified Switcher,20.746599815959655
+1uxm_K,2nam_A,1,Chakravarty & Porter 2022,Verified Switcher,32.76076155768448
+1wyy_B,5wrg_C,1,Chakravarty & Porter 2022,Verified Switcher,14.748800937714542
+1x0g_A,1x0g_D,1,Chakravarty & Porter 2022,Verified Switcher,21.012776824182872
+1xjt_A,1xju_B,1,Chakravarty & Porter 2022,Verified Switcher,21.188417642912725
+1xnt_A,3lqc_A,1,Chakravarty & Porter 2022,Verified Switcher,16.50199583925006
+2a73_B,3l5n_B,1,Chakravarty & Porter 2022,Verified Switcher,63.218071551443444
+2frh_A,1fzp_D,1,Chakravarty & Porter 2022,Verified Switcher,19.350110545057667
+2hdm_A,2n54_B,1,Chakravarty & Porter 2022,Verified Switcher,17.77461053478198
+6c6s_D,2oug_C,1,Chakravarty & Porter 2022,Verified Switcher,19.68974405999358
+3ejh_A,3m7p_A,1,Chakravarty & Porter 2022,Verified Switcher,19.07337380420435
+3hde_A,3hdf_A,1,Chakravarty & Porter 2022,Verified Switcher,26.216292602722742
+3ifa_A,5et5_A,1,Chakravarty & Porter 2022,Verified Switcher,29.60669845022028
+3j7w_B,3j7v_G,1,Chakravarty & Porter 2022,Verified Switcher,37.749504848920466
+3j97_M,1xtg_B,1,Chakravarty & Porter 2022,Verified Switcher,21.544981436226408
+3jv6_A,1zk9_A,1,Chakravarty & Porter 2022,Verified Switcher,20.155848680079643
+3kuy_A,5c3i_F,1,Chakravarty & Porter 2022,Verified Switcher,12.92228824456232
+3m1b_F,3low_A,1,Chakravarty & Porter 2022,Verified Switcher,25.13529063240249
+3o44_A,1xez_A,1,Chakravarty & Porter 2022,Verified Switcher,56.17618601539407
+3qy2_A,1qb3_A,1,Chakravarty & Porter 2022,Verified Switcher,22.917145909743297
+3tp2_A,5lj3_M,1,Chakravarty & Porter 2022,Verified Switcher,14.653242256640622
+3uyi_A,3v0t_A,1,Chakravarty & Porter 2022,Verified Switcher,12.739740551747847
+3zwg_N,4tsy_D,1,Chakravarty & Porter 2022,Verified Switcher,20.903708296632953
+4aan_A,4aal_A,1,Chakravarty & Porter 2022,Verified Switcher,12.881791587919496
+4gqc_C,4gqc_B,1,Chakravarty & Porter 2022,Verified Switcher,12.939659037421377
+2jmr_A,4j3o_F,1,Chakravarty & Porter 2022,Verified Switcher,16.621031132015485
+4jph_B,5hk5_H,1,Chakravarty & Porter 2022,Verified Switcher,37.79255730968795
+4n9w_A,4nc9_C,1,Chakravarty & Porter 2022,Verified Switcher,6.383953281677669
+4o0p_A,4o01_D,1,Chakravarty & Porter 2022,Verified Switcher,4.278329404426371
+4phq_A,2wcd_X,1,Chakravarty & Porter 2022,Verified Switcher,34.29565922582829
+4pyi_A,4pyj_A,1,Chakravarty & Porter 2022,Verified Switcher,20.35337949325512
+4qhf_A,4qhh_A,1,Chakravarty & Porter 2022,Verified Switcher,16.91586912114072
+4rwn_A,4rwq_B,1,Chakravarty & Porter 2022,Verified Switcher,33.642611632557966
+4uv2_D,4q79_F,1,Chakravarty & Porter 2022,Verified Switcher,15.971732245839917
+4y0m_J,4xws_D,1,Chakravarty & Porter 2022,Verified Switcher,3.2791542197250867
+4zrb_C,4zrb_H,1,Chakravarty & Porter 2022,Verified Switcher,11.158276945647488
+4zt0_C,4cmq_B,1,Chakravarty & Porter 2022,Verified Switcher,49.098135313291536
+5aoe_B,5ly6_B,1,Chakravarty & Porter 2022,Verified Switcher,34.68952638281825
+5c1v_A,5c1v_B,1,Chakravarty & Porter 2022,Verified Switcher,8.954788281684966
+5ejb_C,1wp8_C,1,Chakravarty & Porter 2022,Verified Switcher,37.800526834813724
+5flu_E,2uy7_D,1,Chakravarty & Porter 2022,Verified Switcher,7.074334780643501
+3ztj_E,5hmg_A,1,Chakravarty & Porter 2022,Verified Switcher,53.785950596575404
+5i2m_A,5i2s_A,1,Chakravarty & Porter 2022,Verified Switcher,37.35421738631421
+5ine_A,3mko_A,1,Chakravarty & Porter 2022,Verified Switcher,25.34794140845744
+5jzh_A,5jzt_G,1,Chakravarty & Porter 2022,Verified Switcher,39.23804166958925
+5keq_F,1dzl_A,1,Chakravarty & Porter 2022,Verified Switcher,29.715451427417435
+5l35_D,5l35_G,1,Chakravarty & Porter 2022,Verified Switcher,7.932597465532714
+2kxo_A,3r9j_C,1,Chakravarty & Porter 2022,Verified Switcher,19.285193761955338
+2k42_A,1cee_B,1,Chakravarty & Porter 2022,Verified Switcher,13.635354817864185
+2h44_A,1rkp_A,1,Chakravarty & Porter 2022,Verified Switcher,23.640977198611235
+2grm_B,2axz_A,1,Chakravarty & Porter 2022,Verified Switcher,12.87186218616069
+2c1v_B,2c1u_C,1,Chakravarty & Porter 2022,Verified Switcher,22.929038315356625
+3kds_G,2ce7_C,1,Chakravarty & Porter 2022,Verified Switcher,14.4802162500759
+1nrj_B,2ged_B,1,Chakravarty & Porter 2022,Verified Switcher,21.687268246248973
+2k0q_A,2lel_A,1,Chakravarty & Porter 2022,Verified Switcher,16.88438759898741
+2lv1_A,6lni_A,1,Chakravarty & Porter 2022,Verified Switcher,28.256260550777025
+2bzy_B,2lqw_A,1,Chakravarty & Porter 2022,Verified Switcher,16.396780730356895
+2kkw_A,2n0a_D,1,Chakravarty & Porter 2022,Verified Switcher,49.647126672745316
+1iyt_A,2nao_F,1,Chakravarty & Porter 2022,Verified Switcher,20.685628740472616
+2mwf_A,2nnt_A,1,Chakravarty & Porter 2022,Verified Switcher,15.885574836211326
+1jfk_A,2nxq_B,1,Chakravarty & Porter 2022,Verified Switcher,21.390205756959116
+2p3v_A,2p3v_D,1,Chakravarty & Porter 2022,Verified Switcher,3.0953716880788855
+5jyt_A,2qke_E,1,Chakravarty & Porter 2022,Verified Switcher,19.735857148772237
+3ews_B,3g0h_A,1,Chakravarty & Porter 2022,Verified Switcher,8.48615524875503
+2vfx_L,3gmh_L,1,Chakravarty & Porter 2022,Verified Switcher,13.227600590506933
+4h2a_A,3j9c_A,1,Chakravarty & Porter 2022,Verified Switcher,37.514680929169245
+2pbk_B,3njq_A,1,Chakravarty & Porter 2022,Verified Switcher,23.306964820538195
+1kct_A,3t1p_A,1,Chakravarty & Porter 2022,Verified Switcher,17.51789075938389
+3t5o_A,4a5w_B,1,Chakravarty & Porter 2022,Verified Switcher,37.44806327828991
+4ow6_B,4ae0_A,1,Chakravarty & Porter 2022,Verified Switcher,20.03486174957522
+3mee_A,4b3o_B,1,Chakravarty & Porter 2022,Verified Switcher,21.875111737594626
+4dxr_A,4dxt_A,1,Chakravarty & Porter 2022,Verified Switcher,4.128889351906337
+4g0d_Z,4fu4_C,1,Chakravarty & Porter 2022,Verified Switcher,16.019608268619514
+2lep_A,4hdd_A,1,Chakravarty & Porter 2022,Verified Switcher,22.148113242834956
+2qqj_A,4qds_A,1,Chakravarty & Porter 2022,Verified Switcher,15.226349551932598
+4rmb_B,4rmb_A,1,Chakravarty & Porter 2022,Verified Switcher,4.210032700711
+3l9q_B,4rr2_D,1,Chakravarty & Porter 2022,Verified Switcher,20.685470495987566
+4ydq_B,4twa_A,1,Chakravarty & Porter 2022,Verified Switcher,18.398656496887856
+1svf_C,4wsg_C,1,Chakravarty & Porter 2022,Verified Switcher,28.512672797503328
+5bmy_A,5b3z_A,1,Chakravarty & Porter 2022,Verified Switcher,32.59196000733874
+3zxg_B,5ec5_P,1,Chakravarty & Porter 2022,Verified Switcher,28.219112885507712
+5f5r_B,5f3k_A,1,Chakravarty & Porter 2022,Verified Switcher,28.618000355783735
+1ebo_E,5fhc_J,1,Chakravarty & Porter 2022,Verified Switcher,44.33952571044776
+2kb8_A,6vw2_A,1,Chakravarty & Porter 2022,Verified Switcher,8.581926360531346
+4yhd_G,7ahl_E,1,Chakravarty & Porter 2022,Verified Switcher,33.64086656511338
+6z4u_A,7kdt_B,1,Chakravarty & Porter 2022,Verified Switcher,21.659497653380555
+101m_A,102m_A,0,UniProt Verified Single-Fold,Verified Control,0.15680022806079796
+132l_A,193l_A,0,UniProt Verified Single-Fold,Verified Control,8.782755487778939
+133l_A,134l_A,0,UniProt Verified Single-Fold,Verified Control,3.248784396394732
+1a2p_A,1b20_A,0,UniProt Verified Single-Fold,Verified Control,0.7554633271221578
+1akk_A,1crc_A,0,UniProt Verified Single-Fold,Verified Control,16.941263655130072
+1j3s_A,2n3y_A,0,UniProt Verified Single-Fold,Verified Control,3.5518037960746893
+12ca_A,1ca3_A,0,UniProt Verified Single-Fold,Verified Control,0.1706677775035447
+1aq7_A,1auj_A,0,UniProt Verified Single-Fold,Verified Control,14.981507537599773
+102l_A,103l_A,0,UniProt Verified Single-Fold,Verified Control,0.3288966562518212
+1b9c_A,1bfp_A,0,UniProt Verified Single-Fold,Verified Control,25.24040443595481
+1l1p_A,5zr0_A,0,UniProt Verified Single-Fold,Verified Control,13.632009520446127
+1azv_A,1ba9_A,0,UniProt Verified Single-Fold,Verified Control,20.988435082195707
+104m_A,105m_A,0,UniProt Verified Single-Fold,Verified Control,1.0618245243312983
+104m_A,1ajg_A,0,UniProt Verified Single-Fold,Verified Control,0.31865036815843933
+104m_A,1ajh_A,0,UniProt Verified Single-Fold,Verified Control,0.31572857140983207
+104m_A,1bvc_A,0,UniProt Verified Single-Fold,Verified Control,22.802956705462094
+193l_A,194l_A,0,UniProt Verified Single-Fold,Verified Control,0.06202015879318358
+193l_A,1aki_A,0,UniProt Verified Single-Fold,Verified Control,12.943923118854034
+193l_A,1azf_A,0,UniProt Verified Single-Fold,Verified Control,0.2137822408546788
+193l_A,1b0d_A,0,UniProt Verified Single-Fold,Verified Control,0.34751431161425245
+193l_A,1b2k_A,0,UniProt Verified Single-Fold,Verified Control,1.7095250283733139
+193l_A,1bgi_A,0,UniProt Verified Single-Fold,Verified Control,22.563838114673917
+193l_A,1bhz_A,0,UniProt Verified Single-Fold,Verified Control,0.6389275524476892
+1a2p_A,1b27_A,0,UniProt Verified Single-Fold,Verified Control,12.7956736018441
+1a2p_A,1b2x_A,0,UniProt Verified Single-Fold,Verified Control,0.8295420854234039
+1a2p_A,1bgs_A,0,UniProt Verified Single-Fold,Verified Control,22.039228327069004
+1a2p_A,1bni_A,0,UniProt Verified Single-Fold,Verified Control,0.42302470101152717
+1a2p_A,1bnj_A,0,UniProt Verified Single-Fold,Verified Control,0.6212358765494345
+1akk_A,1fi7_A,0,UniProt Verified Single-Fold,Verified Control,16.101041183489965
+1akk_A,1fi9_A,0,UniProt Verified Single-Fold,Verified Control,16.102198001055395
+1akk_A,1giw_A,0,UniProt Verified Single-Fold,Verified Control,18.455987841864154
+1akk_A,1i5t_A,0,UniProt Verified Single-Fold,Verified Control,18.812718849526302
+1akk_A,1lc1_A,0,UniProt Verified Single-Fold,Verified Control,14.999560649248073
+1akk_A,1lc2_A,0,UniProt Verified Single-Fold,Verified Control,15.016533448055664
+1j3s_A,2n9i_A,0,UniProt Verified Single-Fold,Verified Control,20.856502306075217
+1j3s_A,2n9j_A,0,UniProt Verified Single-Fold,Verified Control,15.601808410323219
+1j3s_A,3zcf_A,0,UniProt Verified Single-Fold,Verified Control,14.87098947667943
+1a42_A,1am6_A,0,UniProt Verified Single-Fold,Verified Control,0.2611425385963581
+1a42_A,1avn_A,0,UniProt Verified Single-Fold,Verified Control,0.38310499409784526
+1a42_A,1bcd_A,0,UniProt Verified Single-Fold,Verified Control,0.31726841827415536
+1a42_A,1bn1_A,0,UniProt Verified Single-Fold,Verified Control,0.22709102704374637
+1a42_A,1bn3_A,0,UniProt Verified Single-Fold,Verified Control,0.2108538086825773
+1a42_A,1bn4_A,0,UniProt Verified Single-Fold,Verified Control,0.2110914047617528
+1aq7_A,1az8_A,0,UniProt Verified Single-Fold,Verified Control,14.86730832335725
+1aq7_A,1bju_A,0,UniProt Verified Single-Fold,Verified Control,26.462272469116698
+1aq7_A,1bjv_A,0,UniProt Verified Single-Fold,Verified Control,26.390921385069568
+1aq7_A,1c1n_A,0,UniProt Verified Single-Fold,Verified Control,18.57392724373585
+1aq7_A,1c1o_A,0,UniProt Verified Single-Fold,Verified Control,18.607823744732258
+1aq7_A,1c1p_A,0,UniProt Verified Single-Fold,Verified Control,18.591573321575343
+1a0o_A,1bdj_A,0,UniProt Verified Single-Fold,Verified Control,1.0624345194528313
+1a0o_A,1cey_A,0,UniProt Verified Single-Fold,Verified Control,17.373472625133527
+1a0o_A,1chn_A,0,UniProt Verified Single-Fold,Verified Control,15.73856361507884
+1a0o_A,1eay_A,0,UniProt Verified Single-Fold,Verified Control,12.625050917168293
+1a0o_A,1f4v_A,0,UniProt Verified Single-Fold,Verified Control,18.40235227041163
+1a0o_A,1ffg_A,0,UniProt Verified Single-Fold,Verified Control,0.31743365255995043
+1c4f_A,1emb_A,0,UniProt Verified Single-Fold,Verified Control,0.4074893331145906
+1c4f_A,1emg_A,0,UniProt Verified Single-Fold,Verified Control,0.5373928350300619
+1ba9_A,1kmg_A,0,UniProt Verified Single-Fold,Verified Control,2.6236840095424414
+1ba9_A,1mfm_A,0,UniProt Verified Single-Fold,Verified Control,21.33933716181093
+1ba9_A,1rk7_A,0,UniProt Verified Single-Fold,Verified Control,11.18458464150251
+2kox_A,2lj5_A,0,UniProt Verified Single-Fold,Verified Control,19.11474676604029
+2kox_A,2mbh_A,0,UniProt Verified Single-Fold,Verified Control,8.118344704425587
+2kox_A,2mjb_A,0,UniProt Verified Single-Fold,Verified Control,13.873225059391995

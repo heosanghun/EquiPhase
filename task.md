@@ -1,27 +1,18 @@
-# Phase 5 Task List: H2 Study
+# Task Checklist: Contact-Gated Biophysical Force Field (CG-BFF) Implementation & Verification
 
-- [x] **1. Pre-Registration & Split Design**
-  - [x] Re-derive family-disjoint splits from the low-salt pool (Train / Val / Held-Out Test)
-  - [x] Write `PRE_REGISTRATION_PHASE5.json` with hypotheses, metrics, and win conditions
-- [x] **2. Feature Extraction Pipeline**
-  - [x] Implement biophysical feature extractor (`equiphase/data/biophysical.py`)
-  - [x] Implement residue-level ESM-2 embedding extraction and attention-pooling model
-  - [x] Compute and cache features for Train, Val, and Held-Out splits
-- [x] **3. Modeling & Training**
-  - [x] Train XGBoost/LightGBM with concentration monotonic constraints on the new splits
-  - [x] Train improved attention-pooled MLP on the new splits
-- [x] **4. Evaluation & Verification**
-  - [x] Evaluate models on the validation set using 5 seeds and cluster block-bootstrap CIs
-  - [x] Verify if the validation AUPRC clears the no-skill baseline (0.6812)
-- [x] **5. Locked Test Evaluation & Reporting**
-  - [x] Evaluate models on the locked test set `test_phase5.tsv`
-  - [x] Run cluster block bootstrap CI on the locked test set
-  - [x] Generate `locked_test_results_phase5.json` and update `final_report.md` and `DEVIATIONS.md`
-- [x] **6. GitHub Upload**
-  - [x] Initialize git repository and commit code, data, reports, and results
-  - [x] Push all codebase files to the user's GitHub repository: https://github.com/heosanghun/EquiPhase
-- [x] **7. Protocol Corrections & Multiplicity Remediation**
-  - [x] Apply final report corrections (reclassify XGBoost, correct H2 verdict)
-  - [x] Apply walkthrough corrections
-  - [x] Log deviations in DEVIATIONS.md
-  - [x] Commit corrections locally and hold git push
+## Phase 1: Local Code Refactoring (CG-BFF Implementation)
+- [x] Implement pairwise sequence energy projection network in `SymplecticDEQ.__init__` in `equiphase/models/symplectic_deq.py`
+- [x] Refactor `force_forward` in `equiphase/models/symplectic_deq.py` to use Gaussian RBF contact-gated forces
+- [x] Verify that `verify_mathematics.py` passes successfully locally
+- [x] Run syntax checks to ensure python compile success
+
+## Phase 2: Remote Launch & Verification
+- [x] Sync updated model files to the remote GPU server
+- [x] Run remote mathematical verification via SSH
+- [x] Launch `run_honest_audit.py` in a remote tmux session on GPU 5
+
+## Phase 3: Monitor & Download Results
+- [x] Monitor training logs
+- [x] Download final audit logs and results
+- [x] Verify that the Placebo model AUROC collapses to chance (~0.50) while the true Symplectic model achieves high AUROC
+- [x] Update `walkthrough.md` with the final findings and G-BFF architecture validation

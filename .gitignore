@@ -7,3 +7,9 @@ __pycache__/
 # Large data and models
 equiphase/data/esm2_residue_embeddings.pkl
 models/
+runs/
+*.log
+data/pdbs/
+data/clean_chains/
+bifurcation_audit_plot.*
+honest_audit_results.csv
