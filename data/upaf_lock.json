@@ -1,0 +1,110 @@
+{
+    "synthetic_alpha_0.0": {
+        "opens": 2,
+        "timestamps": [
+            "2026-06-21 16:15:43",
+            "2026-06-21 16:16:32"
+        ]
+    },
+    "synthetic_alpha_0.2": {
+        "opens": 2,
+        "timestamps": [
+            "2026-06-21 16:15:44",
+            "2026-06-21 16:16:34"
+        ]
+    },
+    "synthetic_alpha_0.4": {
+        "opens": 2,
+        "timestamps": [
+            "2026-06-21 16:15:46",
+            "2026-06-21 16:16:35"
+        ]
+    },
+    "synthetic_alpha_0.6": {
+        "opens": 2,
+        "timestamps": [
+            "2026-06-21 16:15:47",
+            "2026-06-21 16:16:37"
+        ]
+    },
+    "synthetic_alpha_0.8": {
+        "opens": 2,
+        "timestamps": [
+            "2026-06-21 16:15:49",
+            "2026-06-21 16:16:38"
+        ]
+    },
+    "synthetic_alpha_1.0": {
+        "opens": 2,
+        "timestamps": [
+            "2026-06-21 16:15:51",
+            "2026-06-21 16:16:40"
+        ]
+    },
+    "task_a_fold_switch": {
+        "opens": 3,
+        "timestamps": [
+            "2026-06-21 16:18:37",
+            "2026-06-21 16:37:10",
+            "2026-06-21 16:38:37"
+        ]
+    },
+    "task_b_llps_leak": {
+        "opens": 3,
+        "timestamps": [
+            "2026-06-21 16:18:38",
+            "2026-06-21 16:37:11",
+            "2026-06-21 16:38:38"
+        ]
+    },
+    "task_c_seq_len_clean": {
+        "opens": 3,
+        "timestamps": [
+            "2026-06-21 16:19:03",
+            "2026-06-21 16:38:24",
+            "2026-06-21 16:39:50"
+        ]
+    },
+    "test_b_temp": {
+        "opens": 1,
+        "timestamps": [
+            "2026-06-21 16:33:06"
+        ]
+    },
+    "test_c_temp": {
+        "opens": 1,
+        "timestamps": [
+            "2026-06-21 16:33:15"
+        ]
+    },
+    "test_b_rf": {
+        "opens": 1,
+        "timestamps": [
+            "2026-06-21 16:33:35"
+        ]
+    },
+    "test_c_ridge": {
+        "opens": 1,
+        "timestamps": [
+            "2026-06-21 16:34:45"
+        ]
+    },
+    "test_b_cm": {
+        "opens": 1,
+        "timestamps": [
+            "2026-06-21 16:34:55"
+        ]
+    },
+    "test_b_cm_deep": {
+        "opens": 1,
+        "timestamps": [
+            "2026-06-21 16:35:18"
+        ]
+    },
+    "test_b_cm_conds": {
+        "opens": 1,
+        "timestamps": [
+            "2026-06-21 16:36:13"
+        ]
+    }
+}

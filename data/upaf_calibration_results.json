@@ -1,0 +1,56 @@
+[
+    {
+        "alpha": 0.0,
+        "avg_random": 1.0,
+        "avg_disjoint": 1.0,
+        "avg_placebo": 0.5053205990281382,
+        "partial_r": 0.9974742246675327,
+        "partial_p": 0.0,
+        "verdict": "SIGNAL-GENUINE"
+    },
+    {
+        "alpha": 0.2,
+        "avg_random": 1.0,
+        "avg_disjoint": 1.0,
+        "avg_placebo": 0.5499625544652844,
+        "partial_r": 0.9962756893321867,
+        "partial_p": 0.0,
+        "verdict": "LEAKAGE-DETECTED"
+    },
+    {
+        "alpha": 0.4,
+        "avg_random": 1.0,
+        "avg_disjoint": 1.0,
+        "avg_placebo": 0.7614299552934487,
+        "partial_r": 0.9951547763792006,
+        "partial_p": 0.0,
+        "verdict": "LEAKAGE-DETECTED"
+    },
+    {
+        "alpha": 0.6,
+        "avg_random": 1.0,
+        "avg_disjoint": 1.0,
+        "avg_placebo": 0.9598681277892357,
+        "partial_r": 0.9910441427546639,
+        "partial_p": 0.0,
+        "verdict": "LEAKAGE-DETECTED"
+    },
+    {
+        "alpha": 0.8,
+        "avg_random": 1.0,
+        "avg_disjoint": 1.0,
+        "avg_placebo": 1.0,
+        "partial_r": 0.989181132344276,
+        "partial_p": 0.0,
+        "verdict": "LEAKAGE-DETECTED"
+    },
+    {
+        "alpha": 1.0,
+        "avg_random": 1.0,
+        "avg_disjoint": 1.0,
+        "avg_placebo": 1.0,
+        "partial_r": 3.727487069005164e-14,
+        "partial_p": 0.999999999999273,
+        "verdict": "LEAKAGE-DETECTED"
+    }
+]
