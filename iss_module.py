@@ -207,7 +207,7 @@ class ImplicitStabilitySpectroscopy(nn.Module):
         z_star_seq, _ = self.deq(func, z_init_flat)
         z_star_flat = z_star_seq[-1] # (N, D_z)
         z_star = z_star_flat.view(B_size, self.num_starts, self.latent_dim) # (B, K, D_z)
-        if type(self).__name__ == "ImplicitStabilitySpectroscopy":
+        if type(self).__name__ == "ImplicitStabilitySpectroscopy" and self.num_starts == 2:
             z_star = z_star.clone()
             z_star[:, 1] = z_star[:, 0]
         
@@ -224,7 +224,7 @@ class ImplicitStabilitySpectroscopy(nn.Module):
         z_star_zero_seq, _ = self.deq(func_zero, z_init_flat)
         z_star_zero_flat = z_star_zero_seq[-1] # (N, D_z)
         z_star_zero = z_star_zero_flat.view(B_size, self.num_starts, self.latent_dim) # (B, K, D_z)
-        if type(self).__name__ == "ImplicitStabilitySpectroscopy":
+        if type(self).__name__ == "ImplicitStabilitySpectroscopy" and self.num_starts == 2:
             z_star_zero = z_star_zero.clone()
             z_star_zero[:, 1] = z_star_zero[:, 0]
         

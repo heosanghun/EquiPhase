@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-import torch
+# import torch
 import time
 import os
 import json
@@ -10,7 +10,7 @@ from sklearn.metrics import roc_auc_score, r2_score
 from sklearn.linear_model import LinearRegression
 
 # 1. Single-Open Lock Mechanism
-LOCK_FILE = "D:/AI/EquiPhase/data/upaf_lock.json"
+LOCK_FILE = "c:/Project/EquiPhase/data/upaf_lock.json"
 
 def register_test_open(task_name):
     """

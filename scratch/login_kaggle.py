@@ -1,0 +1,2 @@
+import kagglehub
+kagglehub.login()
