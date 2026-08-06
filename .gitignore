@@ -1,16 +1,6 @@
-# Python
+.venv/
 __pycache__/
 *.pyc
 *.pyo
-*.pyd
-
-# Large data and models
-equiphase/data/esm2_residue_embeddings.pkl
-models/
-!equiphase/models/
-runs/
-*.log
-data/pdbs/
-data/clean_chains/
-bifurcation_audit_plot.*
-honest_audit_results.csv
+.pytest_cache/
+.DS_Store

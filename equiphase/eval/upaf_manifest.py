@@ -283,8 +283,11 @@ class UPAFManifest:
 
 class UPAFEvaluator:
     """
-    UPAF Evaluator with Non-Mutating verify_only Inspector, Cryptographic Hash Chaining, and External Tip Anchoring.
+    UPAF Evaluator with Non-Mutating verify_only Inspector, Cryptographic Hash Chaining, and Repository Ledger Anchoring.
     """
+    REPO_LEDGER_PATH = r"C:\Project\AI\EquiPhase\ledger\operational_manifest_ledger.jsonl"
+    REPO_TIP_PATH = r"C:\Project\AI\EquiPhase\ledger\ledger_tip.sha256"
+
     @staticmethod
     def save_prediction_persistence(predictions_df: pd.DataFrame, output_path: str):
         """Save raw predictions according to §5 specification."""
@@ -297,37 +300,37 @@ class UPAFEvaluator:
         predictions_df.to_csv(output_path, index=False)
 
     @staticmethod
-    def save_tip_anchor(ledger_path: str, tip_file_path: str):
+    def save_tip_anchor(ledger_path: str = None, tip_file_path: str = None):
         """Save the tip manifest_self_sha256 of the ledger log to an external anchor file."""
-        if os.path.exists(ledger_path):
-            with open(ledger_path, "r", encoding="utf-8") as f:
+        lp = ledger_path if ledger_path else UPAFEvaluator.REPO_LEDGER_PATH
+        tp = tip_file_path if tip_file_path else UPAFEvaluator.REPO_TIP_PATH
+        if os.path.exists(lp):
+            with open(lp, "r", encoding="utf-8") as f:
                 lines = [l.strip() for l in f if l.strip()]
             if lines:
                 last_rec = json.loads(lines[-1])
                 tip_sha = last_rec.get("manifest_self_sha256", "0"*64)
-                os.makedirs(os.path.dirname(tip_file_path), exist_ok=True)
-                with open(tip_file_path, "w", encoding="utf-8") as tf:
+                os.makedirs(os.path.dirname(tp), exist_ok=True)
+                with open(tp, "w", encoding="utf-8") as tf:
                     tf.write(tip_sha + "\n")
 
     @staticmethod
     def append_ledger(manifest_dict: dict, ledger_path: str):
-        """Append manifest to ledger log in STRICT APPEND MODE ONLY ('a'). Update external tip anchor."""
+        """Append manifest to ledger log in STRICT APPEND MODE ONLY ('a')."""
         os.makedirs(os.path.dirname(ledger_path), exist_ok=True)
         with open(ledger_path, "a", encoding="utf-8") as f:
             f.write(json.dumps(manifest_dict, sort_keys=True, ensure_ascii=False) + "\n")
-            
-        tip_file = os.path.join(os.path.dirname(ledger_path), "ledger_tip.sha256")
-        if "manifest_self_sha256" in manifest_dict:
-            with open(tip_file, "w", encoding="utf-8") as tf:
-                tf.write(manifest_dict["manifest_self_sha256"] + "\n")
 
     @staticmethod
-    def verify_only(ledger_path: str, tip_file_path: str = None) -> dict:
+    def verify_only(ledger_path: str = None, tip_file_path: str = None) -> dict:
         """
         PURE NON-MUTATING INSPECTOR.
         Inspects ledger line-by-line without EVER appending to disk.
         """
-        if not os.path.exists(ledger_path):
+        lp = ledger_path if ledger_path else UPAFEvaluator.REPO_LEDGER_PATH
+        tp = tip_file_path if tip_file_path else UPAFEvaluator.REPO_TIP_PATH
+        
+        if not os.path.exists(lp):
             return {"valid": False, "reason": "LEDGER_NOT_FOUND", "line_reports": []}
             
         line_reports = []
@@ -335,7 +338,7 @@ class UPAFEvaluator:
         genesis_reached = False
         all_valid = True
         
-        with open(ledger_path, "r", encoding="utf-8") as f:
+        with open(lp, "r", encoding="utf-8") as f:
             for line_idx, line in enumerate(f, 1):
                 if line.strip():
                     rec = json.loads(line.strip())
@@ -378,8 +381,8 @@ class UPAFEvaluator:
                     last_sha256 = rec.get("manifest_self_sha256", last_sha256)
                     
         # Tip anchor check
-        if tip_file_path and os.path.exists(tip_file_path):
-            with open(tip_file_path, "r", encoding="utf-8") as tf:
+        if tp and os.path.exists(tp):
+            with open(tp, "r", encoding="utf-8") as tf:
                 anchored_tip = tf.read().strip()
             if anchored_tip != last_sha256:
                 all_valid = False
@@ -388,11 +391,13 @@ class UPAFEvaluator:
         return {"valid": all_valid, "line_reports": line_reports, "tip_sha256": last_sha256}
 
     @staticmethod
-    def verify_and_update_lock(manifest_obj: UPAFManifest, ledger_path: str) -> dict:
+    def verify_and_update_lock(manifest_obj: UPAFManifest, ledger_path: str = None) -> dict:
         """Verify lock, verify self-hashes, apply cryptographic hash chaining, handle run_id invalidations."""
-        if not os.path.exists(ledger_path):
+        lp = ledger_path if ledger_path else UPAFEvaluator.REPO_LEDGER_PATH
+        
+        if not os.path.exists(lp):
             final_json = manifest_obj.build_manifest_json(open_count=1, status="FIRST_SEAL", prev_hash="0"*64)
-            UPAFEvaluator.append_ledger(final_json, ledger_path)
+            UPAFEvaluator.append_ledger(final_json, lp)
             return {"verdict": "FIRST_SEAL", "violation": False, "changed_keys": []}
             
         previous_records = []
@@ -400,7 +405,7 @@ class UPAFEvaluator:
         last_sha256 = "0" * 64
         genesis_reached = False
         
-        with open(ledger_path, "r", encoding="utf-8") as f:
+        with open(lp, "r", encoding="utf-8") as f:
             for line_idx, line in enumerate(f, 1):
                 if line.strip():
                     rec = json.loads(line.strip())
@@ -414,28 +419,27 @@ class UPAFEvaluator:
                         if inv_run_id:
                             invalidated_run_ids.add(inv_run_id)
                             
-                    # Cryptographic Hash Chaining Link Check (On ALL records after line 1)
-                    if line_idx > 1 and "prev_manifest_self_sha256" in rec:
+                    # Post-GENESIS Cryptographic Hash Chaining Link Check
+                    if genesis_reached and "prev_manifest_self_sha256" in rec and status != "GENESIS":
                         stored_prev = rec.get("prev_manifest_self_sha256")
                         if stored_prev != last_sha256 and last_sha256 != "0"*64:
                             return {"verdict": "LEDGER_CHAIN_BROKEN", "violation": True, "changed_keys": [f"ledger_line_{line_idx}"]}
                             
-                    # Self-Hash Verification with pre-GENESIS legacy compatibility
-                    if "manifest_self_sha256" in rec:
+                    # Post-GENESIS Self-Hash Verification
+                    if genesis_reached and "manifest_self_sha256" in rec and status != "GENESIS":
                         stored_hash = rec["manifest_self_sha256"]
-                        
-                        hash_a = hashlib.sha256(UPAFManifest.canon_json(rec["sealed"])).hexdigest() if "sealed" in rec else None
                         rec_copy = rec.copy()
                         del rec_copy["manifest_self_sha256"]
-                        hash_b = hashlib.sha256(UPAFManifest.canon_json(rec_copy)).hexdigest()
-                        hash_c = hashlib.sha256(json.dumps(rec_copy, sort_keys=True, ensure_ascii=False).encode('utf-8')).hexdigest()
+                        h_canon = hashlib.sha256(UPAFManifest.canon_json(rec_copy)).hexdigest()
+                        h_std = hashlib.sha256(json.dumps(rec_copy, sort_keys=True, ensure_ascii=False).encode('utf-8')).hexdigest()
                         
-                        if stored_hash not in (hash_a, hash_b, hash_c):
+                        if stored_hash not in (h_canon, h_std):
                             return {"verdict": "LEDGER_RECORD_TAMPERED", "violation": True, "changed_keys": [f"ledger_line_{line_idx}"]}
                                 
                     previous_records.append(rec)
                     last_sha256 = rec.get("manifest_self_sha256", last_sha256)
                     
+        # Filter matching previous records ONLY from post-GENESIS valid records
         matching_prev = [
             r for r in previous_records 
             if r.get("task_id") == manifest_obj.task_id 
@@ -445,7 +449,7 @@ class UPAFEvaluator:
         
         if not matching_prev:
             final_json = manifest_obj.build_manifest_json(open_count=1, status="FIRST_SEAL", prev_hash=last_sha256)
-            UPAFEvaluator.append_ledger(final_json, ledger_path)
+            UPAFEvaluator.append_ledger(final_json, lp)
             return {"verdict": "FIRST_SEAL", "violation": False, "changed_keys": []}
             
         latest_prev = matching_prev[-1]
@@ -465,23 +469,23 @@ class UPAFEvaluator:
             new_count = prev_count + 1
             new_hist = prev_hist + [{"utc": manifest_obj.created_utc, "status": "REOPEN", "changed_keys": []}]
             final_json = manifest_obj.build_manifest_json(open_count=new_count, status="REOPEN", history=new_hist, prev_hash=last_sha256)
-            UPAFEvaluator.append_ledger(final_json, ledger_path)
+            UPAFEvaluator.append_ledger(final_json, lp)
             return {"verdict": "REOPEN", "violation": False, "changed_keys": []}
             
         if set(changed_keys) <= {"runtime"}:
             new_count = prev_count + 1
             new_hist = prev_hist + [{"utc": manifest_obj.created_utc, "status": "BENIGN_DRIFT", "changed_keys": changed_keys}]
             final_json = manifest_obj.build_manifest_json(open_count=new_count, status="BENIGN_DRIFT", history=new_hist, prev_hash=last_sha256)
-            UPAFEvaluator.append_ledger(final_json, ledger_path)
+            UPAFEvaluator.append_ledger(final_json, lp)
             return {"verdict": "BENIGN_DRIFT", "violation": False, "changed_keys": changed_keys}
             
         if manifest_obj.approved_change_reason:
             new_count = prev_count + 1
             new_hist = prev_hist + [{"utc": manifest_obj.created_utc, "status": "SCOPE_CHANGE", "changed_keys": changed_keys}]
             final_json = manifest_obj.build_manifest_json(open_count=new_count, status="SCOPE_CHANGE", history=new_hist, prev_hash=last_sha256)
-            UPAFEvaluator.append_ledger(final_json, ledger_path)
+            UPAFEvaluator.append_ledger(final_json, lp)
             return {"verdict": "SCOPE_CHANGE", "violation": False, "changed_keys": changed_keys, "reason": manifest_obj.approved_change_reason}
             
         rejected_json = manifest_obj.build_manifest_json(open_count=prev_count, status="TAMPER_REJECTED", prev_hash=last_sha256)
-        UPAFEvaluator.append_ledger(rejected_json, ledger_path)
+        UPAFEvaluator.append_ledger(rejected_json, lp)
         return {"verdict": "TAMPER", "violation": True, "changed_keys": changed_keys}
