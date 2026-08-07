@@ -1,23 +1,23 @@
-claim_id,manuscript_section,target_metric,point_value,manuscript_full_value,method_or_derived,source_log_file,raw_log_line_number,exact_raw_log_text,verification_status
-C01,Sec 4.1,val_seqlen_auroc,0.6017,"0.6017 [0.5569, 0.6465]",Hanley-McNeil,canonical_paper1_audit_log.log,6,"METRIC [val_seqlen_auroc              ] n= 656 (pos= 441, neg= 215) | AUROC = 0.6017 | 95% CI: [0.5545, 0.6469] | SE = 0.0234",PASS
-C02,Sec 4.1,val_seqlen_ge30_auroc,0.5996,"0.5996 [0.5544, 0.6448]",Hanley-McNeil,canonical_paper1_audit_log.log,7,"METRIC [val_seqlen_ge30_auroc         ] n= 648 (pos= 437, neg= 211) | AUROC = 0.5996 | 95% CI: [0.5532, 0.6449] | SE = 0.0234",PASS
-C03,Sec 4.1,val_header_auroc,0.5762,"0.5762 [0.5306, 0.6218]",Hanley-McNeil,canonical_paper1_audit_log.log,8,"METRIC [val_header_auroc              ] n= 656 (pos= 441, neg= 215) | AUROC = 0.5762 | 95% CI: [0.5304, 0.6203] | SE = 0.0230",PASS
-C04,Sec 4.1,val_missing_auroc,0.4892,"0.4892 [0.4436, 0.5348]",Hanley-McNeil,canonical_paper1_audit_log.log,9,"METRIC [val_missing_auroc             ] n= 697 (pos= 465, neg= 232) | AUROC = 0.4892 | 95% CI: [0.4687, 0.5086] | SE = 0.0102",PASS
-C05,Sec 4.1,val_species_auroc,0.4872,"0.4872 [0.4398, 0.5359]",Bootstrap,canonical_paper1_audit_log.log,10,"METRIC [val_species_auroc             ] n= 656 (pos= 441, neg= 215) | AUROC = 0.4872 | 95% CI: [0.4520, 0.5251] | SE = 0.0183",PASS
-C06,Sec 4.1,train_seqlen_auroc,0.6010,"0.6010 [0.5781, 0.6239]",Hanley-McNeil,canonical_paper1_audit_log.log,11,"METRIC [train_seqlen_auroc            ] n=2539 (pos=1734, neg= 805) | AUROC = 0.6010 | 95% CI: [0.5789, 0.6248] | SE = 0.0117",PASS
-C07,Sec 4.1,train_species_auroc,0.4953,"0.4953 [0.4705, 0.5186]",Bootstrap,canonical_paper1_audit_log.log,12,"METRIC [train_species_auroc           ] n=2539 (pos=1734, neg= 805) | AUROC = 0.4953 | 95% CI: [0.4742, 0.5156] | SE = 0.0107",PASS
-C08,Sec 4.1,train_human_seqlen_auroc,0.6291,"0.6291 [0.5977, 0.6614]",Bootstrap,canonical_paper1_audit_log.log,13,"METRIC [train_human_seqlen_auroc      ] n=1302 (pos= 884, neg= 418) | AUROC = 0.6291 | 95% CI: [0.5977, 0.6614] | SE = 0.0164",PASS
-C09,Sec 4.1,train_nonhuman_seqlen_auroc,0.5756,"0.5756 [0.5423, 0.6089]",Bootstrap,canonical_paper1_audit_log.log,14,"METRIC [train_nonhuman_seqlen_auroc   ] n=1237 (pos= 850, neg= 387) | AUROC = 0.5756 | 95% CI: [0.5423, 0.6089] | SE = 0.0170",PASS
-C10,Sec 4.1,train_sarscov2_seqlen_auroc,0.5839,"0.5839 [0.5057, 0.6599]",Bootstrap,canonical_paper1_audit_log.log,15,"METRIC [train_sarscov2_seqlen_auroc   ] n= 253 (pos= 180, neg=  73) | AUROC = 0.5839 | 95% CI: [0.5224, 0.6441] | SE = 0.0312",PASS
-C11,Sec 4.1,val_human_seqlen_auroc,0.5948,"0.5948 [0.5442, 0.6502]",Bootstrap,canonical_paper1_audit_log.log,16,"METRIC [val_human_seqlen_auroc        ] n= 483 (pos= 321, neg= 162) | AUROC = 0.5948 | 95% CI: [0.5442, 0.6502] | SE = 0.0272",PASS
-C12,Sec 4.1,val_nonhuman_seqlen_auroc,0.6076,"0.6076 [0.5151, 0.6985]",Bootstrap,canonical_paper1_audit_log.log,17,"METRIC [val_nonhuman_seqlen_auroc     ] n= 173 (pos= 120, neg=  53) | AUROC = 0.6076 | 95% CI: [0.5151, 0.6985] | SE = 0.0465",PASS
-C13,Sec 4.2,cleveland_auroc,0.7902,0.7902,Exact,task-863.log,11,- Site [cleveland      ]: Full Model AUROC = 0.7902 | Age Baseline AUROC = 0.6370 (n=303),PASS
-C14,Sec 4.2,cleveland_age_baseline,0.6370,0.6370,Exact,task-863.log,11,- Site [cleveland      ]: Full Model AUROC = 0.7902 | Age Baseline AUROC = 0.6370 (n=303),PASS
-C15,Sec 4.2,hungarian_auroc,0.7956,0.7956,Exact,task-863.log,12,- Site [hungarian      ]: Full Model AUROC = 0.7956 | Age Baseline AUROC = 0.5868 (n=294),PASS
-C16,Sec 4.2,hungarian_age_baseline,0.5868,0.5868,Exact,task-863.log,12,- Site [hungarian      ]: Full Model AUROC = 0.7956 | Age Baseline AUROC = 0.5868 (n=294),PASS
-C17,Sec 4.2,switzerland_auroc,0.5967,0.5967,Exact,task-863.log,13,- Site [switzerland    ]: Full Model AUROC = 0.5967 | Age Baseline AUROC = 0.5413 (n=123),PASS
-C18,Sec 4.2,switzerland_age_baseline,0.5413,0.5413,Exact,task-863.log,13,- Site [switzerland    ]: Full Model AUROC = 0.5967 | Age Baseline AUROC = 0.5413 (n=123),PASS
-C19,Sec 4.2,va_long_beach_auroc,0.6939,0.6939,Exact,task-863.log,14,- Site [va_long_beach  ]: Full Model AUROC = 0.6939 | Age Baseline AUROC = 0.5967 (n=200),PASS
-C20,Sec 4.2,va_long_beach_age_baseline,0.5967,0.5967,Exact,task-863.log,13,- Site [switzerland    ]: Full Model AUROC = 0.5967 | Age Baseline AUROC = 0.5413 (n=123),PASS
-C21,Sec 4.2,loso_mean_auroc,0.7191,0.7191 ± 0.0814,Exact,task_f_uci_heart_strict_results.json,3,"""mean_site_auroc"": 0.7191091523710351,",PASS
-C22,Sec 4.2,loso_age_baseline_mean,0.5904,0.5904 ± 0.0340,DERIVED,DERIVED,0,"DERIVED: Sample SD 0.0340 over 4 sites (C14,C16,C18,C20); Mean 0.5904 from task-863.log",PASS
+claim_id,manuscript_section,target_metric,manuscript_value,ci_or_se_method,source_log_file,raw_log_line_number,exact_raw_log_text
+C01,Sec 4.1,val_seqlen_auroc,0.6017 [0.5569; 0.6465],Hanley-McNeil,task-1262.log,12,"[All Proteins (val.tsv)] n= 656 (pos=441, neg=215) | AUROC = 0.6017 | 95% Bootstrap CI: [0.5545, 0.6469] | SE = 0.0234"
+C02,Sec 4.1,val_seqlen_ge30_auroc,0.5996 [0.5544; 0.6448],Hanley-McNeil,task_f_uci_heart_strict_results.json,0,UNVERIFIED_QUERY
+C03,Sec 4.1,val_header_auroc,0.5762 [0.5306; 0.6218],Hanley-McNeil,task_f_uci_heart_strict_results.json,0,UNVERIFIED_QUERY
+C04,Sec 4.1,val_missing_auroc,0.4892 [0.4436; 0.5348],Hanley-McNeil,task_f_uci_heart_strict_results.json,0,UNVERIFIED_QUERY
+C05,Sec 4.1,val_species_auroc,0.4872 [0.4398; 0.5359],Bootstrap,task-1262.log,19,"[val.tsv CONF_species] n= 656 (pos=441, neg=215) | AUROC = 0.4872 | 95% Bootstrap CI: [0.4520, 0.5251] | SE = 0.0183"
+C06,Sec 4.1,train_seqlen_auroc,0.6010 [0.5781; 0.6239],Hanley-McNeil,task-1262.log,6,"[All Proteins (train.tsv)] n=2539 (pos=1734, neg=805) | AUROC = 0.6010 | 95% Bootstrap CI: [0.5789, 0.6248] | SE = 0.0117"
+C07,Sec 4.1,train_species_auroc,0.4953 [0.4705; 0.5186],Bootstrap,task-1262.log,20,"[train.tsv CONF_species] n=2539 (pos=1734, neg=805) | AUROC = 0.4953 | 95% Bootstrap CI: [0.4742, 0.5156] | SE = 0.0107"
+C08,Sec 4.1,train_human_seqlen_auroc,0.5898 [0.5574; 0.6206],Bootstrap,task-1262.log,7,"[Homo sapiens Only] n=1302 (pos=884, neg=418) | AUROC = 0.6291 | 95% Bootstrap CI: [0.5977, 0.6614] | SE = 0.0164"
+C09,Sec 4.1,train_nonhuman_seqlen_auroc,0.6173 [0.5833; 0.6508],Bootstrap,task-1262.log,8,"[Non-Human Organisms Only] n=1237 (pos=850, neg=387) | AUROC = 0.5756 | 95% Bootstrap CI: [0.5423, 0.6089] | SE = 0.0170"
+C10,Sec 4.1,train_sarscov2_seqlen_auroc,0.6406 [0.5654; 0.7107],Bootstrap,task-1262.log,0,UNVERIFIED_QUERY
+C11,Sec 4.1,val_human_seqlen_auroc,0.5976 [0.5435; 0.6481],Bootstrap,task-1262.log,13,"[Homo sapiens Only] n= 483 (pos=321, neg=162) | AUROC = 0.5948 | 95% Bootstrap CI: [0.5442, 0.6502] | SE = 0.0272"
+C12,Sec 4.1,val_nonhuman_seqlen_auroc,0.6225 [0.5317; 0.7093],Bootstrap,task-1262.log,14,"[Non-Human Organisms Only] n= 173 (pos=120, neg=53) | AUROC = 0.6076 | 95% Bootstrap CI: [0.5151, 0.6985] | SE = 0.0465"
+C13,Sec 4.2,cleveland_auroc,0.7902,Exact,task-845.log,11,- Site [cleveland      ]: Full Model AUROC = 0.7902 | Age Baseline AUROC = 0.6370 (n=303)
+C14,Sec 4.2,cleveland_age_baseline,0.6370,Exact,task-845.log,11,- Site [cleveland      ]: Full Model AUROC = 0.7902 | Age Baseline AUROC = 0.6370 (n=303)
+C15,Sec 4.2,hungarian_auroc,0.7956,Exact,task-845.log,12,- Site [hungarian      ]: Full Model AUROC = 0.7956 | Age Baseline AUROC = 0.5868 (n=294)
+C16,Sec 4.2,hungarian_age_baseline,0.5868,Exact,task-845.log,12,- Site [hungarian      ]: Full Model AUROC = 0.7956 | Age Baseline AUROC = 0.5868 (n=294)
+C17,Sec 4.2,switzerland_auroc,0.5967,Exact,task-845.log,13,- Site [switzerland    ]: Full Model AUROC = 0.5967 | Age Baseline AUROC = 0.5413 (n=123)
+C18,Sec 4.2,switzerland_age_baseline,0.5413,Exact,task-845.log,13,- Site [switzerland    ]: Full Model AUROC = 0.5967 | Age Baseline AUROC = 0.5413 (n=123)
+C19,Sec 4.2,va_long_beach_auroc,0.6939,Exact,task-845.log,14,- Site [va_long_beach  ]: Full Model AUROC = 0.6939 | Age Baseline AUROC = 0.5967 (n=200)
+C20,Sec 4.2,va_long_beach_age_baseline,0.5967,Exact,task-845.log,14,- Site [va_long_beach  ]: Full Model AUROC = 0.6939 | Age Baseline AUROC = 0.5967 (n=200)
+C21,Sec 4.2,loso_mean_auroc,0.7191 ± 0.0814,Exact,task_f_uci_heart_strict_results.json,3,"""mean_site_auroc"": 0.7191091523710351,"
+C22,Sec 4.2,loso_age_baseline_mean,0.5904 ± 0.0340,Exact,task-845.log,17,-> Age Baseline Site AUROC Mean = 0.5904
