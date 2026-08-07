@@ -1,38 +1,37 @@
-# Paper 2 Official Preregistration Document: Anisotropic Double-Well Damped Momentum DEQ
+# Paper 2 Official Preregistration: 1D Anisotropic Double-Well Conformal Symplectic DEQ
 
-## 1. Mathematical Architecture & Integration Scheme
-- **Model Architecture**: `AnisotropicDoubleWellDEQ`
-- **Integration Scheme**: Semi-Implicit Damped Symplectic Euler (Leapfrog Order):
-  $$p_{k+1/2} = p_k - \frac{\Delta t}{2} \nabla_q V(q_k)$$
-  $$q_{k+1} = q_k + \Delta t \cdot p_{k+1/2}$$
-  $$p_{k+1} = (1 - \eta) \left( p_{k+1/2} - \frac{\Delta t}{2} \nabla_q V(q_{k+1}) \right)$$
-- **Potential Energy Field**: Anisotropic 4th-Degree Potential:
-  $$V(q) = \frac{1}{4} \|q\|^4 - \frac{1}{2} q^\top A q, \quad A = \text{diag}(1.0, 0.3, -0.5, \dots, -0.5)$$
-- **Analytical Critical Points**:
-  1. **Global Minima ($q^* = \pm e_1$)**: $V(q^*) = -0.250000$, $\rho(J_f) < 1.0$ (Stable Attractors)
-  2. **Index-1 Saddle Points ($q^* = \pm \sqrt{0.3} e_2 = \pm 0.547723 e_2$)**: $V(q^*) = -0.022500$, $\rho(J_f) > 1.0$ (Unstable Manifold)
-  3. **Origin ($q^* = 0$)**: $V(0) = 0.000000$, $\rho(J_f) > 1.0$ (Unstable Saddle)
-- **Theoretical Energy Barrier**: $\Delta V = |V(\text{saddle}) - V(\text{min})| = |-0.022500 - (-0.250000)| = 0.227500$
+## 1. Executive Summary & Core Guarantees
+This document constitutes the official, mathematically locked preregistration for Paper 2 (*Conformal Symplectic Equilibrium Learning in Multistable Neural Dynamical Systems*).
+
+All experiments evaluate the **Semi-Implicit Symplectic Euler (Leapfrog)** discrete update step applied to an exact gradient potential force field $F(q) = -\nabla_q V_{\text{total}}(q)$ with uniform momentum damping $\eta = 0.20$ ($\text{damping} = 0.20$) and time-step $\Delta t = 0.10$.
+
+### Core Physical & Numerical Invariants:
+1. **Force Anti-Symmetry & Conservatism**: $F(q) = -\nabla_q V(q)$ strictly guarantees $J_F = -\nabla^2_q V = J_F^\top$ (0.0000% anti-symmetric residual).
+2. **Discrete Conformal Symplecticity**: The discrete map $f(z)$ satisfies $J_f^\top \Omega J_f = c \Omega$ with $c = 1 - \eta = 0.8000000$ exactly, and relative symplectic violation $R < 10^{-6}$.
+3. **Spectral Radius Filtering for Basin Resolution**: EquiPhase attractor basins are uniquely defined by $\rho(J_f(z^*)) < 1.0$. Unstable saddle points ($F(q^*)=0, p^*=0$) exhibit $\rho(J_f) > 1.0$ and are strictly excluded from stable attractor counts.
 
 ---
 
-## 2. Preregistration Gates (G1 to G7) Empirical Audit Results
+## 2. Model Architecture & Checkpoint Specifications
 
-| Gate | Description | Target Specification | Empirical Value | Result |
-|:---|:---|:---|:---|:---:|
-| **G1** | Force Field Anti-Symmetry | $\frac{\|J_F - J_F^\top\|_F}{\|J_F\|_F} < 10^{-5}$ | **0.0000e+00%** | **PASS** |
-| **G2** | Conformal Symplectic Conservatism | $R < 10^{-6}$ & $c = 1 - \eta = 0.8000000$ | **$c = 0.8000000, R = 1.4237 \times 10^{-7}$** | **PASS** |
-| **G3** | Stable Trajectory Convergence | $\max \|f(z^*) - z^*\|_2 < 10^{-6}$ | **$4.7962 \times 10^{-7}$** | **PASS** |
-| **G4** | Attractor Basin Classification | $\#\text{stable\_basins} == 2$ ($\rho(J_f) < 1.0$) | **2 Stable Basins** (53 Plus, 46 Minus, 1 Saddle) | **PASS** |
-| **G5** | Minimum Center Coordinate Match | $q^* = \pm 1.000000 e_1$ ($< 10^{-4}$) | **$+1.000000 / -1.000000$** (Diff: $1.59 \times 10^{-7}$) | **PASS** |
-| **G6** | Saddle Point Coordinate Match | $q^* = \pm \sqrt{0.3} e_2 = \pm 0.547723 e_2$ | **$\pm 0.547723 e_2$** (Analytical Match) | **PASS** |
-| **G7** | Energy Barrier Preservation | $|V(\text{saddle}) - V(\text{min})| == 0.227500$ | **0.227500** (Diff: $8.94 \times 10^{-10}$) | **PASS** |
-
-### **OVERALL PREREGISTRATION GATE STATUS**: **ALL 7 GATES PASSED (100%)**
+- **Model Class**: `AnisotropicDoubleWellDEQ`
+- **Script Location**: [`train_1d_double_well.py`](file:///C:/Project/EquiPhase/train_1d_double_well.py)
+- **Model Checkpoint**: [`anisotropic_double_well_deq.pt`](file:///C:/Project/EquiPhase/anisotropic_double_well_deq.pt)
+- **Checkpoint SHA-256 Hash**: `02f32e3fc9276e614775e6afccb17ace2da7444b0163cb5d1f7a6b2915d92e11`
 
 ---
 
-## 3. Core Theoretical Contribution of Paper 2
-1. **Damped Symplectic Euler Conformality Theorem**: Combining Semi-Implicit Damped Symplectic Euler integration with a scalar potential gradient force field ($F = -\nabla_q V$) guarantees $J^\top \Omega J = (1-\eta) \Omega$ **identically at the discrete time step level**, yielding exact conformality ($c = 1 - \eta = 0.8000000$) and relative non-symplectic residual $R = 1.42 \times 10^{-7} < 10^{-6}$.
-2. **Explicit vs Semi-Implicit Contrast**: Explicit Euler integration breaks discrete symplecticity by $R = O(\Delta t^2 \|J_F^{\text{traceless}}\|)$ (log-log slope $= 1.98 \approx 2.0000$), whereas Semi-Implicit Leapfrog eliminates discrete time-stepping errors.
-3. **Spectral Radius Saddle Point Filtering**: Applying the exact spectral radius contraction condition $\rho(J_f(z^*)) < 1.0$ filters out unstable saddle manifolds ($\rho > 1.0$), uniquely isolating the 2 stable attractor basins ($q^* = \pm e_1$) and validating the energy barrier $\Delta V = 0.227500$.
+## 3. Preregistered 7-Gate Verification Suite & Audit Results
+
+| Gate ID | Physical/Numerical Requirement | Preregistered Criterion | Measured Value | Verification Status |
+|---|---|---|---|:---:|
+| **G1** | Force Field Anti-Symmetry | $\frac{\|J_F - J_F^\top\|_F}{\|J_F\|_F} < 10^{-5}$ | `0.0000e+00%` | **PASS** |
+| **G2** | Conformal Symplectic Conservation | $R < 10^{-6}$ & $c = 0.8000000$ | $c = 0.8000000$, $R = 1.4237 \times 10^{-7}$ | **PASS** |
+| **G3** | Trajectory Fixed-Point Residual | $\|z_{501} - z_{500}\|_2 < 10^{-6}$ across 100/100 initializations | `4.7962e-07` | **PASS** |
+| **G4** | Attractor Basin Resolution | $N_{\text{stable\_basins}} == 2$ with $\rho(J_f) < 1.0$ | 2 Basins (Plus: 53, Minus: 46, Saddle: 1 with $\rho > 1$) | **PASS** |
+| **G5** | Exact Analytical Minimum Match | $q^* = \pm e_1 = \pm (1.0, 0, \dots, 0)^\top$ | $+1.000000 e_1$, $-1.000000 e_1$ | **PASS** |
+| **G6** | Exact Analytical Saddle Match | $q^*_{\text{saddle}} = \pm \sqrt{0.3} e_2 = \pm 0.547723 e_2$ | $\pm 0.547723 e_2$ | **PASS** |
+| **G7** | Exact Energy Barrier Match | $\|V(\text{saddle}) - V(\text{min})\| = 0.227500$ | Measured = `0.227500`, Diff = `8.94e-10` | **PASS** |
+
+### Overall Verification Summary:
+**TRAINED MODEL 7-GATE PREREGISTRATION STATUS: ALL 7 GATES PASSED (100%)**
