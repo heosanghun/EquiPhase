@@ -335,50 +335,53 @@ class UPAFEvaluator:
             
         line_reports = []
         last_sha256 = "0" * 64
-        genesis_reached = False
         all_valid = True
         
         with open(lp, "r", encoding="utf-8") as f:
-            for line_idx, line in enumerate(f, 1):
-                if line.strip():
-                    rec = json.loads(line.strip())
-                    status = rec.get("seal_status")
-                    task_id = rec.get("task_id")
+            lines = [l.strip() for l in f if l.strip()]
+            
+        has_genesis = any(json.loads(l).get("seal_status") == "GENESIS" for l in lines)
+        genesis_reached = not has_genesis  # If no GENESIS record exists, entire ledger is post-GENESIS
+        
+        for line_idx, line in enumerate(lines, 1):
+            rec = json.loads(line)
+            status = rec.get("seal_status")
+            task_id = rec.get("task_id")
+            
+            if status == "GENESIS":
+                genesis_reached = True
+                line_reports.append({"line": line_idx, "task_id": task_id, "status": status, "verification": "GENESIS_CHECKPOINT"})
+                last_sha256 = rec.get("manifest_self_sha256", last_sha256)
+                continue
+                
+            if not genesis_reached:
+                line_reports.append({"line": line_idx, "task_id": task_id, "status": status, "verification": "unverifiable_legacy"})
+                last_sha256 = rec.get("manifest_self_sha256", last_sha256)
+                continue
+                
+            # Post-GENESIS Strict Chain Link Verification
+            if "prev_manifest_self_sha256" in rec:
+                stored_prev = rec.get("prev_manifest_self_sha256")
+                if stored_prev != last_sha256 and last_sha256 != "0"*64:
+                    line_reports.append({"line": line_idx, "task_id": task_id, "status": status, "verification": "LEDGER_CHAIN_BROKEN"})
+                    all_valid = False
+                    continue
                     
-                    if status == "GENESIS":
-                        genesis_reached = True
-                        line_reports.append({"line": line_idx, "task_id": task_id, "status": status, "verification": "GENESIS_CHECKPOINT"})
-                        last_sha256 = rec.get("manifest_self_sha256", last_sha256)
-                        continue
-                        
-                    if not genesis_reached:
-                        line_reports.append({"line": line_idx, "task_id": task_id, "status": status, "verification": "unverifiable_legacy"})
-                        last_sha256 = rec.get("manifest_self_sha256", last_sha256)
-                        continue
-                        
-                    # Post-GENESIS Strict Chain Link Verification
-                    if "prev_manifest_self_sha256" in rec:
-                        stored_prev = rec.get("prev_manifest_self_sha256")
-                        if stored_prev != last_sha256 and last_sha256 != "0"*64:
-                            line_reports.append({"line": line_idx, "task_id": task_id, "status": status, "verification": "LEDGER_CHAIN_BROKEN"})
-                            all_valid = False
-                            continue
-                            
-                    # Post-GENESIS Strict Self-Hash Verification
-                    if "manifest_self_sha256" in rec:
-                        stored_hash = rec["manifest_self_sha256"]
-                        rec_copy = rec.copy()
-                        del rec_copy["manifest_self_sha256"]
-                        h_canon = hashlib.sha256(UPAFManifest.canon_json(rec_copy)).hexdigest()
-                        h_std = hashlib.sha256(json.dumps(rec_copy, sort_keys=True, ensure_ascii=False).encode('utf-8')).hexdigest()
-                        
-                        if stored_hash not in (h_canon, h_std):
-                            line_reports.append({"line": line_idx, "task_id": task_id, "status": status, "verification": "LEDGER_RECORD_TAMPERED"})
-                            all_valid = False
-                            continue
-                            
-                    line_reports.append({"line": line_idx, "task_id": task_id, "status": status, "verification": "VALID"})
-                    last_sha256 = rec.get("manifest_self_sha256", last_sha256)
+            # Post-GENESIS Strict Self-Hash Verification
+            if "manifest_self_sha256" in rec:
+                stored_hash = rec["manifest_self_sha256"]
+                rec_copy = rec.copy()
+                del rec_copy["manifest_self_sha256"]
+                h_canon = hashlib.sha256(UPAFManifest.canon_json(rec_copy)).hexdigest()
+                h_std = hashlib.sha256(json.dumps(rec_copy, sort_keys=True, ensure_ascii=False).encode('utf-8')).hexdigest()
+                
+                if stored_hash not in (h_canon, h_std):
+                    line_reports.append({"line": line_idx, "task_id": task_id, "status": status, "verification": "LEDGER_RECORD_TAMPERED"})
+                    all_valid = False
+                    continue
+                    
+            line_reports.append({"line": line_idx, "task_id": task_id, "status": status, "verification": "VALID"})
+            last_sha256 = rec.get("manifest_self_sha256", last_sha256)
                     
         # Tip anchor check
         if tp and os.path.exists(tp):
@@ -400,48 +403,57 @@ class UPAFEvaluator:
             UPAFEvaluator.append_ledger(final_json, lp)
             return {"verdict": "FIRST_SEAL", "violation": False, "changed_keys": []}
             
-        previous_records = []
+        previous_records_post_genesis = []
         invalidated_run_ids = set()
         last_sha256 = "0" * 64
-        genesis_reached = False
         
         with open(lp, "r", encoding="utf-8") as f:
-            for line_idx, line in enumerate(f, 1):
-                if line.strip():
-                    rec = json.loads(line.strip())
-                    status = rec.get("seal_status")
+            lines = [l.strip() for l in f if l.strip()]
+            
+        has_genesis = any(json.loads(l).get("seal_status") == "GENESIS" for l in lines)
+        genesis_reached = not has_genesis  # If no GENESIS record exists, entire ledger is post-GENESIS
+        
+        for line_idx, line in enumerate(lines, 1):
+            rec = json.loads(line)
+            status = rec.get("seal_status")
+            
+            if status == "GENESIS":
+                genesis_reached = True
+                last_sha256 = rec.get("manifest_self_sha256", last_sha256)
+                continue
+                
+            if status == "INVALIDATED":
+                inv_run_id = rec.get("invalidates_run_id")
+                if inv_run_id:
+                    invalidated_run_ids.add(inv_run_id)
                     
-                    if status == "GENESIS":
-                        genesis_reached = True
+            if not genesis_reached:
+                last_sha256 = rec.get("manifest_self_sha256", last_sha256)
+                continue
+                
+            # Post-GENESIS Cryptographic Hash Chaining Link Check
+            if "prev_manifest_self_sha256" in rec:
+                stored_prev = rec.get("prev_manifest_self_sha256")
+                if stored_prev != last_sha256 and last_sha256 != "0"*64:
+                    return {"verdict": "LEDGER_CHAIN_BROKEN", "violation": True, "changed_keys": [f"ledger_line_{line_idx}"]}
+                    
+            # Post-GENESIS Strict Self-Hash Verification (No hash_a fallback!)
+            if "manifest_self_sha256" in rec:
+                stored_hash = rec["manifest_self_sha256"]
+                rec_copy = rec.copy()
+                del rec_copy["manifest_self_sha256"]
+                h_canon = hashlib.sha256(UPAFManifest.canon_json(rec_copy)).hexdigest()
+                h_std = hashlib.sha256(json.dumps(rec_copy, sort_keys=True, ensure_ascii=False).encode('utf-8')).hexdigest()
+                
+                if stored_hash not in (h_canon, h_std):
+                    return {"verdict": "LEDGER_RECORD_TAMPERED", "violation": True, "changed_keys": [f"ledger_line_{line_idx}"]}
                         
-                    if status == "INVALIDATED":
-                        inv_run_id = rec.get("invalidates_run_id")
-                        if inv_run_id:
-                            invalidated_run_ids.add(inv_run_id)
-                            
-                    # Post-GENESIS Cryptographic Hash Chaining Link Check
-                    if genesis_reached and "prev_manifest_self_sha256" in rec and status != "GENESIS":
-                        stored_prev = rec.get("prev_manifest_self_sha256")
-                        if stored_prev != last_sha256 and last_sha256 != "0"*64:
-                            return {"verdict": "LEDGER_CHAIN_BROKEN", "violation": True, "changed_keys": [f"ledger_line_{line_idx}"]}
-                            
-                    # Post-GENESIS Self-Hash Verification
-                    if genesis_reached and "manifest_self_sha256" in rec and status != "GENESIS":
-                        stored_hash = rec["manifest_self_sha256"]
-                        rec_copy = rec.copy()
-                        del rec_copy["manifest_self_sha256"]
-                        h_canon = hashlib.sha256(UPAFManifest.canon_json(rec_copy)).hexdigest()
-                        h_std = hashlib.sha256(json.dumps(rec_copy, sort_keys=True, ensure_ascii=False).encode('utf-8')).hexdigest()
-                        
-                        if stored_hash not in (h_canon, h_std):
-                            return {"verdict": "LEDGER_RECORD_TAMPERED", "violation": True, "changed_keys": [f"ledger_line_{line_idx}"]}
-                                
-                    previous_records.append(rec)
-                    last_sha256 = rec.get("manifest_self_sha256", last_sha256)
+            previous_records_post_genesis.append(rec)
+            last_sha256 = rec.get("manifest_self_sha256", last_sha256)
                     
         # Filter matching previous records ONLY from post-GENESIS valid records
         matching_prev = [
-            r for r in previous_records 
+            r for r in previous_records_post_genesis 
             if r.get("task_id") == manifest_obj.task_id 
             and r.get("seal_status") not in ("TAMPER_REJECTED", "INVALIDATED", "GENESIS", "LEDGER_OVERWRITE_INCIDENT")
             and r.get("run_id") not in invalidated_run_ids
