@@ -2,7 +2,7 @@
 
 **Author**: Sanghoon Huh (허상훈)  
 **Date**: August 2026  
-**Document Version**: 2.1 (Refined Formal Specification)
+**Document Version**: 2.2 (Refined Formal Specification)
 
 ---
 
@@ -85,10 +85,8 @@ $$N_{\text{basins}}(x_t; \mathcal{Z}_0) \triangleq \left| \text{Cluster}_{\delta
 
 ### 3.3 Critical Saddle-Node Bifurcation Threshold ($u^*$)
 Operational constraint $u_t$ (safety policy perturbation) modifies $f_\theta(z; x_t, u_t)$. A saddle-node bifurcation occurs when a real eigenvalue of the Jacobian passes $+1$:
-$$\lambda_{\max}\left( J_f(z_k^*; u) \right) = +1$$
-The critical collapse threshold for eliminating non-compliant attractor $k$ is:
 $$u_k^* \triangleq \inf \left\{ \|u\| \;\middle|\; \exists \lambda_i\left( J_f(z_k^*; u) \right) = +1 \right\}$$
-At $u = u_k^*$, $I - J_f(z_k^*; u)$ becomes singular, destroying attractor $z_k^*$ and collapsing the latent phase space into the compliant basin.
+At $u = u_k^*$, $I - J_f(z_k^*; u)$ becomes singular, destroying attractor $z_k^*$. Upon destruction, the state transitions to a remaining attractor; ensuring that the destination attractor is compliant requires that $u_t$ simultaneously eliminates all non-compliant basins—a safety design constraint, not an automatic mathematical consequence of the bifurcation itself.
 
 ---
 
@@ -96,7 +94,7 @@ At $u = u_k^*$, $I - J_f(z_k^*; u)$ becomes singular, destroying attractor $z_k^
 
 1. **Token Axis (Gemma 4)**: Handles token sequence parsing, tool formatting, and explicit Chain-of-Thought generation.
 2. **Latent Axis (MS-DEQ)**: Executes solver iterations over intermediate transformer state spaces to reach steady-state attractors $z^*$.
-3. **Safety Control Perturbation**: Enforces operational constraints $u_t$, inducing saddle-node bifurcations ($\lambda_i \to +1$) to eliminate non-compliant attractors.
+3. **Safety Control Perturbation**: Enforces operational constraints $u_t$, inducing saddle-node bifurcations ($\exists \lambda_i = +1$) to eliminate non-compliant attractors.
 4. **Autoregressive Output**: Decodes tokens conditioned on the collapsed attractor $z^*_{\text{collapsed}}$.
 
 ---
@@ -105,5 +103,5 @@ At $u = u_k^*$, $I - J_f(z_k^*; u)$ becomes singular, destroying attractor $z_k^
 
 1. **Universal Transformers & Looped Architectures**: Dehghani et al. (2019), Giannou et al. (2023) - Recurrent depth, looped transformers, and test-time compute iterations.
 2. **Implicit Deep Equilibrium Models**: Bai et al. (2019, 2020) - Fixed-point representations and implicit differentiation.
-3. **Latent Deliberation & Recurrent Depth**: Coconut (Hao et al., 2024), Saunshi et al. (2025) - Reasoning with latent thoughts in looped transformers.
-4. **Attractor Networks & Dynamical Systems**: "Scaling Up Test-Time Compute with Latent Reasoning" (Geiping et al., 2025; Ouro, 2025).
+3. **Latent Deliberation & Recurrent Depth**: Coconut (Hao et al., 2024), Saunshi et al. (2025), Ouro (Zhu et al., 2025) - Reasoning with latent thoughts in looped language models.
+4. **Attractor Networks & Dense Associative Memory**: Hopfield Networks and Dense Associative Memories (Krotov & Hopfield, 2016; Ramsauer et al., 2020), "Scaling Up Test-Time Compute with Latent Reasoning" (Geiping et al., 2025).

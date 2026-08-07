@@ -7,7 +7,7 @@
 ---
 
 ## Abstract
-Machine learning benchmarks in computational biology and clinical medicine often exhibit inflated performance estimates due to hidden data leakage, baseline confounders, and undocumented dataset provenance artifacts. In this work, we propose the Unified Provenance and Audit Framework (UPAF), a cryptographic auditing framework that seals dataset provenance, split rules, runtime environments, code execution, and holdout predictions. We apply UPAF to audit three canonical domain benchmarks: (1) an intrinsically disordered protein liquid-liquid phase separation (LLPS) prediction benchmark (Task B), (2) a multi-center leave-one-site-out clinical heart disease dataset (Task F), and (3) a fold-switching protein structure benchmark (Task A). Our empirical audits reveal that baseline sequence length alone achieves an AUROC of 0.6017 [0.5569, 0.6465], while metadata text annotation length yields an independent literature bias of 0.5762 [0.5306, 0.6218]. In multi-center clinical auditing, our 3-axis protocol indicates model discriminative power beyond demographic chance (permutation $p = 0.0010$, demographic gain $\Delta = +0.1287$) while identifying severe regional degradation at sites with missing measurements (Switzerland AUROC 0.5967). Finally, we present three real-world case studies detailing provenance leakage, dataset parsing artifacts, and audit log immutability lessons.
+Machine learning benchmarks in computational biology and clinical medicine often exhibit inflated performance estimates due to hidden data leakage, baseline confounders, and undocumented dataset provenance artifacts. In this work, we propose the Unified Provenance and Audit Framework (UPAF), a cryptographic auditing framework that seals dataset provenance, split rules, runtime environments, code execution, and holdout predictions. We apply UPAF to audit two primary domain benchmarks: (1) an intrinsically disordered protein liquid-liquid phase separation (LLPS) prediction benchmark (Task B) and (2) a multi-center leave-one-site-out clinical heart disease dataset (Task F), while presenting a retrospective forensic case study on a third (Task A). Our empirical audits reveal that baseline sequence length alone achieves an AUROC of 0.6017 [0.5569, 0.6465], while metadata text annotation length yields an independent literature bias of 0.5762 [0.5306, 0.6218]. In multi-center clinical auditing, our 3-axis protocol indicates model discriminative power beyond demographic chance (permutation $p = 0.0010$, demographic gain $\Delta = +0.1287$) while identifying severe regional degradation at sites with missing measurements (Switzerland AUROC 0.5967). Finally, we present three real-world case studies detailing provenance leakage, dataset parsing artifacts, and audit log immutability lessons.
 
 ---
 
@@ -24,14 +24,16 @@ UPAF establishes a 5-layer cryptographic seal:
 4. **Execution Layer**: Model configuration, hyperparameter seeds, and metric definitions.
 5. **Output Layer**: Raw holdout prediction persistence (`sample_id`, `y_true`, `y_score`, `y_pred`).
 
-All audit records link sequentially via cryptographic hash chaining (`prev_manifest_self_sha256`) anchored by an external repository tip hash (`ledger_tip.sha256`).
+Post-GENESIS audit records link sequentially via cryptographic hash chaining (`prev_manifest_self_sha256`) anchored by an external repository tip hash (`ledger_tip.sha256`).
+
+*System Boundary & Scope*: The seal detects post-hoc modification and rerun inconsistency. It does not detect confounds in the data itself, nor manipulation at execution time; the former is addressed by the 3-axis protocol.
 
 ---
 
 ## 3. The 3-Axis Audit Evaluation Protocol
 To distinguish genuine model learning from artifact exploitation, holdout predictions are subjected to a 3-axis evaluation:
 - **Axis B1 (Permutation Significance)**: Shuffling labels and re-training models ($1,000+$ fits per fold) to construct empirical null distributions.
-- **Axis B2 (Demographic Baseline Gain)**: Comparing holdout predictions against leak-free demographic baselines (e.g., Age baseline).
+- **Axis B2 (Demographic Baseline Gain)**: Comparing holdout predictions against leak-free demographic baselines (e.g., Age baseline). *Note: Axis B2 evaluates Demographic Gain; Matched-Confound Decoy Generators are designated for Future Work.*
 - **Axis B3 (Score-Confound Correlation)**: Quantifying residual correlation between prediction scores and demographic variables.
 
 ---
@@ -69,16 +71,16 @@ Auditing the combined UCI Heart Disease dataset ($n=920$, 4 clinical sites) unde
 ## 5. Case Studies of Benchmark Artifacts and Provenance Leakage
 
 ### 5.1 Case Study 1: Provenance Leakage in Fold-Switching Protein Pair Benchmarks (Task A)
-In auditing the fold-switching protein benchmark ($n=156$, 93 switchers / 63 controls; Chakravarty & Porter 2022; SHA-256 `7fdd599046...`), we identified three major provenance and alignment artifacts:
+In auditing the fold-switching protein benchmark ($n=156$, 93 switchers / 63 controls; Chakravarty & Porter 2022; SHA-256 `7fdd599046...`), the following three artifacts were identified through manual code forensics rather than automated framework scanning (which subsequently motivated adding provenance tracking and source-only baseline checks to UPAF):
 1. **Source-Label Confounding**: Positive pairs were sourced from Chakravarty & Porter (2022) whereas negative controls were constructed from UniProt, embedding non-biophysical dataset generation artifacts into label assignments.
 2. **Raw Structural Alignment Discrimination**: A simple, un-trained raw structural RMSD baseline achieved an AUROC of **`0.7981`** without learning protein dynamics.
-3. **Residue Indexing Misalignment**: Calculating RMSD across residue indices without sequence alignment inflated control structural RMSD values by a median of **`12.6 Å`**, artificially separating controls from switchers.
+3. **Residue Indexing Misalignment**: Calculating RMSD across residue indices without sequence alignment caused control-pair RMSD values to reach a median of **`12.6 Å`**, far above the $0.5\text{--}2\text{ \AA}$ typical of same-fold pairs. Because alignment errors artificially inflated control RMSD values toward the fold-switching range, proper sequence alignment is expected to further increase the baseline discriminative RMSD AUROC above 0.7981.
 
 ### 5.2 Case Study 2: FASTA Text String Parsing Artifacts (Task B)
 Auditing the raw `val.tsv` file revealed that 41 missing sequence rows were initially converted into 5-residue peptide strings (`NKNWN`) due to naive regex cleaning of `"UNKNOWN"` text cells. Excluding these rows isolated true sequence length bias (`CONF_seqlen = 0.6017`) and header text length bias (`CONF_header = 0.5762`).
 
 ### 5.3 Case Study 3: Audit Log Overwrite Incident and Hash Chaining Requirements (UPAF Incident)
-During audit log maintenance, a script executed in write mode (`"w"`) rather than append mode (`"a"`), demonstrating that single-file logs require cryptographic hash chaining (`prev_manifest_self_sha256`) and external repository tip anchoring (`ledger_tip.sha256`) to guarantee audit immutability.
+During audit log maintenance, a script (`rewrite_invalidations.py`) executed in write mode (`"w"`) rather than append mode (`"a"`), resulting in the loss of 5 invalidation log entries (prior log state SHA-256 `b3f12e56...`). Cryptographic hash chaining (`prev_manifest_self_sha256`) was subsequently designed and introduced specifically in response to this incident. Pre-GENESIS ledger records (lines 1-14) remain designated as `unverifiable_legacy`. Furthermore, because internal hash chaining alone cannot prevent whole-file rewrites, external tip anchoring (`ledger_tip.sha256`) in git history is essential to guarantee audit log immutability.
 
 ---
 
@@ -104,4 +106,7 @@ During audit log maintenance, a script executed in write mode (`"w"`) rather tha
 - Geiping, J. et al. (2025). Scaling up test-time compute with latent reasoning. *arXiv preprint*.
 - Giannou, A. et al. (2023). Looped transformers as programmable computers. *ICML*.
 - Hao, L. et al. (2024). Training large language models to reason in a continuous latent space. *arXiv:2412.06769*.
+- Krotov, D., & Hopfield, J. J. (2016). Dense associative memory for pattern recognition. *NIPS*.
+- Ramsauer, H. et al. (2020). Hopfield networks is all you need. *ICLR*.
 - Saunshi, N. et al. (2025). Reasoning with latent thoughts: On the power of looped transformers. *arXiv:2502.17416*.
+- Zhu, Y. et al. (2025). Ouro: Recurrent depth language models. *arXiv preprint*.
