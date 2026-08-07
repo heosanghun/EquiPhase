@@ -6,7 +6,7 @@ import os
 
 sys.path.append("C:/Project/EquiPhase")
 
-from equiphase.models.symplectic_deq import SymplecticDEQ
+from equiphase.models.damped_momentum_deq import DampedMomentumDEQ
 from iss_module import ImplicitStabilitySpectroscopy
 from equiphase.models.spectral_dispatch import compute_spectral_radius
 
@@ -43,13 +43,14 @@ def test_volume_preservation():
     print("=" * 80)
     print("TEST 1: LEAPFROG VOLUME PRESERVATION (LIOUVILLE'S THEOREM - DETERMINISTIC SEED 42)")
     print("=" * 80)
+    # Fix seed BEFORE model instantiation to guarantee 100% parameter determinism
     torch.manual_seed(42)
     
     latent_dim = 8
     half_dim = latent_dim // 2
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
-    model_no_damping = SymplecticDEQ(
+    model_no_damping = DampedMomentumDEQ(
         esm_dim=1280,
         latent_dim=latent_dim,
         num_starts=2,
@@ -69,12 +70,12 @@ def test_volume_preservation():
         z = torch.randn(latent_dim, device=device, requires_grad=True)
         J = torch.autograd.functional.jacobian(f_sym_no_damping, z)
         det = torch.linalg.det(J).item()
-        print(f"Point {i+1} | Symplectic DEQ (D=8, damping=0.0) det(J): {det:.7f}")
+        print(f"Point {i+1} | DampedMomentumDEQ (D=8, damping=0.0) det(J): {det:.7f}")
         assert abs(det - 1.0) < 1e-5, f"Volume preservation failed! det = {det}"
         
     print("  -> PASSED: det(J) is exactly 1.0 (conserved volume) when damping = 0.0.")
     
-    model_damping = SymplecticDEQ(
+    model_damping = DampedMomentumDEQ(
         esm_dim=1280,
         latent_dim=latent_dim,
         num_starts=2,
@@ -89,11 +90,12 @@ def test_volume_preservation():
     J = torch.autograd.functional.jacobian(f_sym_damping, z)
     det = torch.linalg.det(J).item()
     expected_det = (1.0 - 0.2)**half_dim
-    print(f"Symplectic DEQ (D=8, damping=0.2) det(J): {det:.7f} | Expected: {expected_det:.7f}")
+    print(f"DampedMomentumDEQ (D=8, damping=0.2) det(J): {det:.7f} | Expected: {expected_det:.7f}")
     assert abs(det - expected_det) < 1e-5, f"Jacobian determinant mismatch! det = {det}, expected = {expected_det}"
     print("  -> PASSED: det(J) decays exactly as (1 - damping)^half_dim under physical friction.")
     
-    # Baseline Observation (Separated from PASS/FAIL gate)
+    # Baseline Observation (Deterministic seed set before model construction)
+    torch.manual_seed(42)
     model_standard = ImplicitStabilitySpectroscopy(
         esm_dim=1280,
         latent_dim=latent_dim,
@@ -106,7 +108,7 @@ def test_volume_preservation():
     z = torch.randn(latent_dim, device=device)
     J = torch.autograd.functional.jacobian(f_std, z)
     det = torch.linalg.det(J).item()
-    print(f"Standard DEQ Baseline Observation det(J): {det:.7e} (Rank deficiency / numerical singularity)")
+    print(f"Standard DEQ Baseline Observation det(J): {det:.7e} (Deterministic observation)")
     print("=" * 80 + "\n")
 
 def test_symplectic_tensor_preservation():
@@ -131,7 +133,8 @@ def test_symplectic_tensor_preservation():
     print("  -> PASSED: 2D Leapfrog strictly conserves canonical symplectic structure (R < 1e-6).")
     
     # 2. 200-State Audit for D=64 Model
-    model_64 = SymplecticDEQ(esm_dim=1280, latent_dim=64, num_starts=2, dt=0.1, damping=0.2).to(device)
+    torch.manual_seed(42)
+    model_64 = DampedMomentumDEQ(esm_dim=1280, latent_dim=64, num_starts=2, dt=0.1, damping=0.2).to(device)
     X_pooled = torch.randn(1, 64, device=device)
     lam_eff = torch.tensor([[0.5]], device=device)
     def f_sym_64(z):
@@ -146,11 +149,12 @@ def test_symplectic_tensor_preservation():
             r_list.append(r_v)
             
     c_arr, r_arr = np.array(c_list), np.array(r_list)
+    mean_r_pct = r_arr.mean() * 100
     print(f"Full Model (D=64, damping=0.2) 200-State Audit:")
     print(f"  Conformality c: {c_arr.mean():.7f} ± {c_arr.std():.7f} (Matches 1 - damping = 0.8)")
-    print(f"  Relative Residual R: Mean={r_arr.mean()*100:.2f}%, Min={r_arr.min()*100:.2f}%, Max={r_arr.max()*100:.2f}%")
+    print(f"  Relative Residual R: Mean={mean_r_pct:.2f}%, Min={r_arr.min()*100:.2f}%, Max={r_arr.max()*100:.2f}%")
     print(f"  Evaluation (Threshold R < 1e-6): 0 / 200 Passed (100% Violation)")
-    print("  -> DECISION (FREEZE_PAPER2 Condition 4): Naming withdrawn. Official Designation: Heavy-Ball Momentum Iteration (c=0.8, R=1.17%).")
+    print(f"  -> DECISION (FREEZE_PAPER2 Condition 4): Naming withdrawn. Official Designation: DampedMomentumDEQ (c=0.8, R={mean_r_pct:.2f}%).")
     print("=" * 80 + "\n")
 
 def test_krylov_spectral_dispatch():
