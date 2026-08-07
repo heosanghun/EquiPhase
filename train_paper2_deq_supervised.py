@@ -46,7 +46,7 @@ def compute_spectral_radius_power_method(M, num_iters=30):
     rho = float(torch.abs(torch.matmul(v.t(), Mv)).item())
     return rho
 
-# Task (c) EquiPhase Supervised DEQ Model
+# Task (c) EquiPhase Supervised DEQ Model with Sign-Paired Loss
 class EquiPhaseSupervisedDEQ(nn.Module):
     def __init__(self, latent_dim=32, damping=0.20, dt=0.10):
         super().__init__()
@@ -54,7 +54,7 @@ class EquiPhaseSupervisedDEQ(nn.Module):
         self.damping = damping
         self.dt = dt
         
-        # Neural potential V_net(q; x) parameterized by MLP
+        # Neural potential V_net(q; x)
         self.fc1 = nn.Linear(latent_dim + 2, 64)
         self.act = nn.GELU()
         self.fc2 = nn.Linear(64, 1)
@@ -63,13 +63,19 @@ class EquiPhaseSupervisedDEQ(nn.Module):
         nn.init.normal_(self.fc2.weight, std=0.01)
         nn.init.zeros_(self.fc2.bias)
         
+        # A matrix: a1 = alpha (input conditioning), a2 = 0.3 (fixed saddle), a3..32 = -0.5 (fixed harmonic)
         A_diag = torch.tensor([1.0, 0.3] + [-0.5]*(latent_dim-2), device=device)
-        self.A = torch.diag(A_diag)
+        self.A_base = torch.diag(A_diag)
 
     def V_total(self, q, x):
-        # q: [B, latent_dim], x: [B, 2]
+        # q: [B, latent_dim], x: [B, 2] (x = [alpha, sqrt(alpha)])
+        alpha = x[:, 0:1]
+        A_dynamic = self.A_base.clone()
+        
         q_sq = torch.sum(q**2, dim=-1, keepdim=True)
-        q_A_q = torch.sum(q * torch.matmul(q, self.A.t()), dim=-1, keepdim=True)
+        # Dynamic a1 = alpha along e1
+        q_A_q = alpha * (q[:, 0:1]**2) + 0.3 * (q[:, 1:2]**2) + torch.sum(-0.5 * (q[:, 2:]**2), dim=-1, keepdim=True)
+        
         v_base = 0.25 * (q_sq**2) - 0.5 * q_A_q
         
         qx = torch.cat([q, x], dim=-1)
@@ -98,7 +104,6 @@ class EquiPhaseSupervisedDEQ(nn.Module):
         return torch.cat([q_next, p_next], dim=-1).squeeze(0)
 
     def solve_equilibrium(self, z_init, x, num_steps=100):
-        # Forward trajectory to find fixed point z*
         z_curr = z_init
         for _ in range(num_steps):
             q = z_curr[:, :self.latent_dim]
@@ -117,45 +122,47 @@ class EquiPhaseSupervisedDEQ(nn.Module):
 
 def main():
     print("==========================================================================================")
-    print("=== TASK (C) DEQ FIXED-POINT SUPERVISED LEARNING & PREREGISTRATION AUDIT ===")
+    print("=== TASK (C) SIGN-PAIRED DEQ SUPERVISED LEARNING & PREREGISTRATION AUDIT ===")
     print("==========================================================================================")
     
     model = EquiPhaseSupervisedDEQ().to(device)
     optimizer = optim.Adam(model.parameters(), lr=1e-3)
     
-    # Generate Synthetic Supervisory Task (c):
-    # Conditioning vector alpha in [0.8, 1.2]. Goal: steer equilibrium q1* to +sqrt(alpha) or -sqrt(alpha)
+    # Balanced 50/50 Positive and Negative Initializations
     torch.manual_seed(100)
-    num_samples = 32
-    alphas = torch.rand(num_samples, 1, device=device) * 0.4 + 0.8  # alpha in [0.8, 1.2]
+    batch_size = 32
+    half_b = batch_size // 2
+    
+    alphas = torch.rand(batch_size, 1, device=device) * 0.4 + 0.8  # alpha in [0.8, 1.2]
     x_batch = torch.cat([alphas, torch.sqrt(alphas)], dim=-1)     # [B, 2]
     
-    target_q_plus = torch.zeros(num_samples, 32, device=device)
-    target_q_plus[:, 0] = torch.sqrt(alphas).squeeze(-1)
-    
     # Pre-training Audit
-    print("\n--- PRE-TRAINING AUDIT (Untrained Model) ---")
     x_test_single = torch.tensor([1.0, 1.0], device=device)
     f_map_pre = lambda z: model.cell_forward_single(z, x_test_single)
     c_pre, R_pre = compute_symplectic_residual(f_map_pre, torch.randn(64, device=device))
-    print(f"Pre-training c parameter: {c_pre:.6f}")
-    print(f"Pre-training Symplectic Violation R: {R_pre:.6e}")
+    print(f"\n[Architectural Guarantee] Pre-training c: {c_pre:.6f}, Symplectic R: {R_pre:.6e}")
     
-    # Execute 50 Epochs of Supervised Fixed-Point Training
-    print("\n--- EXECUTING TASK (C) DEQ SUPERVISED FIXED-POINT TRAINING ---")
+    # Execute 50 Epochs of Sign-Paired Supervised Training
+    print("\n--- EXECUTING SIGN-PAIRED TASK (C) SUPERVISED DEQ TRAINING ---")
     for epoch in range(1, 51):
         optimizer.zero_grad()
         
-        z_init = torch.randn(num_samples, 64, device=device) * 0.5
-        z_init[:, 0] += 1.0  # initialize near positive basin
+        # 50/50 Balanced initializations: half positive q1, half negative q1
+        z_init = torch.randn(batch_size, 64, device=device) * 0.5
+        z_init[:half_b, 0] = torch.abs(z_init[:half_b, 0]) + 0.5   # positive half
+        z_init[half_b:, 0] = -torch.abs(z_init[half_b:, 0]) - 0.5  # negative half
+        
+        # Sign-paired target: sign(z0_q1) * sqrt(alpha) * e1
+        q0 = z_init[:, 0:1]
+        target_sign = torch.sign(q0)
+        target_q = torch.zeros(batch_size, 32, device=device)
+        target_q[:, 0:1] = target_sign * torch.sqrt(alphas)
         
         z_star = model.solve_equilibrium(z_init, x_batch, num_steps=60)
         q_star = z_star[:, :32]
         
-        # Loss: Equilibrium Target MSE + Residual Penalty
-        loss_eq = torch.mean((q_star - target_q_plus)**2)
+        loss_eq = torch.mean((q_star - target_q)**2)
         
-        # Fixed point residual check
         z_next = model.solve_equilibrium(z_star, x_batch, num_steps=1)
         loss_res = torch.mean((z_next - z_star)**2)
         
@@ -164,7 +171,7 @@ def main():
         optimizer.step()
         
         if epoch % 10 == 0 or epoch == 1:
-            print(f"Epoch {epoch:2d}/50 | Fixed-Point Target Loss: {loss_eq.item():.6e} | Residual Penalty: {loss_res.item():.6e}")
+            print(f"Epoch {epoch:2d}/50 | Sign-Paired Target Loss: {loss_eq.item():.6e} | Residual Penalty: {loss_res.item():.6e}")
             
     # Save Checkpoint
     checkpoint_path = "C:/Project/EquiPhase/supervised_deq_model.pt"
@@ -182,7 +189,6 @@ def main():
     f_map_post = lambda z: model.cell_forward_single(z, x_test_single)
     c_post, R_post = compute_symplectic_residual(f_map_post, torch.randn(64, device=device))
     
-    # Measure Attractor Basins & Spectral Radius Filtering
     stable_basins = []
     saddle_points = []
     diverged_count = 0
@@ -210,15 +216,10 @@ def main():
     minus_count = sum(1 for q in q1_vals if q < -0.1)
     unique_basins = (1 if plus_count > 0 else 0) + (1 if minus_count > 0 else 0)
     
-    print(f"Post-training c parameter: {c_post:.6f}")
-    print(f"Post-training Symplectic Violation R: {R_post:.6e}")
+    print(f"[Architectural Guarantee] Post-training c: {c_post:.6f}, Symplectic R: {R_post:.6e}")
     print(f"Diverged Trajectories: {diverged_count}/100")
     print(f"Stable Attractor Basins (rho < 1.0): {len(stable_basins)} (Plus={plus_count}, Minus={minus_count}) -> Unique Basins: {unique_basins}")
     print(f"Unstable Saddle Manifolds (rho >= 1.0): {len(saddle_points)}")
-    
-    print("\n==========================================================================================")
-    print("=== TASK (C) DEQ SUPERVISED LEARNING & VERIFICATION COMPLETE (STATUS: ALL PASSED) ===")
-    print("==========================================================================================")
 
 if __name__ == "__main__":
     main()
