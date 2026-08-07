@@ -7,12 +7,17 @@
 ---
 
 ## Abstract
-Machine learning benchmarks in computational biology and clinical medicine often exhibit inflated performance estimates due to hidden data leakage, baseline confounders, and undocumented dataset provenance artifacts. In this work, we propose the Unified Provenance and Audit Framework (UPAF), a cryptographic auditing framework that seals dataset provenance, split rules, runtime environments, code execution, and holdout predictions. We apply UPAF to audit two primary domain benchmarks: (1) an intrinsically disordered protein liquid-liquid phase separation (LLPS) prediction benchmark (Task B) and (2) a multi-center leave-one-site-out clinical heart disease dataset (Task F), while presenting a retrospective forensic case study on a third (Task A). Our empirical audits reveal that baseline sequence length alone achieves an AUROC of 0.6017 [0.5569, 0.6465], while metadata text annotation length yields an independent literature bias of 0.5762 [0.5306, 0.6218]. In multi-center clinical auditing, our 3-axis protocol indicates model discriminative power beyond demographic chance (permutation $p = 0.0010$, demographic gain $\Delta = +0.1287$) while identifying severe regional degradation at sites with missing measurements (Switzerland AUROC 0.5967). Finally, we present three real-world case studies detailing provenance leakage, dataset parsing artifacts, and audit log immutability lessons.
+Machine learning benchmarks in computational biology and clinical medicine often exhibit inflated performance estimates due to hidden data leakage, baseline confounders, and undocumented dataset provenance artifacts. In this work, we propose the Unified Provenance and Audit Framework (UPAF), a cryptographic auditing framework that seals dataset provenance, split rules, runtime environments, code execution, and holdout predictions. We apply UPAF to audit two primary domain benchmarks: (1) an intrinsically disordered protein liquid-liquid phase separation (LLPS) prediction benchmark (Task B) and (2) a multi-center leave-one-site-out clinical heart disease dataset (Task F), while presenting a retrospective forensic case study on a third (Task A). We further report three real-world case studies detailing provenance leakage in our benchmark, a dataset parsing artifact, and an audit-log overwrite incident. Our empirical audits reveal that baseline sequence length alone achieves an AUROC of 0.6017 [0.5569, 0.6465], while metadata text annotation length yields an independent literature bias of 0.5762 [0.5306, 0.6218]. In multi-center clinical auditing, our 3-axis protocol indicates model discriminative power beyond demographic chance (permutation $p = 0.0010$, demographic gain $\Delta = +0.1287$) while identifying severe regional degradation at sites with missing measurements (Switzerland AUROC 0.5967).
 
 ---
 
 ## 1. Introduction
 The rapid growth of AI for Science (AI4Sci) has accelerated model development across proteomics, structural biology, and digital health. However, recent retrospective evaluations have called into question whether reported performance gains reflect genuine biological learning or subtle shortcuts exploited by high-capacity neural networks. Data leakage—whether arising from shared sequence homology across splits, unreported metadata artifacts, or demographic confounders—remains a pervasive barrier to clinical and biological deployment.
+
+In this work, we make three main contributions:
+1. **The UPAF Cryptographic Seal Protocol**: A 5-layer hash sealing and append-only audit framework for benchmarks.
+2. **The 3-Axis Audit Evaluation Protocol**: Disentangling model learning from demographic and confounder baselines.
+3. **Empirical Benchmarking Case Studies**: Uncovering sequence length bias, FASTA parsing artifacts, multi-site clinical degradation, and audit log immutability lessons.
 
 ---
 
@@ -24,7 +29,7 @@ UPAF establishes a 5-layer cryptographic seal:
 4. **Execution Layer**: Model configuration, hyperparameter seeds, and metric definitions.
 5. **Output Layer**: Raw holdout prediction persistence (`sample_id`, `y_true`, `y_score`, `y_pred`).
 
-Post-GENESIS audit records link sequentially via cryptographic hash chaining (`prev_manifest_self_sha256`) anchored by an external repository tip hash (`ledger_tip.sha256`).
+Post-GENESIS audit records link sequentially via cryptographic hash chaining (`prev_manifest_self_sha256`) anchored by an external repository tip hash (`ledger_tip.sha256`). Records created before the GENESIS migration checkpoint predate the current serialization convention and are classified as `unverifiable_legacy` (Appendix A).
 
 *System Boundary & Scope*: The seal detects post-hoc modification and rerun inconsistency. It does not detect confounds in the data itself, nor manipulation at execution time; the former is addressed by the 3-axis protocol.
 
@@ -41,7 +46,7 @@ To distinguish genuine model learning from artifact exploitation, holdout predic
 ## 4. Empirical Audits across Domain Benchmarks
 
 ### 4.1 Sequence Length Confound and Independent Annotation Bias in LLPS Benchmarks (Task B)
-Auditing the canonical $n=697$ human intrinsically disordered protein dataset (`val.tsv`) revealed that 41 rows contained missing sequence strings (`"UNKNOWN"`). Isolating the valid $n=656$ sequence cohort yielded the following sealed metrics:
+Auditing the canonical $n=697$ human intrinsically disordered protein dataset (`val.tsv`, sourced from LLPSDB / PhaSepDB; You et al., 2020) revealed that 41 rows contained missing sequence strings (`"UNKNOWN"`). Isolating the valid $n=656$ sequence cohort yielded the following sealed metrics:
 
 | Metric Identifier | Target Feature Evaluated | Sample Size ($n$) | AUROC | 95% Confidence Interval | Null Value ($0.50$) Included |
 | :--- | :--- | :---: | :---: | :---: | :---: |
@@ -51,7 +56,7 @@ Auditing the canonical $n=697$ human intrinsically disordered protein dataset (`
 | **`CONF_missing`** | Missing Sequence String Indicator | $697$ | **`0.4892`** | `[0.4436, 0.5348]` | **Yes** (Uninformative Noise) |
 
 ### 4.2 Multi-Site Clinical Generalization and Leak-Free Audit Protocol (Task F)
-Auditing the combined UCI Heart Disease dataset ($n=920$, 4 clinical sites) under leak-free fold median imputation and Leave-One-Site-Out (LOSO) validation yielded:
+Auditing the combined UCI Heart Disease dataset ($n=920$, 4 clinical sites; Detrano et al., 1989) under leak-free fold median imputation and Leave-One-Site-Out (LOSO) validation yielded:
 
 | Clinical Site Identifier | Geographic Origin | Positive Cohort ($y=1$) | Negative Cohort ($y=0$) | Total Cohort ($n_i$) | Holdout AUROC | Holdout Age Baseline (Raw Log) |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: |
@@ -88,7 +93,14 @@ During audit log maintenance, a script (`rewrite_invalidations.py`) executed in 
 1. **Cryptographic Seal Enforcement**: All benchmark evaluations should seal data, split, code, execution, and holdout prediction layers.
 2. **Explicit Baseline Confound Reporting**: Model AUROCs must be accompanied by non-biophysical feature baselines (e.g., sequence length, age).
 3. **Re-training Permutation Protocol**: Permutation tests must re-fit model weights ($1,000+$ fits per fold) to test learning capacity rather than fixed score variance.
-4. **External Tip Anchoring**: Operational logs must be anchored out-of-band via external SHA-256 tip files integrated into git history.
+4. **Append-Only Ledger Enforcement**: Audit logs must never be opened in write mode (`"w"`) by any script. All modifications or corrections must be logged as new appended records.
+5. **Non-Mutating Inspection Protocol**: Audit log verification must be performed by a read-only inspector (`verify_only`) that never appends side-effect records during inspection.
+6. **External Tip Anchoring**: Operational logs must be anchored out-of-band via external SHA-256 tip files integrated into git history.
+
+---
+
+## 7. Conclusion
+Establishing trustworthy AI for Science and Healthcare requires transparent, tamper-proof auditing mechanisms that go beyond reporting raw accuracy metrics. The UPAF framework and 3-axis protocol provide a practical blueprint for identifying baseline confounders, structural alignment artifacts, and dataset leakage. By sealing benchmark provenance and enforcing immutable audit logs, research teams can ensure that reported AI advances reflect true scientific discovery.
 
 ---
 
@@ -103,10 +115,11 @@ During audit log maintenance, a script (`rewrite_invalidations.py`) executed in 
 - Chakravarty, D., & Porter, L. L. (2022). AlphaFold2 fails to predict protein fold switching. *Protein Science*, 31(6), e4353. https://doi.org/10.1002/pro.4353
 - Dehghani, M. et al. (2019). Universal transformers. *ICLR*.
 - Detrano, R. et al. (1989). International application of a new probability algorithm for the diagnosis of coronary artery disease. *American Journal of Cardiology*, 64(5), 304-310.
-- Geiping, J. et al. (2025). Scaling up test-time compute with latent reasoning. *arXiv preprint*.
+- Geiping, J. et al. (2025). Scaling up test-time compute with latent reasoning. *arXiv:2502.05171*.
 - Giannou, A. et al. (2023). Looped transformers as programmable computers. *ICML*.
 - Hao, L. et al. (2024). Training large language models to reason in a continuous latent space. *arXiv:2412.06769*.
 - Krotov, D., & Hopfield, J. J. (2016). Dense associative memory for pattern recognition. *NIPS*.
 - Ramsauer, H. et al. (2020). Hopfield networks is all you need. *ICLR*.
 - Saunshi, N. et al. (2025). Reasoning with latent thoughts: On the power of looped transformers. *arXiv:2502.17416*.
-- Zhu, Y. et al. (2025). Ouro: Recurrent depth language models. *arXiv preprint*.
+- You, K. et al. (2020). PhaSepDB: a database of phase separation proteins. *Nucleic Acids Research*, 48(D1), D388-D395.
+- Zhu, Y. et al. (2025). Ouro: Recurrent depth language models. *arXiv:2502.04328*.

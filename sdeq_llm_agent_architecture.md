@@ -2,7 +2,7 @@
 
 **Author**: Sanghoon Huh (허상훈)  
 **Date**: August 2026  
-**Document Version**: 2.2 (Refined Formal Specification)
+**Document Version**: 2.3 (Refined Formal Specification)
 
 ---
 
@@ -39,7 +39,9 @@ At any decision epoch $t$, the operational multi-stability count $N(x_t)$ repres
 |   Operational Constraint Perturbation:  u_t (Safety Policy / Guardrails)                         |
 |       z^(k+1) = f_theta(z^(k); x_t, u_t)                                                         |
 |                                                                                                  |
-|   Saddle-Node Bifurcation -> Basin Collapse to Unique Compliant Attractor z*_(collapsed)          |
+|   Saddle-Node Bifurcation (EXISTS lambda_i = +1) -> Non-Compliant Basin Elimination               |
+|       -> Transition to Remaining Attractor                                                       |
+|       (Compliance requires u_t to eliminate ALL non-compliant basins -- Safety Design Constraint)|
 +--------------------------------------------------------------------------------------------------+
                                                |
                                     Collapsed Attractor z*
