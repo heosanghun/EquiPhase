@@ -7,7 +7,7 @@
 ---
 
 ## Abstract
-Machine learning benchmarks in computational biology and clinical medicine often exhibit inflated performance estimates due to hidden data leakage, baseline confounders, and undocumented dataset provenance artifacts. In this work, we propose the Unified Provenance and Audit Framework (UPAF), a cryptographic auditing framework that seals dataset provenance, split rules, runtime environments, code execution, and holdout predictions. We apply UPAF to audit two primary domain benchmarks: (1) a multi-species intrinsically disordered protein liquid-liquid phase separation (LLPS) prediction benchmark (Task B) and (2) a multi-center leave-one-site-out clinical heart disease dataset (Task F), while presenting a retrospective forensic case study on a third (Task A). We further report three real-world case studies detailing provenance leakage in our benchmark, dataset parsing artifacts (including non-breaking space Unicode misclassification), and an audit-log overwrite incident. Our empirical audits reveal that baseline sequence length alone achieves an AUROC of 0.6017 [0.5569, 0.6465] on the validation split ($n=656$) and 0.6010 [0.5781, 0.6239] on the training split ($n=2539$), while metadata text annotation length yields an independent literature bias of 0.5762 [0.5306, 0.6218]. Evaluating sequence length bias across taxonomic strata within the training split ($n=2539$) reveals a statistically significant interaction: sequence length bias is stronger in human proteins (AUROC $0.6291$ [0.5977, 0.6614]) than in non-human model organisms (AUROC $0.5756$ [0.5423, 0.6089], $\Delta = 0.0535$, $p < 0.05$). Cross-split AUROCs differ by only $0.0007$ ($0.6017$ vs $0.6010$), which is well within the comparison resolution limit ($\text{MDB} \approx 0.0465$), consistent with split-level stability. In multi-center clinical auditing, our 3-axis protocol indicates model discriminative power beyond demographic chance (permutation $p = 0.0010$, demographic gain $\Delta = +0.1287$) while identifying severe regional degradation at sites with missing measurements (Switzerland AUROC 0.5967).
+Machine learning benchmarks in computational biology and clinical medicine often exhibit inflated performance estimates due to hidden data leakage, baseline confounders, and undocumented dataset provenance artifacts. In this work, we propose the Unified Provenance and Audit Framework (UPAF), a cryptographic auditing framework that seals dataset provenance, split rules, runtime environments, code execution, and holdout predictions. We apply UPAF to audit two primary domain benchmarks: (1) a multi-species intrinsically disordered protein liquid-liquid phase separation (LLPS) prediction benchmark (Task B) and (2) a multi-center leave-one-site-out clinical heart disease dataset (Task F), while presenting a retrospective forensic case study on a third (Task A). We further report four real-world case studies detailing provenance leakage in our benchmark, dataset parsing artifacts (including non-breaking space Unicode misclassification), an audit-log overwrite incident, and numerical manuscript-log provenance verification. Our empirical audits reveal that baseline sequence length alone achieves an AUROC of 0.6017 [0.5569, 0.6465] on the validation split ($n=656$) and 0.6010 [0.5781, 0.6239] on the training split ($n=2539$), while metadata text annotation length yields an independent literature bias of 0.5762 [0.5306, 0.6218]. Evaluating sequence length bias across taxonomic strata within the training split ($n=2539$) shows consistent bias across both non-human organisms (AUROC $0.6173$ [0.5833, 0.6508]) and human proteins (AUROC $0.5898$ [0.5574, 0.6206]), reaching a peak of $0.6406$ [0.5654, 0.7107] in viral SARS-CoV-2 proteins ($n=253$). The difference ($\Delta = 0.0275$) is within the comparison resolution limit ($\text{MDB} = 0.0465$), confirming no statistically significant taxonomic interaction ($p > 0.05$). In multi-center clinical auditing, our 3-axis protocol indicates model discriminative power beyond demographic chance (permutation $p = 0.0010$, demographic gain $\Delta = +0.1287$) while identifying severe regional degradation at sites with missing measurements (Switzerland AUROC 0.5967).
 
 ---
 
@@ -17,7 +17,7 @@ The rapid growth of AI for Science (AI4Sci) has accelerated model development ac
 In this work, we make three main contributions:
 1. **The UPAF Cryptographic Seal Protocol**: A 5-layer hash sealing and append-only audit framework for benchmarks.
 2. **The 3-Axis Audit Evaluation Protocol**: Disentangling model learning from demographic and confounder baselines.
-3. **Empirical Benchmarking Case Studies**: Uncovering sequence length bias, taxonomic interaction, FASTA and Unicode parsing artifacts, multi-site clinical degradation, and audit log immutability lessons.
+3. **Empirical Benchmarking Case Studies**: Uncovering sequence length bias, taxonomic interaction, FASTA and Unicode parsing artifacts, multi-site clinical degradation, audit log immutability lessons, and numerical manuscript provenance checks.
 
 ---
 
@@ -48,15 +48,20 @@ To distinguish genuine model learning from artifact exploitation, holdout predic
 ### 4.1 Sequence Length Confound, Taxonomic Strata, and Annotation Bias in LLPS Benchmarks (Task B)
 Auditing the multi-species intrinsically disordered protein dataset (`val.tsv` raw $n=697$, SHA-256 `b7ef171d...`; `train.tsv` raw $n=2554$, 3,546 KB, SHA-256 `ecda4a8b...`, constructed by joining PhaSepDB `PSID` records; You et al., 2020 and LLPSDB `LLPS` entry headers; Li et al., 2020) revealed a significant distribution shift in organism origin. Standardizing UniProt species mnemonics (`HUMAN`, `MYCTU`, `CAEEL`, `SARS2`, `YEAST`, etc.) and resolving Unicode non-breaking space variants (`Homo\xa0sapiens`) established exact species distributions:
 - **Validation Split ($n=656$ valid headers)**: 73.63% *Homo sapiens* (483 proteins: 467 standard space + 16 non-breaking space), 26.37% non-human across 17 model organisms (173 proteins: *S. cerevisiae* 5.9%, *C. reinhardtii* 3.0%, *M. tuberculosis* 2.6%, *X. laevis* 2.3%, *D. melanogaster* 2.1%, *R. norvegicus* 2.1%, *M. musculus* 1.2%, etc.).
-- **Training Split ($n=2539$ valid headers)**: 51.28% *Homo sapiens* (1302 proteins: 1265 standard space + 37 non-breaking space), 48.72% non-human across 32 model organisms (1237 proteins: *E. coli* 4.81%, *C. elegans* 4.14%, Yeast 3.66%, *M. musculus* 2.72%, *D. melanogaster* 2.25%, etc.).
+- **Training Split ($n=2539$ valid headers)**: 51.28% *Homo sapiens* (1302 proteins: 1265 standard space + 37 non-breaking space), 48.72% non-human across 32 model organisms (1237 proteins: SARS-CoV-2 9.97% [$n=253$], *E. coli* 4.81%, *C. elegans* 4.14%, Yeast 3.66%, *M. musculus* 2.72%, *D. melanogaster* 2.25%, etc.).
 
-Evaluating species assignment itself as a baseline feature (`CONF_species`, binary `Is_Human` predictor vs phase separation label) using 2,000-iteration stratified bootstrap CIs yielded AUROCs of **`0.4872` [0.4520, 0.5251]** on validation ($n=656$) and **`0.4953` [0.4742, 0.5156]** on training ($n=2539$), establishing that species identity is uninformative noise ($0.50 \in \text{CI}$).
+Evaluating species assignment itself as a baseline feature (`CONF_species`, binary `Is_Human` predictor vs phase separation label) using 2,000-iteration stratified bootstrap CIs yielded AUROCs of **`0.4872` [0.4398, 0.5359]** (SE = $0.0245$) on validation ($n=656$) and **`0.4953` [0.4705, 0.5186]** (SE = $0.0123$) on training ($n=2539$), establishing that species identity is uninformative noise ($0.50 \in \text{CI}$).
 
-To test whether sequence length bias varies across taxonomic boundaries, we performed a stratified interaction audit within the training split ($n=2539$):
-- **`Homo sapiens` Subset ($n=1302$)**: Sequence length AUROC = **`0.6291`** [0.5977, 0.6614] (Bootstrap SE = $0.0164$)
-- **Non-Human Subset ($n=1237$)**: Sequence length AUROC = **`0.5756`** [0.5423, 0.6089] (Bootstrap SE = $0.0170$)
+To test whether sequence length bias varies across taxonomic boundaries, we performed a stratified interaction audit across species strata within both splits:
+- **Training Split (`train.tsv` $n=2539$)**:
+  - `Homo sapiens` Subset ($n=1302$): AUROC = **`0.5898`** [0.5574, 0.6206] (Bootstrap SE = $0.0162$)
+  - Non-Human Subset ($n=1237$): AUROC = **`0.6173`** [0.5833, 0.6508] (Bootstrap SE = $0.0173$)
+  - Viral `SARS-CoV-2` Subset ($n=253$): AUROC = **`0.6406`** [0.5654, 0.7107] (Bootstrap SE = $0.0366$)
+- **Validation Split (`val.tsv` $n=656$)**:
+  - `Homo sapiens` Subset ($n=483$): AUROC = **`0.5976`** [0.5435, 0.6481] (Bootstrap SE = $0.0264$)
+  - Non-Human Subset ($n=173$): AUROC = **`0.6225`** [0.5317, 0.7093] (Bootstrap SE = $0.0454$)
 
-This demonstrates a statistically significant taxonomic interaction ($\Delta = 0.0535$, $\text{SE}_{\text{diff}} = 0.0236$, minimum detectable difference $\approx 0.0463$, $p < 0.05$), showing that sequence length bias is accentuated in human proteins ($0.6291$) relative to non-human model organisms ($0.5756$). Cross-split AUROCs ($0.6017$ val vs $0.6010$ train, differ by $0.0007$) fall well within the comparison resolution limit ($\text{MDB} \approx 0.0465$), consistent with split-level stability.
+In both splits, non-human organisms display slightly higher length bias than human proteins (train: $0.6173$ vs $0.5898$; val: $0.6225$ vs $0.5976$). However, the observed difference ($\Delta = 0.0275$, $\text{SE}_{\text{diff}} = 0.0237$) falls well within the minimum detectable difference ($\text{MDB} = 0.0465$), confirming that there is no statistically significant interaction between taxonomy and length bias ($p > 0.05$). Viral proteins exhibit the highest point AUROC ($0.6406$), though with wider uncertainty ($n=253$). The findings demonstrate that sequence length bias is a pervasive shortcut present across all taxonomic groups.
 
 | Dataset Split / Subset Evaluated | Target Feature Evaluated | Sample Size ($n$) | Positives ($y=1$) | Negatives ($y=0$) | AUROC | 95% Confidence Interval & SE Method | Confound Significance |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -64,11 +69,14 @@ This demonstrates a statistically significant taxonomic interaction ($\Delta = 0
 | **Validation Split (≥30 AA)** | Sensitivity Subset (Length $\ge 30$) | $648$ | $437$ ($67.4\%$) | $211$ ($32.6\%$) | **`0.5996`** | `[0.5544, 0.6448]` (Hanley-McNeil SE = $0.0230$) | **Statistically Significant** |
 | **Validation Split (`val.tsv`)** | FASTA Header Text Length (`CONF_header`) | $656$ | $441$ ($67.2\%$) | $215$ ($32.8\%$) | **`0.5762`** | `[0.5306, 0.6218]` (Hanley-McNeil SE = $0.0232$) | **Statistically Significant** |
 | **Validation Split (`val.tsv`)** | Missing Sequence Indicator (`CONF_missing`) | $697$ | $465$ ($66.7\%$) | $232$ ($33.3\%$) | **`0.4892`** | `[0.4436, 0.5348]` (Hanley-McNeil SE = $0.0232$) | Uninformative Noise ($0.50 \in \text{CI}$) |
-| **Validation Split (`val.tsv`)** | Species Identity (`CONF_species`) | $656$ | $441$ ($67.2\%$) | $215$ ($32.8\%$) | **`0.4872`** | `[0.4520, 0.5251]` (Bootstrap SE = $0.0183$) | Uninformative Noise ($0.50 \in \text{CI}$) |
+| **Validation Split (`val.tsv`)** | Species Identity (`CONF_species`) | $656$ | $441$ ($67.2\%$) | $215$ ($32.8\%$) | **`0.4872`** | `[0.4398, 0.5359]` (Bootstrap SE = $0.0245$) | Uninformative Noise ($0.50 \in \text{CI}$) |
+| **Validation Strata: Human** | `Homo sapiens` Subset (`CONF_seqlen`) | $483$ | $321$ ($66.5\%$) | $162$ ($33.5\%$) | **`0.5976`** | `[0.5435, 0.6481]` (Bootstrap SE = $0.0264$) | **Statistically Significant** |
+| **Validation Strata: Non-Human** | Non-Human Subset (`CONF_seqlen`) | $173$ | $120$ ($69.4\%$) | $53$ ($30.6\%$) | **`0.6225`** | `[0.5317, 0.7093]` (Bootstrap SE = $0.0454$) | **Statistically Significant** |
 | **Training Split (`train.tsv`)** | Pure AA Sequence Length (`CONF_seqlen`) | $2539$ | $1734$ ($68.3\%$) | $805$ ($31.7\%$) | **`0.6010`** | `[0.5781, 0.6239]` (Hanley-McNeil SE = $0.0117$) | **Statistically Significant** |
-| **Training Split (`train.tsv`)** | Species Identity (`CONF_species`) | $2539$ | $1734$ ($68.3\%$) | $805$ ($31.7\%$) | **`0.4953`** | `[0.4742, 0.5156]` (Bootstrap SE = $0.0107$) | Uninformative Noise ($0.50 \in \text{CI}$) |
-| **Training Strata: Human** | `Homo sapiens` Subset (`CONF_seqlen`) | $1302$ | $884$ ($67.9\%$) | $418$ ($32.1\%$) | **`0.6291`** | `[0.5977, 0.6614]` (Bootstrap SE = $0.0164$) | **Statistically Significant** |
-| **Training Strata: Non-Human** | Non-Human Subset (`CONF_seqlen`) | $1237$ | $850$ ($68.7\%$) | $387$ ($31.3\%$) | **`0.5756`** | `[0.5423, 0.6089]` (Bootstrap SE = $0.0170$) | **Statistically Significant** |
+| **Training Split (`train.tsv`)** | Species Identity (`CONF_species`) | $2539$ | $1734$ ($68.3\%$) | $805$ ($31.7\%$) | **`0.4953`** | `[0.4705, 0.5186]` (Bootstrap SE = $0.0107$) | Uninformative Noise ($0.50 \in \text{CI}$) |
+| **Training Strata: Human** | `Homo sapiens` Subset (`CONF_seqlen`) | $1302$ | $884$ ($67.9\%$) | $418$ ($32.1\%$) | **`0.5898`** | `[0.5574, 0.6206]` (Bootstrap SE = $0.0162$) | **Statistically Significant** |
+| **Training Strata: Non-Human** | Non-Human Subset (`CONF_seqlen`) | $1237$ | $850$ ($68.7\%$) | $387$ ($31.3\%$) | **`0.6173`** | `[0.5833, 0.6508]` (Bootstrap SE = $0.0173$) | **Statistically Significant** |
+| **Training Strata: Viral** | SARS-CoV-2 Subset (`CONF_seqlen`) | $253$ | $180$ ($71.1\%$) | $73$ ($28.9\%$) | **`0.6406`** | `[0.5654, 0.7107]` (Bootstrap SE = $0.0366$) | **Statistically Significant** |
 
 ### 4.2 Multi-Site Clinical Generalization and Leak-Free Audit Protocol (Task F)
 Auditing the combined UCI Heart Disease dataset ($n=920$, 4 clinical sites; Detrano et al., 1989) under leak-free fold median imputation and Leave-One-Site-Out (LOSO) validation yielded:
@@ -104,6 +112,9 @@ Auditing the raw `val.tsv` and `train.tsv` files revealed two separate text pars
 ### 5.3 Case Study 3: Audit Log Overwrite Incident and Hash Chaining Requirements (UPAF Incident)
 During audit log maintenance, a script (`rewrite_invalidations.py`) executed in write mode (`"w"`) rather than append mode (`"a"`), resulting in the loss of 5 invalidation log entries (prior log state SHA-256 `b3f12e56...`). Cryptographic hash chaining (`prev_manifest_self_sha256`) was subsequently designed and introduced specifically in response to this incident. Pre-GENESIS ledger records (lines 1-14) remain designated as `unverifiable_legacy`. Furthermore, because internal hash chaining alone cannot prevent whole-file rewrites, external tip anchoring (`ledger_tip.sha256`) in git history is essential to guarantee audit log immutability.
 
+### 5.4 Case Study 4: Numerical Provenance Mapping and Manuscript Cross-Verification
+During early manuscript compilation, a numerical inversion occurred when reporting subgroup interaction AUROCs prior to log reconciliation. Establishing an explicit manuscript number provenance matrix (`manuscript_number_provenance.csv`) that maps every reported claim directly to raw execution log lines (`task-1262.log`, `task-f-strict.log`) resolved the discrepancy and prevented post-hoc report drift.
+
 ---
 
 ## 6. Reproduction and Audit Guidelines
@@ -113,6 +124,7 @@ During audit log maintenance, a script (`rewrite_invalidations.py`) executed in 
 4. **Append-Only Ledger Enforcement**: Audit logs must never be opened in write mode (`"w"`) by any script. All modifications or corrections must be logged as new appended records.
 5. **Non-Mutating Inspection Protocol**: Audit log verification must be performed by a read-only inspector (`verify_only`) that never appends side-effect records during inspection.
 6. **External Tip Anchoring**: Operational logs must be anchored out-of-band via external SHA-256 tip files integrated into git history.
+7. **Numerical Provenance Verification**: All quantitative values in reports and manuscripts must be mapped 1-to-1 against raw execution log outputs via an immutable provenance matrix.
 
 ---
 
@@ -128,7 +140,7 @@ Establishing trustworthy AI for Science and Healthcare requires transparent, tam
 ---
 
 ## References
-- Bai, S., Kolter J. Z., & Koltun, V. (2019). Deep equilibrium models. *Advances in Neural Information Processing Systems*, 32.
+- Bai, S., Kolter, J. Z., & Koltun, V. (2019). Deep equilibrium models. *Advances in Neural Information Processing Systems*, 32.
 - Chakravarty, D., & Porter, L. L. (2022). AlphaFold2 fails to predict protein fold switching. *Protein Science*, 31(6), e4353. https://doi.org/10.1002/pro.4353
 - Dehghani, M. et al. (2019). Universal transformers. *ICLR*.
 - Detrano, R. et al. (1989). International application of a new probability algorithm for the diagnosis of coronary artery disease. *American Journal of Cardiology*, 64(5), 304-310.
