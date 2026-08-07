@@ -2,7 +2,7 @@
 
 **Author**: Sanghoon Huh (허상훈)  
 **Date**: August 2026  
-**Document Version**: 2.0 (Corrected Formal Specification)
+**Document Version**: 2.1 (Refined Formal Specification)
 
 ---
 
@@ -75,19 +75,20 @@ Due to the curse of dimensionality ($d \approx 3000$ in modern LLMs), global bas
 
 $$N_{\text{basins}}(x_t; \mathcal{Z}_0) \triangleq \left| \text{Cluster}_{\delta}\left( \left\{ \text{Solve}\left(f_\theta(\cdot; x_t), z^{(0)}_i\right) \;\middle|\; z^{(0)}_i \in \mathcal{Z}_0, \, \rho(J_f) < 1 \right\} \right) \right|$$
 
-- **$K$**: Number of candidate hypothesis initializations.
-- **$\text{Solve}(\cdot, z^{(0)}_i)$**: Anderson Acceleration or Broyden solver output starting from $z^{(0)}_i$.
-- **$\text{Cluster}_{\delta}$**: Hierarchical clustering with distance threshold $\delta$ merging points into distinct attractor heads.
+### 3.2 Attractor Sharpness & Hypothesis Confidence
+- **Attractor Sharpness / Convergence Velocity ($V_{\text{conv}}$)**:
+  $$V_{\text{conv}}(z_k^*) \triangleq -\ln \rho\left( J_f(z_k^*) \right)$$
+  Higher $V_{\text{conv}}$ quantifies local attractor sharpness and numerical solver convergence speed.
+- **Hypothesis Confidence / Basin Volume Share ($\text{Share}_k$)**:
+  $$\text{Share}_k(\mathcal{Z}_0) \triangleq \frac{1}{K} \left| \left\{ i \in \{1, \dots, K\} \;\middle|\; \text{Solve}(f_\theta(\cdot; x_t), z^{(0)}_i) \to z_k^* \right\} \right|$$
+  $\text{Share}_k$ measures the empirical probability weight of candidate attractor $z_k^*$ over proposal set $\mathcal{Z}_0$.
 
-### 3.2 Basin Convergence Velocity ($V_{\text{conv}}$)
-Instead of scalar potential depth, attractor strength and confidence are measured by convergence velocity under iterations:
-$$V_{\text{conv}}(z_k^*) \triangleq -\ln \rho\left( J_f(z_k^*) \right)$$
-Higher $V_{\text{conv}}$ indicates faster solver convergence and stronger local dynamical stability.
-
-### 3.3 Critical Bifurcation Collapse Threshold ($u^*$)
-Operational constraint $u_t$ (safety guardrail perturbation) modifies $f_\theta(z; x_t, u_t)$. The critical collapse threshold for eliminating non-compliant basin $k$ is:
-$$u_k^* \triangleq \inf \left\{ \|u\| \;\middle|\; \text{Saddle-node bifurcation occurs at } z_k^* \text{ under } f_\theta(\cdot; x_t, u) \right\}$$
-At $u = u_k^*$, Jacobian $(I - J_f(z_k^*; u))$ becomes singular ($\rho \to 1$), collapsing attractor $z_k^*$ and forcing transition into the primary compliant basin.
+### 3.3 Critical Saddle-Node Bifurcation Threshold ($u^*$)
+Operational constraint $u_t$ (safety policy perturbation) modifies $f_\theta(z; x_t, u_t)$. A saddle-node bifurcation occurs when a real eigenvalue of the Jacobian passes $+1$:
+$$\lambda_{\max}\left( J_f(z_k^*; u) \right) = +1$$
+The critical collapse threshold for eliminating non-compliant attractor $k$ is:
+$$u_k^* \triangleq \inf \left\{ \|u\| \;\middle|\; \exists \lambda_i\left( J_f(z_k^*; u) \right) = +1 \right\}$$
+At $u = u_k^*$, $I - J_f(z_k^*; u)$ becomes singular, destroying attractor $z_k^*$ and collapsing the latent phase space into the compliant basin.
 
 ---
 
@@ -95,14 +96,14 @@ At $u = u_k^*$, Jacobian $(I - J_f(z_k^*; u))$ becomes singular ($\rho \to 1$), 
 
 1. **Token Axis (Gemma 4)**: Handles token sequence parsing, tool formatting, and explicit Chain-of-Thought generation.
 2. **Latent Axis (MS-DEQ)**: Executes solver iterations over intermediate transformer state spaces to reach steady-state attractors $z^*$.
-3. **Safety Control Perturbation**: Enforces operational constraints $u_t$, inducing saddle-node bifurcations to eliminate non-compliant attractors.
+3. **Safety Control Perturbation**: Enforces operational constraints $u_t$, inducing saddle-node bifurcations ($\lambda_i \to +1$) to eliminate non-compliant attractors.
 4. **Autoregressive Output**: Decodes tokens conditioned on the collapsed attractor $z^*_{\text{collapsed}}$.
 
 ---
 
 ## 5. Related Literature & Prior Work
 
-1. **Universal Transformers & Looped Architectures**: Dehghani et al. (2019), Yang et al. (2023) - Recurrent depth and test-time compute iterations.
+1. **Universal Transformers & Looped Architectures**: Dehghani et al. (2019), Giannou et al. (2023) - Recurrent depth, looped transformers, and test-time compute iterations.
 2. **Implicit Deep Equilibrium Models**: Bai et al. (2019, 2020) - Fixed-point representations and implicit differentiation.
-3. **Latent Deliberation & Recurrent Depth**: Coconut (Pan et al., 2024), Saunshi et al. (2025) - Latent thoughts in looped transformers.
-4. **Attractor Networks & Dynamical Systems**: "Solve the Loop: Attractor Models for Language and Reasoning" (Geiping et al., 2025; Ouro, 2025).
+3. **Latent Deliberation & Recurrent Depth**: Coconut (Hao et al., 2024), Saunshi et al. (2025) - Reasoning with latent thoughts in looped transformers.
+4. **Attractor Networks & Dynamical Systems**: "Scaling Up Test-Time Compute with Latent Reasoning" (Geiping et al., 2025; Ouro, 2025).
