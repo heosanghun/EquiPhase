@@ -46,7 +46,7 @@ To distinguish genuine model learning from artifact exploitation, holdout predic
 ## 4. Empirical Audits across Domain Benchmarks
 
 ### 4.1 Sequence Length Confound and Independent Annotation Bias in LLPS Benchmarks (Task B)
-Auditing the canonical $n=697$ human intrinsically disordered protein dataset (`val.tsv`, sourced from LLPSDB / PhaSepDB; You et al., 2020) revealed that 41 rows contained missing sequence strings (`"UNKNOWN"`). Isolating the valid $n=656$ sequence cohort yielded the following sealed metrics:
+Auditing the canonical $n=697$ human intrinsically disordered protein dataset (`val.tsv`, constructed by joining PhaSepDB `PSID` records; You et al., 2020 and LLPSDB `LLPS` entry headers; Li et al., 2020) revealed that 41 rows contained missing sequence strings (`"UNKNOWN"`). Isolating the valid $n=656$ sequence cohort yielded the following sealed metrics:
 
 | Metric Identifier | Target Feature Evaluated | Sample Size ($n$) | AUROC | 95% Confidence Interval | Null Value ($0.50$) Included |
 | :--- | :--- | :---: | :---: | :---: | :---: |
@@ -119,6 +119,7 @@ Establishing trustworthy AI for Science and Healthcare requires transparent, tam
 - Giannou, A. et al. (2023). Looped transformers as programmable computers. *ICML*.
 - Hao, L. et al. (2024). Training large language models to reason in a continuous latent space. *arXiv:2412.06769*.
 - Krotov, D., & Hopfield, J. J. (2016). Dense associative memory for pattern recognition. *NIPS*.
+- Li, Q. et al. (2020). LLPSDB: a database of proteins undergoing liquid-liquid phase separation in vitro. *Nucleic Acids Research*, 48(D1), D320-D327. https://doi.org/10.1093/nar/gkz780
 - Ramsauer, H. et al. (2020). Hopfield networks is all you need. *ICLR*.
 - Saunshi, N. et al. (2025). Reasoning with latent thoughts: On the power of looped transformers. *arXiv:2502.17416*.
 - You, K. et al. (2020). PhaSepDB: a database of phase separation proteins. *Nucleic Acids Research*, 48(D1), D388-D395.
