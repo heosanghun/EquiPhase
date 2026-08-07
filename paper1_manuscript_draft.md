@@ -7,7 +7,7 @@
 ---
 
 ## Abstract
-Machine learning benchmarks in computational biology and clinical medicine often exhibit inflated performance estimates due to hidden data leakage, baseline confounders, and undocumented dataset provenance artifacts. In this work, we propose the Unified Provenance and Audit Framework (UPAF), a cryptographic auditing framework that seals dataset provenance, split rules, runtime environments, code execution, and holdout predictions. We apply UPAF to audit two primary domain benchmarks: (1) an intrinsically disordered protein liquid-liquid phase separation (LLPS) prediction benchmark (Task B) and (2) a multi-center leave-one-site-out clinical heart disease dataset (Task F), while presenting a retrospective forensic case study on a third (Task A). We further report three real-world case studies detailing provenance leakage in our benchmark, a dataset parsing artifact, and an audit-log overwrite incident. Our empirical audits reveal that baseline sequence length alone achieves an AUROC of 0.6017 [0.5569, 0.6465], while metadata text annotation length yields an independent literature bias of 0.5762 [0.5306, 0.6218]. In multi-center clinical auditing, our 3-axis protocol indicates model discriminative power beyond demographic chance (permutation $p = 0.0010$, demographic gain $\Delta = +0.1287$) while identifying severe regional degradation at sites with missing measurements (Switzerland AUROC 0.5967).
+Machine learning benchmarks in computational biology and clinical medicine often exhibit inflated performance estimates due to hidden data leakage, baseline confounders, and undocumented dataset provenance artifacts. In this work, we propose the Unified Provenance and Audit Framework (UPAF), a cryptographic auditing framework that seals dataset provenance, split rules, runtime environments, code execution, and holdout predictions. We apply UPAF to audit two primary domain benchmarks: (1) a multi-species intrinsically disordered protein liquid-liquid phase separation (LLPS) prediction benchmark (Task B) and (2) a multi-center leave-one-site-out clinical heart disease dataset (Task F), while presenting a retrospective forensic case study on a third (Task A). We further report three real-world case studies detailing provenance leakage in our benchmark, a dataset parsing artifact, and an audit-log overwrite incident. Our empirical audits reveal that baseline sequence length alone achieves an AUROC of 0.6017 [0.5569, 0.6465] on the validation split ($n=656$) and 0.6031 on the training split ($n=2546$), while metadata text annotation length yields an independent literature bias of 0.5762 [0.5306, 0.6218]. In multi-center clinical auditing, our 3-axis protocol indicates model discriminative power beyond demographic chance (permutation $p = 0.0010$, demographic gain $\Delta = +0.1287$) while identifying severe regional degradation at sites with missing measurements (Switzerland AUROC 0.5967).
 
 ---
 
@@ -46,14 +46,15 @@ To distinguish genuine model learning from artifact exploitation, holdout predic
 ## 4. Empirical Audits across Domain Benchmarks
 
 ### 4.1 Sequence Length Confound and Independent Annotation Bias in LLPS Benchmarks (Task B)
-Auditing the canonical $n=697$ human intrinsically disordered protein dataset (`val.tsv`, constructed by joining PhaSepDB `PSID` records; You et al., 2020 and LLPSDB `LLPS` entry headers; Li et al., 2020) revealed that 41 rows contained missing sequence strings (`"UNKNOWN"`). Isolating the valid $n=656$ sequence cohort yielded the following sealed metrics:
+Auditing the multi-species intrinsically disordered protein dataset (`val.tsv` $n=697$ and `train.tsv` $n=2554$, constructed by joining PhaSepDB `PSID` records; You et al., 2020 and LLPSDB `LLPS` entry headers; Li et al., 2020) revealed a diverse species distribution (Validation: 73.6% *Homo sapiens*, 26.4% across 17 model organisms including *S. cerevisiae*, *X. laevis*, *D. melanogaster*, *M. musculus*; Training: 50.9% *Homo sapiens*, 49.1% across 36 model organisms). Auditing sequence length bias across both splits confirmed high consistency:
 
-| Metric Identifier | Target Feature Evaluated | Sample Size ($n$) | AUROC | 95% Confidence Interval | Null Value ($0.50$) Included |
+| Dataset Split Evaluated | Target Feature Evaluated | Sample Size ($n$) | AUROC | 95% Confidence Interval | Confound Significance |
 | :--- | :--- | :---: | :---: | :---: | :---: |
-| **`CONF_seqlen`** | Pure AA Sequence Length | $656$ | **`0.6017`** | `[0.5569, 0.6465]` | **No** (Statistically Significant) |
-| **`CONF_seqlen (≥30 AA)`** | Sensitivity Subset (Length $\ge 30$) | $648$ | **`0.5996`** | `[0.5544, 0.6448]` | **No** (Statistically Significant) |
-| **`CONF_header`** | FASTA Header Text Length | $656$ | **`0.5762`** | `[0.5306, 0.6218]` | **No** (Statistically Significant) |
-| **`CONF_missing`** | Missing Sequence String Indicator | $697$ | **`0.4892`** | `[0.4436, 0.5348]` | **Yes** (Uninformative Noise) |
+| **Validation Split (`val.tsv`)** | Pure AA Sequence Length | $656$ | **`0.6017`** | `[0.5569, 0.6465]` | **Statistically Significant** |
+| **Validation Split (≥30 AA)** | Sensitivity Subset (Length $\ge 30$) | $648$ | **`0.5996`** | `[0.5544, 0.6448]` | **Statistically Significant** |
+| **Validation Split (`val.tsv`)** | FASTA Header Text Length | $656$ | **`0.5762`** | `[0.5306, 0.6218]` | **Statistically Significant** |
+| **Validation Split (`val.tsv`)** | Missing Sequence Indicator | $697$ | **`0.4892`** | `[0.4436, 0.5348]` | Uninformative Noise ($0.50 \in \text{CI}$) |
+| **Training Split (`train.tsv`)** | Pure AA Sequence Length | $2546$ | **`0.6031`** | `[0.5824, 0.6238]` | **Statistically Significant** |
 
 ### 4.2 Multi-Site Clinical Generalization and Leak-Free Audit Protocol (Task F)
 Auditing the combined UCI Heart Disease dataset ($n=920$, 4 clinical sites; Detrano et al., 1989) under leak-free fold median imputation and Leave-One-Site-Out (LOSO) validation yielded:
@@ -122,5 +123,5 @@ Establishing trustworthy AI for Science and Healthcare requires transparent, tam
 - Li, Q. et al. (2020). LLPSDB: a database of proteins undergoing liquid-liquid phase separation in vitro. *Nucleic Acids Research*, 48(D1), D320-D327. https://doi.org/10.1093/nar/gkz780
 - Ramsauer, H. et al. (2020). Hopfield networks is all you need. *ICLR*.
 - Saunshi, N. et al. (2025). Reasoning with latent thoughts: On the power of looped transformers. *arXiv:2502.17416*.
-- You, K. et al. (2020). PhaSepDB: a database of phase separation proteins. *Nucleic Acids Research*, 48(D1), D388-D395.
-- Zhu, Y. et al. (2025). Ouro: Recurrent depth language models. *arXiv:2502.04328*.
+- You, K., Huang, Q., Yu, C., Shen, B., Sevilla, C., Shi, M., Hermjakob, H., Chen, Y., & Li, T. (2020). PhaSepDB: a database of liquid–liquid phase separation related proteins. *Nucleic Acids Research*, 48(D1), D354-D359. https://doi.org/10.1093/nar/gkz847
+- Zhu, Y. et al. (2025). Scaling latent reasoning via looped language models. *arXiv preprint*.
