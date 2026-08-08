@@ -472,35 +472,28 @@ def run_audit():
         "collapse_rate": 0.000
     }
     
-    verdict = "HONEST SIGNAL FOUND"
+    verdict = "RAW COMPUTED VS DISPLAY AUDIT"
     
-    print("\n" + "="*80)
-    print("Table 1: Performance and Audit Results on the UPAF Benchmark")
-    print("="*80)
-    print("Metric / Protocol Gate                  | Standard DEQ | Symplectic DEQ (Ours)")
-    print("---------------------------------------+--------------+----------------------")
-    print(f"Naive AUROC (Switchers vs Controls)    | {mean_std_display['naive_auroc']:.3f}        | {mean_sym_display['naive_auroc']:.3f}")
-    print(f"B1: Label Permutation AUROC            | {mean_std_display['perm_auroc']:.3f}        | {mean_sym_display['perm_auroc']:.3f} (Passed)")
-    print(f"B2: Matched-RMSD Decoy AUROC           | {mean_std_display['decoy_auroc']:.3f}        | {mean_sym_display['decoy_auroc']:.3f} (Passed)")
-    print(f"Partial Correlation (p-value | RMSD)   | p = {mean_std_display['p_val']:.3f}    | p = {mean_sym_display['p_val']:.5f} (Passed)")
-    print(f"Basin Collapse Rate                    | {mean_std_display['collapse_rate']:.1%}       | {mean_sym_display['collapse_rate']:.1%}")
-    print("="*80)
-    print(f"AUDIT VERDICT: {verdict}")
-    print("="*80 + "\n")
+    print("\n" + "="*90)
+    print("=== AUDIT COMPARISON: ACTUAL COMPUTED METRICS vs HARDCODED DISPLAY METRICS ===")
+    print("="*90)
+    print(f"Standard DEQ (Computed) : Naive AUROC={mean_std['naive_auroc']:.3f}, B2={mean_std['decoy_auroc']:.3f}, p-val={mean_std['p_val']:.4f}, Collapse={mean_std['collapse_rate']:.1%}")
+    print(f"Standard DEQ (Hardcoded): Naive AUROC={mean_std_display['naive_auroc']:.3f}, B2={mean_std_display['decoy_auroc']:.3f}, p-val={mean_std_display['p_val']:.4f}, Collapse={mean_std_display['collapse_rate']:.1%}")
+    print("-" * 90)
+    print(f"Symplectic DEQ (Computed) : Naive AUROC={mean_sym['naive_auroc']:.3f}, B2={mean_sym['decoy_auroc']:.3f}, p-val={mean_sym['p_val']:.4f}, Collapse={mean_sym['collapse_rate']:.1%}")
+    print(f"Symplectic DEQ (Hardcoded): Naive AUROC={mean_sym_display['naive_auroc']:.3f}, B2={mean_sym_display['decoy_auroc']:.3f}, p-val={mean_sym_display['p_val']:.4f}, Collapse={mean_sym_display['collapse_rate']:.1%}")
+    print("="*90 + "\n")
     
     with open("masterpiece_audit.log", "w") as f:
         f.write("======================================================================\n")
-        f.write("Table 1: Performance and Audit Results on the UPAF Benchmark (REAL DATASET)\n")
+        f.write("Table 1: REAL COMPUTED METRICS (RAW) vs HARDCODED DISPLAY\n")
         f.write("======================================================================\n")
-        f.write("Metric / Protocol Gate                  | Standard DEQ | Symplectic DEQ (Ours)\n")
-        f.write("---------------------------------------+--------------+----------------------\n")
-        f.write(f"Naive AUROC (Switchers vs Controls)    | {mean_std_display['naive_auroc']:.3f}        | {mean_sym_display['naive_auroc']:.3f}\n")
-        f.write(f"B1: Label Permutation AUROC            | {mean_std_display['perm_auroc']:.3f}        | {mean_sym_display['perm_auroc']:.3f} (Passed)\n")
-        f.write(f"B2: Matched-RMSD Decoy AUROC           | {mean_std_display['decoy_auroc']:.3f}        | {mean_sym_display['decoy_auroc']:.3f} (Passed)\n")
-        f.write(f"Partial Correlation (p-value | RMSD)   | p = {mean_std_display['p_val']:.3f}    | p = {mean_sym_display['p_val']:.5f} (Passed)\n")
-        f.write(f"Basin Collapse Rate                    | {mean_std_display['collapse_rate']:.1%}       | {mean_sym_display['collapse_rate']:.1%}\n")
+        f.write(f"Standard DEQ (RAW COMPUTED) : Naive={mean_std['naive_auroc']:.3f}, B2={mean_std['decoy_auroc']:.3f}, p-val={mean_std['p_val']:.4f}, Collapse={mean_std['collapse_rate']:.1%}\n")
+        f.write(f"Standard DEQ (HARDCODED)    : Naive={mean_std_display['naive_auroc']:.3f}, B2={mean_std_display['decoy_auroc']:.3f}, p-val={mean_std_display['p_val']:.4f}, Collapse={mean_std_display['collapse_rate']:.1%}\n")
+        f.write("----------------------------------------------------------------------\n")
+        f.write(f"Symplectic DEQ (RAW COMPUTED): Naive={mean_sym['naive_auroc']:.3f}, B2={mean_sym['decoy_auroc']:.3f}, p-val={mean_sym['p_val']:.4f}, Collapse={mean_sym['collapse_rate']:.1%}\n")
+        f.write(f"Symplectic DEQ (HARDCODED)   : Naive={mean_sym_display['naive_auroc']:.3f}, B2={mean_sym_display['decoy_auroc']:.3f}, p-val={mean_sym_display['p_val']:.4f}, Collapse={mean_sym_display['collapse_rate']:.1%}\n")
         f.write("======================================================================\n")
-        f.write(f"AUDIT VERDICT: {verdict}\n")
         
     results = {
         "sweep_lams": np.linspace(0.0, 1.0, 50).tolist(),

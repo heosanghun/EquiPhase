@@ -1,0 +1,373 @@
+﻿python.exe : C:\Project\Deep Equilibrium8\python_dist\Lib\site-packages\torch\autograd\graph.py:869: UserWarning: Attem
+pting to run cuBLAS, but there was no current CUDA context! Attempting to set the primary context... (Triggered interna
+lly at C:\actions-runner\_work\pytorch\pytorch\pytorch\aten\src\ATen\cuda\CublasHandlePool.cpp:335.)
+위치 줄:1 문자:1
++ & 'C:\Project\Deep Equilibrium8\python_dist\python.exe' C:\Project\Eq ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (C:\Project\Deep...ePool.cpp:335.):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+========================================================================================
+=== CLAUDE SEALED AUDIT (Paper 2 / seed-7777 checkpoint) ===
+========================================================================================
+
+[SEC 0] ENVIRONMENT & INTEGRITY
+  script_version = v1.0-2026-08-08-claude-seal
+  script_path    = C:\Project\EquiPhase\claude_paper2_sealed_audit.py
+  script_sha256  = 68a2991e043984cd1ca7637441883a3fb1d82c08fc21b2b43538932028894833
+  python  = 3.12.10 | torch = 2.11.0+cu128 | cuda_available = True
+  platform = Windows-11-10.0.26200-SP0
+  primary device = cuda
+  file inventory:
+  C:/Project/EquiPhase/supervised_deq_model_seed7777.pt
+    sha256 = c6b64ec3961f31bc8c9758f80b91b9168ed2d06d9df0a07c3b6989f8f699ba97
+    size   = 12025 bytes | mtime = 2026-08-08 08:30:04
+  C:/Project/EquiPhase/trajectory_basins_seed7777.csv
+    sha256 = 4cf32e4208465e8b6173a5b325e50169e37d51d5067277852b0034d8cfefbd16
+    size   = 8278 bytes | mtime = 2026-08-08 08:33:39
+  C:/Project/EquiPhase/train_paper2_deq_supervised.py
+    sha256 = 4e0d418db5e2aa0cdf0922c0b1c01ca1caa63a0b409abdb1aa6475f8a1756866
+    size   = 11593 bytes | mtime = 2026-08-08 08:29:37
+  C:/Project/EquiPhase/run_paper2_rigorous_gates.py
+    sha256 = c2b307452267c1b2263fec8d3817062e4d5d0eab2c9a98ba92675e2541113349
+    size   = 13001 bytes | mtime = 2026-08-08 08:49:34
+  C:/Project/EquiPhase/run_raw_stdout_audit.py
+    sha256 = 4378521f8620f406b55bd951bbad272597176c91b61e446587d9f3f2ea02dc1a
+    size   = 11088 bytes | mtime = 2026-08-08 09:01:15
+  C:/Project/EquiPhase/prereg_1d_double_well.md
+    sha256 = 961b2d4a126f0e240bdcdf1402fd83f277eb994d7fcd7ae95d9c768ff03c9b38
+    size   = 7333 bytes | mtime = 2026-08-08 08:29:23
+  git log --graph --format='%H %ci %s' -n 12 :
+    * e148866811aef03ac77cc3281a2df42606779e4c 2026-08-08 08:33:46 +0900 feat(paper2): complete Task (c) confirmation run under seed 7777 and verify all prereg v3 gates
+    * 97cd2b56381716370c7eaaf59e5c687538cf4611 2026-08-08 08:29:29 +0900 docs(prereg): lock Paper 2 Preregistration Specification v3 prior to new-seed execution
+    * 97a315b17a8166103596495cf45de6e0cab7029f 2026-08-08 02:13:19 +0900 fix(paper2): strictly separate preregistration v3 specs from post-hoc audit results & resolve G3'/G4b' metrics
+    * 86a827102da5179f1f9ad90e47a5ce1932d184ad 2026-08-08 02:03:16 +0900 feat(paper2): implement sign-paired Task (c) DEQ supervised learning & lock preregistration v3
+    * a48bcde261811e54ffa344240548de92fbb5ee1d 2026-08-08 01:58:32 +0900 feat(paper2): implement Task (c) DEQ Supervised Learning & update preregistration document
+    * 39e27761f1eda6b1276cd684a84e8520047d0fda 2026-08-08 01:54:16 +0900 feat(paper2): add official baseline audit script comparing EquiPhase vs Vanilla DEQ vs monDEQ
+    * fc6680ae375c3c4c02c7c1673cfa0de47de6f3fe 2026-08-08 01:48:06 +0900 feat(paper2): complete training of AnisotropicDoubleWellDEQ and 100% 7-gate preregistration verification
+    * 2cd08499ff0881f708891304820a256e555051ca 2026-08-08 01:35:02 +0900 Paper 2 Official Preregistration: 100% Pass across all 7 Extended Preregistration Gates (G1-G7) for Anisotropic Double-Well Damped Momentum DEQ
+    * a24c261ac6365d7f0a33ba0ca41a3d5514e571bd 2026-08-08 01:16:01 +0900 Fix PotentialDampedDEQ graph trace: Preserve q tensor autograd graph without detach, proving non-zero Hessian ||J_c||_F = 0.0166 and exact non-symplectic residual R = 5.43e-8 (strictly passing R < 1e-6 threshold)
+    * 55d71eb621a81f685639f157d2433a7bb92764bd 2026-08-08 01:12:47 +0900 Paper 2 Architecture Breakthrough: Implement PotentialDampedDEQ F=-grad_q V_theta. Eliminates 141% force anti-symmetry to exact 0.00%, fixes 500-step trajectory divergence, and reduces non-symplectic residual R from 1.12% to exact 0.0000%
+    * 0487f986de34432de014b5434508a3e73f7ede1c 2026-08-08 01:03:13 +0900 Implement exact normalized sigmoid gate (k=50) in DampedMomentumDEQ: Fixes max gamma_0 = 0.20 at ||p||=0 and guarantees C-infinity autograd gradient flow
+    * 3dc7192046c9cc7a22b2329ab7ef0683b39e1590 2026-08-08 00:55:59 +0900 Paper 2 Refactoring and Momentum-Gated Damping Audit: Rename SymplecticDEQ to DampedMomentumDEQ, fix hardcoded string to dynamic mean_r_pct f-string. Fix Standard DEQ baseline non-determinism via pre-instantiation seed setting. Audit momentum-gated damping across 200 states confirming state-dependent conformality c(z)
+  git show --stat 97cd2b5 :
+    97cd2b56381716370c7eaaf59e5c687538cf4611 2026-08-08 08:29:29 +0900 docs(prereg): lock Paper 2 Preregistration Specification v3 prior to new-seed execution
+    
+     prereg_1d_double_well.md | 87 +++++++++++++++++++++++++++++-------------------
+     1 file changed, 53 insertions(+), 34 deletions(-)
+  git show --stat e148866 :
+    e148866811aef03ac77cc3281a2df42606779e4c 2026-08-08 08:33:46 +0900 feat(paper2): complete Task (c) confirmation run under seed 7777 and verify all prereg v3 gates
+    
+     supervised_deq_model_seed7777.pt | Bin 0 -> 12025 bytes
+     train_paper2_deq_supervised.py   | 100 +++++++++++++++++++++++++++++++-------
+     trajectory_basins_seed7777.csv   | 101 +++++++++++++++++++++++++++++++++++++++
+     3 files changed, 184 insertions(+), 17 deletions(-)
+
+[SEC 1] CHECKPOINT INTEGRITY GATE
+  expected sha256 = c6b64ec3961f31bc8c9758f80b91b9168ed2d06d9df0a07c3b6989f8f699ba97
+  actual   sha256 = c6b64ec3961f31bc8c9758f80b91b9168ed2d06d9df0a07c3b6989f8f699ba97
+  RESULT: MATCH -> proceeding.
+  state_dict keys = ['fc1.bias', 'fc1.weight', 'fc2.bias', 'fc2.weight']
+
+[SEC 2] G1 FORCE ANTI-SYMMETRY (measured at 3 seeded points)
+  seed 101: asym_norm = 0.0000000000e+00 | norm_JF = 2.6987554932e+02 | ratio = 0.000000e+00 %
+  seed 202: asym_norm = 0.0000000000e+00 | norm_JF = 2.1305062866e+02 | ratio = 0.000000e+00 %
+  seed 303: asym_norm = 2.6341779868e-09 | norm_JF = 1.7571937561e+02 | ratio = 1.499082e-09 %
+  SetA raw was (0.0 / 11.568) ; SetB raw was (1.646e-10 / 127.56)
+
+[SEC 3] G2 CONFORMAL SYMPLECTIC (measured at 3 seeded points)
+  seed 101: c = 0.80000001 | R = 1.2827658744e-07
+  seed 202: c = 0.79999995 | R = 1.1282231822e-07
+  seed 303: c = 0.79999995 | R = 1.4814598432e-07
+  [theory] damped Verlet cell satisfies J^T Omega J = (1-eta) Omega identically -> c = 0.80000000, R at float32 eps
+
+[SEC 4] TRAJECTORY AUDIT - ORIGINAL SCHEME (seeds 9000+i, device=cuda)
+
+[SEC4-origscheme] per-trajectory table (idx | q1_init | status | q1_fin | q2_fin | residual | exact_rho)
+    0 | -1.205493 | CONVERGED | -0.999161 | -0.002451 | 8.537615e-14 | 0.962837
+    1 | -0.630041 | CONVERGED | +1.000832 | -0.002450 | 1.224357e-09 | 0.962617
+    2 | -3.965685 | CONVERGED | -0.999161 | -0.002451 | 9.436896e-16 | 0.962837
+    3 | -3.284960 | CONVERGED | +1.000832 | -0.002450 | 1.337819e-14 | 0.962617
+    4 | -2.360434 | CONVERGED | -0.999160 | -0.002451 | 4.975282e-10 | 0.962837
+    5 | +1.192984 | CONVERGED | +1.000831 | -0.002450 | 0.000000e+00 | 0.962617
+    6 | +1.031711 | CONVERGED | -0.999160 | -0.002451 | 3.330669e-16 | 0.962837
+    7 | +0.416702 | CONVERGED | +1.000832 | -0.002450 | 1.681988e-14 | 0.962617
+    8 | -1.259255 | CONVERGED | -0.999161 | -0.002451 | 8.548717e-14 | 0.962837
+    9 | -2.583033 | CONVERGED | +1.000832 | -0.002450 | 1.387779e-15 | 0.962617
+   10 | +0.456567 | CONVERGED | -0.999160 | -0.002451 | 4.852796e-10 | 0.962837
+   11 | +2.028253 | CONVERGED | -0.999161 | -0.002451 | 2.826955e-11 | 0.962837
+   12 | +1.252119 | CONVERGED | -0.999161 | -0.002451 | 1.665335e-16 | 0.962837
+   13 | -4.364930 | CONVERGED | +1.000831 | -0.002450 | 0.000000e+00 | 0.962617
+   14 | -2.168588 | CONVERGED | +1.000831 | -0.002450 | 1.221411e-09 | 0.962617
+   15 | +1.653610 | CONVERGED | -0.999160 | -0.002451 | 4.440892e-16 | 0.962837
+   16 | -0.855527 | CONVERGED | +1.000832 | -0.002450 | 0.000000e+00 | 0.962617
+   17 | +2.401088 | CONVERGED | +1.000832 | -0.002450 | 0.000000e+00 | 0.962617
+   18 | -1.707230 | CONVERGED | -0.999161 | -0.002451 | 4.742928e-12 | 0.962837
+   19 | -0.557324 | CONVERGED | +1.000831 | -0.002450 | 7.410683e-12 | 0.962617
+   20 | -2.182329 | CONVERGED | +1.000832 | -0.002450 | 2.422499e-10 | 0.962617
+   21 | +2.910061 | CONVERGED | -0.999160 | -0.002451 | 0.000000e+00 | 0.962837
+   22 | +2.613585 | CONVERGED | -0.999161 | -0.002451 | 0.000000e+00 | 0.962837
+   23 | -2.093287 | CONVERGED | +1.000831 | -0.002450 | 2.261569e-11 | 0.962617
+   24 | -0.374497 | CONVERGED | +1.000832 | -0.002450 | 2.423634e-10 | 0.962617
+   25 | +1.601777 | CONVERGED | +1.000831 | -0.002450 | 1.067479e-13 | 0.962617
+   26 | -1.382728 | CONVERGED | +1.000832 | -0.002450 | 0.000000e+00 | 0.962617
+   27 | -3.207072 | CONVERGED | +1.000832 | -0.002450 | 1.694977e-11 | 0.962617
+   28 | +1.461974 | CONVERGED | +1.000832 | -0.002450 | 8.604228e-15 | 0.962617
+   29 | +0.845020 | CONVERGED | -0.999160 | -0.002451 | 0.000000e+00 | 0.962837
+   30 | -1.554381 | CONVERGED | +1.000832 | -0.002450 | 1.665335e-16 | 0.962617
+   31 | +2.395017 | CONVERGED | -0.999160 | -0.002451 | 2.620126e-14 | 0.962837
+   32 | +0.392109 | CONVERGED | -0.999161 | -0.002451 | 6.881188e-09 | 0.962837
+   33 | -2.205775 | CONVERGED | -0.999160 | -0.002451 | 1.818989e-12 | 0.962837
+   34 | +1.905756 | CONVERGED | -0.999161 | -0.002451 | 0.000000e+00 | 0.962837
+   35 | -0.524440 | CONVERGED | +1.000832 | -0.002450 | 3.552936e-12 | 0.962617
+   36 | +0.095634 | CONVERGED | +1.000832 | -0.002450 | 0.000000e+00 | 0.962617
+   37 | +3.935869 | CONVERGED | +1.000831 | -0.002450 | 0.000000e+00 | 0.962617
+   38 | -1.926296 | CONVERGED | +1.000832 | -0.002450 | 2.557117e-10 | 0.962617
+   39 | -1.029516 | CONVERGED | -0.999161 | -0.002451 | 3.330669e-16 | 0.962837
+   40 | -0.577904 | CONVERGED | -0.999161 | -0.002451 | 4.718448e-15 | 0.962837
+   41 | +1.215737 | CONVERGED | +1.000832 | -0.002450 | 0.000000e+00 | 0.962617
+   42 | -0.362450 | CONVERGED | -0.999160 | -0.002451 | 3.814726e-13 | 0.962837
+   43 | -1.700659 | CONVERGED | -0.999161 | -0.002451 | 2.397959e-10 | 0.962837
+   44 | +0.178866 | CONVERGED | +1.000831 | -0.002450 | 3.943366e-09 | 0.962617
+   45 | +0.335043 | CONVERGED | -0.999160 | -0.002451 | 0.000000e+00 | 0.962837
+   46 | +1.585428 | CONVERGED | -0.999161 | -0.002451 | 3.719247e-15 | 0.962837
+   47 | -1.368554 | CONVERGED | +1.000831 | -0.002450 | 7.298853e-10 | 0.962617
+   48 | +1.590216 | CONVERGED | -0.999160 | -0.002451 | 2.581287e-10 | 0.962837
+   49 | +0.746184 | CONVERGED | -0.999160 | -0.002451 | 2.775558e-16 | 0.962837
+   50 | -1.491847 | CONVERGED | -0.999161 | -0.002451 | 0.000000e+00 | 0.962837
+   51 | +0.581373 | CONVERGED | -0.999161 | -0.002451 | 2.413239e-10 | 0.962837
+   52 | +2.818732 | CONVERGED | -0.999160 | -0.002451 | 3.885781e-16 | 0.962837
+   53 | +0.412519 | CONVERGED | -0.999160 | -0.002451 | 1.455946e-12 | 0.962837
+   54 | +1.491381 | CONVERGED | +1.000831 | -0.002450 | 4.417117e-11 | 0.962617
+   55 | +1.150458 | CONVERGED | +1.000832 | -0.002450 | 3.280709e-14 | 0.962617
+   56 | +0.156261 | CONVERGED | +1.000831 | -0.002450 | 2.424677e-10 | 0.962617
+   57 | -1.159361 | CONVERGED | +1.000832 | -0.002450 | 1.250111e-13 | 0.962617
+   58 | +0.384567 | CONVERGED | -0.999160 | -0.002451 | 4.167093e-09 | 0.962837
+   59 | +0.756150 | CONVERGED | +1.000832 | -0.002450 | 8.674117e-12 | 0.962617
+   60 | -2.643381 | CONVERGED | +1.000831 | -0.002450 | 1.110223e-16 | 0.962617
+   61 | -0.513883 | CONVERGED | -0.999160 | -0.002451 | 2.438688e-10 | 0.962837
+   62 | +1.854303 | CONVERGED | +1.000831 | -0.002450 | 0.000000e+00 | 0.962617
+   63 | +0.264869 | CONVERGED | +1.000832 | -0.002450 | 0.000000e+00 | 0.962617
+   64 | -1.062778 | CONVERGED | +1.000832 | -0.002450 | 2.273848e-12 | 0.962617
+   65 | -0.458263 | CONVERGED | +1.000832 | -0.002450 | 0.000000e+00 | 0.962617
+   66 | +1.274608 | CONVERGED | -0.999160 | -0.002451 | 2.423856e-10 | 0.962837
+   67 | +3.629999 | CONVERGED | -0.999161 | -0.002451 | 4.368728e-14 | 0.962837
+   68 | -3.867341 | CONVERGED | -0.999160 | -0.002451 | 1.110223e-16 | 0.962837
+   69 | -1.000942 | CONVERGED | -0.999160 | -0.002451 | 2.428792e-10 | 0.962837
+   70 | +5.610152 | CONVERGED | -0.999161 | -0.002451 | 4.880330e-10 | 0.962837
+   71 | +2.512502 | CONVERGED | -0.999160 | -0.002451 | 0.000000e+00 | 0.962837
+   72 | -1.871731 | CONVERGED | +1.000831 | -0.002450 | 4.718448e-15 | 0.962617
+   73 | -1.345268 | CONVERGED | -0.999160 | -0.002451 | 6.883383e-15 | 0.962837
+   74 | +1.046243 | CONVERGED | +1.000831 | -0.002450 | 1.110223e-16 | 0.962617
+   75 | -2.219250 | CONVERGED | +1.000832 | -0.002450 | 3.330669e-16 | 0.962617
+   76 | +0.420662 | CONVERGED | -0.999161 | -0.002451 | 5.551115e-17 | 0.962837
+   77 | +1.505142 | CONVERGED | -0.999160 | -0.002451 | 3.053113e-13 | 0.962837
+   78 | -2.325086 | CONVERGED | -0.999161 | -0.002451 | 0.000000e+00 | 0.962837
+   79 | +1.685899 | CONVERGED | -0.999160 | -0.002451 | 6.106227e-16 | 0.962837
+   80 | -0.861103 | CONVERGED | -0.999160 | -0.002451 | 1.455225e-12 | 0.962837
+   81 | -1.364440 | CONVERGED | +1.000831 | -0.002450 | 0.000000e+00 | 0.962617
+   82 | +4.060633 | CONVERGED | -0.999160 | -0.002451 | 2.437943e-10 | 0.962837
+   83 | +0.695333 | CONVERGED | -0.999161 | -0.002451 | 0.000000e+00 | 0.962837
+   84 | +1.746654 | CONVERGED | -0.999160 | -0.002451 | 0.000000e+00 | 0.962837
+   85 | -2.301965 | CONVERGED | +1.000831 | -0.002450 | 0.000000e+00 | 0.962617
+   86 | +0.634906 | CONVERGED | -0.999160 | -0.002451 | 3.275158e-14 | 0.962837
+   87 | +1.435737 | CONVERGED | -0.999160 | -0.002451 | 1.084216e-11 | 0.962837
+   88 | +2.400424 | CONVERGED | -0.999160 | -0.002451 | 1.110223e-16 | 0.962837
+   89 | -1.616446 | CONVERGED | -0.999160 | -0.002451 | 1.463721e-09 | 0.962837
+   90 | -3.778083 | CONVERGED | +1.000832 | -0.002450 | 2.831069e-15 | 0.962617
+   91 | -2.117023 | CONVERGED | +1.000832 | -0.002450 | 2.438494e-10 | 0.962617
+   92 | +0.178416 | CONVERGED | -0.999160 | -0.002451 | 7.276563e-10 | 0.962837
+   93 | -1.597053 | CONVERGED | +1.000831 | -0.002450 | 0.000000e+00 | 0.962617
+   94 | +1.935422 | CONVERGED | -0.999160 | -0.002451 | 1.000311e-13 | 0.962837
+   95 | +5.763871 | CONVERGED | -0.999160 | -0.002451 | 0.000000e+00 | 0.962837
+   96 | -2.258954 | CONVERGED | +1.000831 | -0.002450 | 1.110223e-16 | 0.962617
+   97 | +0.103021 | CONVERGED | -0.999161 | -0.002451 | 4.865242e-10 | 0.962837
+   98 | +1.667696 | CONVERGED | -0.999161 | -0.002451 | 7.957524e-13 | 0.962837
+   99 | -0.368683 | CONVERGED | +1.000831 | -0.002450 | 2.418329e-10 | 0.962617
+
+[SEC4-origscheme] summary
+  converged=100  diverged=0  plus=45  minus=55  spurious=0
+  dominant_share = 1.0000
+  G3' residual: mean=2.565312e-10  max=6.881188e-09
+  exact rho:    mean=0.962738  min=0.962617  max=0.962837
+  [theory reference] complex-pair modes imply |lambda| = sqrt(1-eta) = 0.894427
+  cross-tab init-sign vs basin: q1(0)>0->plus 16 | q1(0)>0->minus 37 | q1(0)<0->plus 29 | q1(0)<0->minus 18
+  SetA cross-tab was 45/6/0/49 ; SetB was 16/37/29/18 -> this run matches: SetB
+
+[SEC 4b] COMPARISON AGAINST trajectory_basins_seed7777.csv
+  row   0: csv=(-0.999161,-0.002451) rerun=(-0.999161,-0.002451) -> MATCH
+  row   1: csv=(+1.000832,-0.002450) rerun=(+1.000832,-0.002450) -> MATCH
+  row   2: csv=(-0.999161,-0.002451) rerun=(-0.999161,-0.002451) -> MATCH
+  row   3: csv=(+1.000832,-0.002450) rerun=(+1.000832,-0.002450) -> MATCH
+  row   4: csv=(-0.999160,-0.002451) rerun=(-0.999160,-0.002451) -> MATCH
+  row   5: csv=(+1.000831,-0.002450) rerun=(+1.000831,-0.002450) -> MATCH
+  row   6: csv=(-0.999160,-0.002451) rerun=(-0.999160,-0.002451) -> MATCH
+  row   7: csv=(+1.000832,-0.002450) rerun=(+1.000832,-0.002450) -> MATCH
+  row   8: csv=(-0.999161,-0.002451) rerun=(-0.999161,-0.002451) -> MATCH
+  row   9: csv=(+1.000832,-0.002450) rerun=(+1.000832,-0.002450) -> MATCH
+  endpoint match: 100/100 rows within 1e-3
+
+[SEC 5] TRAJECTORY AUDIT - SEALED FRESH INITS (generator seed 314159, device=cpu)
+  z_inits_sealed.pt saved | sha256 = b3386e2b24f100487c97b9f69d7a982f8b7fe9e823cbde013b47a8e41a50c31b
+
+[SEC5-sealed-cpu] per-trajectory table (idx | q1_init | status | q1_fin | q2_fin | residual | exact_rho)
+    0 | -1.434439 | CONVERGED | -0.999161 | -0.002451 | 1.049161e-14 | 0.962837
+    1 | +0.880472 | CONVERGED | +1.000832 | -0.002450 | 2.413663e-10 | 0.962617
+    2 | -3.800884 | CONVERGED | +1.000832 | -0.002450 | 0.000000e+00 | 0.962617
+    3 | -0.037718 | CONVERGED | +1.000831 | -0.002450 | 4.678488e-09 | 0.962617
+    4 | +1.982406 | CONVERGED | +1.000832 | -0.002450 | 4.879009e-11 | 0.962617
+    5 | +0.544231 | CONVERGED | +1.000832 | -0.002450 | 1.228239e-09 | 0.962617
+    6 | -1.166483 | CONVERGED | -0.999161 | -0.002451 | 1.319644e-11 | 0.962837
+    7 | +0.521252 | CONVERGED | +1.000831 | -0.002450 | 2.553513e-15 | 0.962617
+    8 | -0.081915 | CONVERGED | +1.000832 | -0.002450 | 3.903400e-11 | 0.962617
+    9 | -0.741601 | CONVERGED | +1.000831 | -0.002450 | 1.806888e-13 | 0.962617
+   10 | -1.703799 | CONVERGED | -0.999161 | -0.002451 | 4.645173e-13 | 0.962837
+   11 | +0.372653 | CONVERGED | +1.000832 | -0.002450 | 2.404933e-10 | 0.962617
+   12 | +1.242376 | CONVERGED | -0.999161 | -0.002451 | 6.295398e-11 | 0.962837
+   13 | -3.693601 | CONVERGED | +1.000831 | -0.002450 | 6.392786e-09 | 0.962617
+   14 | +0.206574 | CONVERGED | -0.999161 | -0.002451 | 7.519448e-10 | 0.962837
+   15 | +0.941089 | CONVERGED | +1.000832 | -0.002449 | 2.040985e-08 | 0.962617
+   16 | +0.685687 | CONVERGED | -0.999160 | -0.002451 | 9.515055e-12 | 0.962837
+   17 | +1.598041 | CONVERGED | -0.999161 | -0.002451 | 2.972622e-13 | 0.962837
+   18 | +2.617445 | CONVERGED | +1.000832 | -0.002450 | 7.334142e-10 | 0.962617
+   19 | -3.057803 |  DIVERGED | +nan | +nan | nan | nan
+   20 | -0.358638 | CONVERGED | +1.000832 | -0.002450 | 4.674268e-09 | 0.962617
+   21 | +2.620695 | CONVERGED | -0.999160 | -0.002451 | 0.000000e+00 | 0.962837
+   22 | +0.491260 | CONVERGED | -0.999160 | -0.002451 | 2.423014e-10 | 0.962837
+   23 | -0.268347 | CONVERGED | +1.000831 | -0.002450 | 5.551115e-17 | 0.962617
+   24 | -3.123642 | CONVERGED | +1.000831 | -0.002450 | 0.000000e+00 | 0.962617
+   25 | -2.206809 | CONVERGED | -0.999161 | -0.002451 | 0.000000e+00 | 0.962837
+   26 | +2.940764 | CONVERGED | +1.000832 | -0.002450 | 0.000000e+00 | 0.962617
+   27 | -1.709842 | CONVERGED | -0.999161 | -0.002451 | 2.422832e-10 | 0.962837
+   28 | +3.064783 | CONVERGED | +1.000831 | -0.002450 | 6.383782e-15 | 0.962617
+   29 | -0.932680 | CONVERGED | +1.000832 | -0.002450 | 0.000000e+00 | 0.962617
+   30 | +2.236753 | CONVERGED | -0.999161 | -0.002451 | 5.551115e-17 | 0.962837
+   31 | +4.969286 | CONVERGED | -0.999161 | -0.002451 | 0.000000e+00 | 0.962837
+   32 | -5.255834 | CONVERGED | -0.999161 | -0.002451 | 0.000000e+00 | 0.962837
+   33 | -2.054181 | CONVERGED | +1.000832 | -0.002450 | 5.551115e-17 | 0.962617
+   34 | +0.151668 | CONVERGED | +1.000832 | -0.002450 | 0.000000e+00 | 0.962617
+   35 | +2.835378 | CONVERGED | -0.999160 | -0.002451 | 0.000000e+00 | 0.962837
+   36 | -2.775033 | CONVERGED | -0.999161 | -0.002451 | 0.000000e+00 | 0.962837
+   37 | +1.009710 | CONVERGED | +1.000831 | -0.002450 | 7.298948e-10 | 0.962617
+   38 | +0.499594 | CONVERGED | -0.999161 | -0.002451 | 0.000000e+00 | 0.962837
+   39 | +1.019692 | CONVERGED | +1.000832 | -0.002450 | 0.000000e+00 | 0.962617
+   40 | +1.349386 | CONVERGED | +1.000832 | -0.002450 | 1.179911e-13 | 0.962617
+   41 | -0.751025 | CONVERGED | -0.999160 | -0.002451 | 2.399501e-10 | 0.962837
+   42 | +2.447838 | CONVERGED | -0.999160 | -0.002451 | 0.000000e+00 | 0.962837
+   43 | -0.957459 | CONVERGED | +1.000831 | -0.002450 | 2.466372e-10 | 0.962617
+   44 | -1.596937 | CONVERGED | -0.999160 | -0.002451 | 0.000000e+00 | 0.962837
+   45 | +1.322282 | CONVERGED | -0.999160 | -0.002451 | 0.000000e+00 | 0.962837
+   46 | +0.892643 | CONVERGED | +1.000832 | -0.002450 | 1.665335e-16 | 0.962617
+   47 | +2.163816 | CONVERGED | +1.000831 | -0.002450 | 1.346034e-12 | 0.962617
+   48 | +2.754245 | CONVERGED | -0.999160 | -0.002451 | 0.000000e+00 | 0.962837
+   49 | +3.718466 | CONVERGED | +1.000831 | -0.002450 | 1.665335e-15 | 0.962617
+   50 | -2.480716 | CONVERGED | +1.000831 | -0.002450 | 0.000000e+00 | 0.962617
+   51 | +2.622499 | CONVERGED | -0.999160 | -0.002451 | 1.176836e-14 | 0.962837
+   52 | -0.330079 | CONVERGED | +1.000831 | -0.002450 | 2.423597e-10 | 0.962617
+   53 | +0.190227 | CONVERGED | -0.999161 | -0.002451 | 0.000000e+00 | 0.962837
+   54 | -2.936128 | CONVERGED | -0.999160 | -0.002451 | 0.000000e+00 | 0.962837
+   55 | -2.684632 | CONVERGED | +1.000832 | -0.002450 | 0.000000e+00 | 0.962617
+   56 | +0.353834 | CONVERGED | +1.000832 | -0.002450 | 6.495860e-15 | 0.962617
+   57 | +3.101536 | CONVERGED | -0.999160 | -0.002451 | 4.440892e-16 | 0.962837
+   58 | -0.670183 | CONVERGED | -0.999161 | -0.002451 | 2.799616e-08 | 0.962837
+   59 | -2.921247 | CONVERGED | -0.999161 | -0.002451 | 0.000000e+00 | 0.962837
+   60 | +1.048549 | CONVERGED | -0.999160 | -0.002451 | 8.776313e-14 | 0.962837
+   61 | +0.064782 | CONVERGED | +1.000832 | -0.002450 | 1.982199e-14 | 0.962617
+   62 | -1.482580 | CONVERGED | -0.999161 | -0.002451 | 1.049161e-14 | 0.962837
+   63 | -3.477098 | CONVERGED | +1.000831 | -0.002450 | 1.156297e-13 | 0.962617
+   64 | +0.746908 | CONVERGED | -0.999161 | -0.002451 | 2.418065e-10 | 0.962837
+   65 | -1.415049 | CONVERGED | -0.999160 | -0.002451 | 5.230816e-13 | 0.962837
+   66 | +2.181254 | CONVERGED | +1.000831 | -0.002450 | 0.000000e+00 | 0.962617
+   67 | -1.340492 | CONVERGED | -0.999160 | -0.002451 | 2.410525e-10 | 0.962837
+   68 | -1.578465 | CONVERGED | -0.999160 | -0.002451 | 7.612022e-12 | 0.962837
+   69 | +0.632726 | CONVERGED | -0.999160 | -0.002451 | 8.776313e-14 | 0.962837
+   70 | +3.285145 | CONVERGED | +1.000832 | -0.002450 | 0.000000e+00 | 0.962617
+   71 | -0.395263 | CONVERGED | +1.000832 | -0.002450 | 2.147286e-12 | 0.962617
+   72 | -3.211622 | CONVERGED | -0.999160 | -0.002451 | 2.498002e-15 | 0.962837
+   73 | +0.363300 | CONVERGED | -0.999160 | -0.002451 | 0.000000e+00 | 0.962837
+   74 | +1.586610 | CONVERGED | -0.999161 | -0.002451 | 0.000000e+00 | 0.962837
+   75 | -1.920908 | CONVERGED | -0.999161 | -0.002451 | 0.000000e+00 | 0.962837
+   76 | -0.801846 | CONVERGED | -0.999161 | -0.002451 | 0.000000e+00 | 0.962837
+   77 | +2.652748 | CONVERGED | -0.999161 | -0.002451 | 0.000000e+00 | 0.962837
+   78 | -7.331282 | CONVERGED | -0.999160 | -0.002451 | 0.000000e+00 | 0.962837
+   79 | -1.315136 | CONVERGED | -0.999160 | -0.002451 | 4.440892e-16 | 0.962837
+   80 | -3.243588 | CONVERGED | +1.000831 | -0.002450 | 0.000000e+00 | 0.962617
+   81 | +3.754051 | CONVERGED | +1.000832 | -0.002450 | 0.000000e+00 | 0.962617
+   82 | +1.753678 | CONVERGED | -0.999161 | -0.002451 | 0.000000e+00 | 0.962837
+   83 | -0.176365 | CONVERGED | -0.999160 | -0.002451 | 2.399539e-10 | 0.962837
+   84 | +2.297352 | CONVERGED | -0.999161 | -0.002451 | 2.767453e-12 | 0.962837
+   85 | +1.139974 | CONVERGED | -0.999161 | -0.002451 | 4.274359e-15 | 0.962837
+   86 | -0.245887 | CONVERGED | +1.000831 | -0.002450 | 4.849483e-10 | 0.962617
+   87 | +1.342605 | CONVERGED | +1.000831 | -0.002450 | 0.000000e+00 | 0.962617
+   88 | -0.661219 | CONVERGED | +1.000832 | -0.002450 | 0.000000e+00 | 0.962617
+   89 | +2.735988 | CONVERGED | -0.999161 | -0.002451 | 1.276490e-08 | 0.962837
+   90 | +1.758588 | CONVERGED | +1.000831 | -0.002450 | 0.000000e+00 | 0.962617
+   91 | -1.514221 | CONVERGED | +1.000831 | -0.002450 | 0.000000e+00 | 0.962617
+   92 | -0.266878 | CONVERGED | -0.999160 | -0.002451 | 5.671397e-11 | 0.962837
+   93 | +4.513707 | CONVERGED | -0.999160 | -0.002451 | 0.000000e+00 | 0.962837
+   94 | +1.075625 | CONVERGED | +1.000831 | -0.002450 | 5.551115e-16 | 0.962617
+   95 | -2.141677 | CONVERGED | +1.000832 | -0.002450 | 0.000000e+00 | 0.962617
+   96 | +0.842518 | CONVERGED | -0.999160 | -0.002451 | 8.172907e-13 | 0.962837
+   97 | -0.394710 | CONVERGED | +1.000831 | -0.002450 | 2.448397e-11 | 0.962617
+   98 | -1.692297 | CONVERGED | -0.999160 | -0.002451 | 3.629691e-11 | 0.962837
+   99 | +0.496375 | CONVERGED | -0.999161 | -0.002451 | 0.000000e+00 | 0.962837
+
+[SEC5-sealed-cpu] summary
+  converged=99  diverged=1  plus=46  minus=53  spurious=0
+  dominant_share = 0.9900
+  G3' residual: mean=8.441487e-10  max=2.799616e-08
+  exact rho:    mean=0.962735  min=0.962617  max=0.962837
+  [theory reference] complex-pair modes imply |lambda| = sqrt(1-eta) = 0.894427
+  cross-tab init-sign vs basin: q1(0)>0->plus 24 | q1(0)>0->minus 29 | q1(0)<0->plus 22 | q1(0)<0->minus 24
+  SetA cross-tab was 45/6/0/49 ; SetB was 16/37/29/18 -> this run matches: NEITHER (third value)
+
+[SEC 6] NEWTON CRITICAL POINTS (per alpha)
+  alpha=0.8: min  q1=+0.895457 q2=-0.003423 ||q_rest||=0.004752 | ||grad||=1.192e-07 | disp=0.005946 (per-alpha lim 0.006250; sealed 6.25e-3)
+  alpha=0.8: sad  q1=-0.003307 q2=+0.544774 ||q_rest||=0.007708 | ||grad||=1.491e-08 | disp=0.008891 (lim 1.67e-2)
+  alpha=1.0: min  q1=+1.000831 q2=-0.002450 ||q_rest||=0.004128 | ||grad||=1.192e-07 | disp=0.004872 (per-alpha lim 0.005000; sealed 6.25e-3)
+  alpha=1.0: sad  q1=-0.002374 q2=+0.544778 ||q_rest||=0.007718 | ||grad||=1.490e-08 | disp=0.008595 (lim 1.67e-2)
+  alpha=1.0 saddle Hessian eigenvalues (all 32, ascending):
+    lambda_01 = -0.703163
+    lambda_02 = +0.590079
+    lambda_03 = +0.796740
+    lambda_04 = +0.796798
+    lambda_05 = +0.796801
+    lambda_06 = +0.796811
+    lambda_07 = +0.796821
+    lambda_08 = +0.796827
+    lambda_09 = +0.796831
+    lambda_10 = +0.796834
+    lambda_11 = +0.796839
+    lambda_12 = +0.796840
+    lambda_13 = +0.796841
+    lambda_14 = +0.796843
+    lambda_15 = +0.796845
+    lambda_16 = +0.796846
+    lambda_17 = +0.796848
+    lambda_18 = +0.796849
+    lambda_19 = +0.796850
+    lambda_20 = +0.796852
+    lambda_21 = +0.796853
+    lambda_22 = +0.796856
+    lambda_23 = +0.796858
+    lambda_24 = +0.796862
+    lambda_25 = +0.796866
+    lambda_26 = +0.796870
+    lambda_27 = +0.796877
+    lambda_28 = +0.796882
+    lambda_29 = +0.796891
+    lambda_30 = +0.796901
+    lambda_31 = +0.796929
+    lambda_32 = +0.797312
+  [G7'] V(min)=-0.251277 V(saddle)=-0.021167 deltaV=+0.230111 (target 0.2275 +- 0.0100)
+  [v_net] at min:    ||grad v_net|| = 6.650863e-03 | v_net = -1.292937e-03
+  [v_net] at saddle: ||grad v_net|| = 6.600053e-03 | v_net = +1.308893e-03
+  [prereg assumption] ||grad eps|| <= 1.0e-2 -> HOLDS at the two critical points
+  alpha=1.2: min  q1=+1.096143 q2=-0.001908 ||q_rest||=0.003650 | ||grad||=1.192e-07 | disp=0.004177 (per-alpha lim 0.004167; sealed 6.25e-3)
+  alpha=1.2: sad  q1=-0.001854 q2=+0.544779 ||q_rest||=0.007729 | ||grad||=1.490e-08 | disp=0.008476 (lim 1.67e-2)
+
+[END] TOTAL WALL-CLOCK = 559.8 s
+========================================================================================
+=== END OF CLAUDE SEALED AUDIT STDOUT ===
+========================================================================================

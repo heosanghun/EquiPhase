@@ -106,5 +106,29 @@
         "timestamps": [
             "2026-06-21 16:36:13"
         ]
+    },
+    "wbc_patient_leakage": {
+        "opens": 1,
+        "timestamps": [
+            "2026-07-06 22:48:59"
+        ]
+    },
+    "wbc_patient_leakage_bl": {
+        "opens": 1,
+        "timestamps": [
+            "2026-07-06 22:50:02"
+        ]
+    },
+    "wbc_patient_leakage_bl_leaky": {
+        "opens": 1,
+        "timestamps": [
+            "2026-07-06 22:50:25"
+        ]
+    },
+    "wbc_patient_leakage_simulation": {
+        "opens": 1,
+        "timestamps": [
+            "2026-07-06 22:50:46"
+        ]
     }
 }

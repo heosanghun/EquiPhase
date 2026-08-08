@@ -1,0 +1,76 @@
+========================================================================================
+=== CLAUDE PAPER 1 SEC 4.1 FORENSIC VARIANT MATRIX (v2) ===
+========================================================================================
+  script_version = v2.0-2026-08-08-claude-p1-sec41-forensic
+  script_sha256  = 37af8f46f1b287270cb3cafad3ed3424a5b1adef757e920e36d796d9fe6a34b6
+  numpy = 2.2.6 | python = 3.12.10
+
+[LOAD] train: C:/Project/AI/EquiPhase/data\train.tsv
+  sha256 = ecda4a8b9e4b141f55d9cc2e31b9b6a995972c86da2ff9b0c055f41a88f0c4f4 | size = 3545972
+  raw rows = 2554 | UNKNOWN cells = 0
+
+[DIAG] train: rows with parsed AA length < 10 or 'unknown' text (candidates for the missing exclusion set)
+  count = 17
+    PSID=PS00000661 y=1 complen=165 collen=None human_res=True cell='>LLPS000573.1 sp|O60500|NPHN_HUMAN Nephrin OS=Homo sapiens OX=9606 GN='
+    PSID=PS00000662 y=1 complen=165 collen=None human_res=True cell='>LLPS000574.1 sp|O60500|NPHN_HUMAN Nephrin OS=Homo sapiens OX=9606 GN='
+    PSID=PS00000663 y=1 complen=165 collen=None human_res=True cell='>LLPS000575.1 sp|O60500|NPHN_HUMAN Nephrin OS=Homo sapiens OX=9606 GN='
+    PSID=PS00000665 y=1 complen=165 collen=None human_res=True cell='>LLPS000577.1 sp|O60500|NPHN_HUMAN Nephrin OS=Homo sapiens OX=9606 GN='
+    PSID=PS00001695 y=1 complen=0 collen=None human_res=False cell='>LLPS000281 synthetic protein [polyK] MW=30kDa-70kDa while the sequenc'
+    PSID=PS00001696 y=1 complen=0 collen=None human_res=False cell='>LLPS000303 synthetic protein [polyK] MW=30kDa-70kDa while the sequenc'
+    PSID=PS00001697 y=1 complen=0 collen=None human_res=False cell='>LLPS000303 synthetic protein [polyK] MW=30kDa-70kDa while the sequenc'
+    PSID=PS00001698 y=1 complen=0 collen=None human_res=False cell='>LLPS000288 synthetic protein [polyK] MW=30kDa-70kDa while the sequenc'
+    PSID=PS00001699 y=1 complen=0 collen=None human_res=False cell='>LLPS000309.1 synthetic protein [polyK] MW=30kDa-70kDa while the seque'
+    PSID=PS00001700 y=1 complen=0 collen=None human_res=False cell='>LLPS000309.1 synthetic protein [polyK] MW=30kDa-70kDa while the seque'
+    PSID=PS00001705 y=1 complen=0 collen=None human_res=False cell='>LLPS000296 synthetic protein [polyK] MW=30kDa-70kDa while the sequenc'
+    PSID=PS00001708 y=1 complen=0 collen=None human_res=False cell='>LLPS000283 synthetic protein [polyK] MW=30kDa-70kDa while the sequenc'
+    PSID=PS00001709 y=1 complen=0 collen=None human_res=False cell='>LLPS000283 synthetic protein [polyK] MW=30kDa-70kDa while the sequenc'
+    PSID=PS00001962 y=1 complen=1334 collen=None human_res=False cell='>LLPS001053.1 synthetic protein construct [RIM1α]|length=1334aa|residu'
+    PSID=PS00002725 y=1 complen=0 collen=None human_res=False cell='>GFP(+36)|length=238aa|residues=1-238|mutation=add charge sequence is '
+    PSID=PS00006508 y=0 complen=5 collen=None human_res=False cell='>LLPS002639 GY-5-V1|length=5aa\nGAGFA'
+    PSID=PS00006509 y=0 complen=5 collen=None human_res=False cell='>LLPS002640 GY-5-V2|length=5aa\nGHGLY'
+
+[CENSUS] train: FULL(valid) = 2554 | DROPSHORT = 2542
+  FULL: pos=1749 neg=805 | human_resolved=1338 | human_naive=1331 | sars2=253
+  DROPSHORT: pos=1739 neg=803 | human_resolved=1338 | human_naive=1331 | sars2=253
+
+[MATRIX] train: strata AUROC under all variants (A_human | A_nonhuman | Delta | nearest historical set, tol 0.0025)
+  inclusion  species   score      n_h  n_nh      A_h    A_nh    Delta  match
+  FULL       RESOLVED  COMPLEN   1338  1216   0.6306  0.5634  -0.0671  V1
+  FULL       RESOLVED  COLLEN       0     0  (empty stratum or unusable score column)
+  FULL       NAIVE     COMPLEN   1331  1223   0.6310  0.5637  -0.0673  V1
+  FULL       NAIVE     COLLEN       0     0  (empty stratum or unusable score column)
+  DROPSHORT  RESOLVED  COMPLEN   1338  1204   0.6306  0.5680  -0.0626  NONE
+  DROPSHORT  RESOLVED  COLLEN       0     0  (empty stratum or unusable score column)
+  DROPSHORT  NAIVE     COMPLEN   1331  1211   0.6310  0.5682  -0.0628  NONE
+  DROPSHORT  NAIVE     COLLEN       0     0  (empty stratum or unusable score column)
+  [train/all FULL COMPLEN] n=2554 (pos 1749/neg 805) AUROC = 0.5969
+  [train/all FULL COLLEN] n=0 (pos 0/neg 0) AUROC = nan
+
+[LOAD] val: C:/Project/AI/EquiPhase/data\val.tsv
+  sha256 = b7ef171dbcc094c31c779ba358a61f6b56a3f8b4c16137b1cd06a5feb325e74c | size = 962644
+  raw rows = 697 | UNKNOWN cells = 41
+
+[DIAG] val: rows with parsed AA length < 10 or 'unknown' text (candidates for the missing exclusion set)
+  count = 0
+
+[CENSUS] val: FULL(valid) = 656 | DROPSHORT = 656
+  FULL: pos=441 neg=215 | human_resolved=483 | human_naive=467 | sars2=0
+  DROPSHORT: pos=441 neg=215 | human_resolved=483 | human_naive=467 | sars2=0
+
+[MATRIX] val: strata AUROC under all variants (A_human | A_nonhuman | Delta | nearest historical set, tol 0.0025)
+  inclusion  species   score      n_h  n_nh      A_h    A_nh    Delta  match
+  FULL       RESOLVED  COMPLEN    483   173   0.5948  0.6076  +0.0128  V1
+  FULL       RESOLVED  COLLEN       0     0  (empty stratum or unusable score column)
+  FULL       NAIVE     COMPLEN    467   189   0.5810  0.6361  +0.0551  NONE
+  FULL       NAIVE     COLLEN       0     0  (empty stratum or unusable score column)
+  DROPSHORT  RESOLVED  COMPLEN    483   173   0.5948  0.6076  +0.0128  V1
+  DROPSHORT  RESOLVED  COLLEN       0     0  (empty stratum or unusable score column)
+  DROPSHORT  NAIVE     COMPLEN    467   189   0.5810  0.6361  +0.0551  NONE
+  DROPSHORT  NAIVE     COLLEN       0     0  (empty stratum or unusable score column)
+  [val/all FULL COMPLEN] n=656 (pos 441/neg 215) AUROC = 0.6017
+  [val/all FULL COLLEN] n=0 (pos 0/neg 0) AUROC = nan
+
+[END] TOTAL WALL-CLOCK = 0.1 s
+========================================================================================
+=== END OF CLAUDE PAPER1 SEC4.1 V2 STDOUT ===
+========================================================================================

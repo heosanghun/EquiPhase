@@ -1,0 +1,57 @@
+========================================================================================
+=== CLAUDE PAPER 1 SEC 4.1 INDEPENDENT RECOMPUTATION (Task B strata) ===
+========================================================================================
+  script_version = v1.0-2026-08-08-claude-p1-sec41
+  script_sha256  = cc8c01d9d33f99a495c01c4461880505725dee7e4fb33224cde2423962da5d79
+  numpy = 2.2.6 | python = 3.12.10
+
+[PHASE 0] SCHEMA DIAGNOSTICS -- train : C:/Project/AI/EquiPhase/data\train.tsv
+  sha256 = ecda4a8b9e4b141f55d9cc2e31b9b6a995972c86da2ff9b0c055f41a88f0c4f4 | size = 3545972
+  columns (38): ['PSID', 'Entry ID', 'Components type', 'Protein ID', 'Protein name', 'Protein type (N/D)', 'Fusion', 'Cleaved', 'Repeat', 'Mutation', 'PTM', 'Sequence length', 'Sequence', 'Protein structure type', 'Nucleic acid', 'Solute concentration', 'Salt concentration', 'Buffer', 'Crowding agent', 'Temperature', 'Pressure', 'Incubation time', 'other molecules', 'Detection method', 'Phase separation', 'Phase diagram', 'Morphology', 'Description', 'PMID', 'DOI', 'In vivo/In cell', 'label', 'parsed_c_sat', 'parsed_salt', 'parsed_ph', 'parsed_temp', 'is_complete', 'cluster_id']
+  raw data rows = 2554 (expected 2554)
+  row 0: ['PS00000010', 'LLPS000001', 'protein(1)', 'p0001', 'LAF-1', 'N', '-', '-', '-', '-', '-', '[LAF-1]:708aa(1-708)', '>LLPS000001 sp|D0PV95|DDX3_CAEEL ATP-dependent RNA helicase ', 'IDR-fold', '-', '3-5 µM [LAF-1]', '125 mM NaCl', '20 mM Tris, pH 7.4, 1 mM DTT', '-', 'RT', '-', '', '0.01-0.07 mg/ml dextran 10-155 kD ', 'Microscopy', 'Yes', '', 'droplet', 'The smaller 10 kDa dextranpartitions favourably into P granu', '29064502.0', '', 'Yes', '1', '4.0', '125.0', '7.4', '25.0', 'True', '63']
+  row 1: ['PS00000011', 'LLPS000109', 'protein(1) + RNA', 'p0003', 'Whi3', 'N', '-', '-', '-', '-', '-', '[Whi3]:729aa(1-729)', '>LLPS000109 tr|Q75E28|Q75E28_ASHGO ABL158Cp OS=Ashbya gossyp', 'fold', 'BNI1:6590nt(1-6590)', '9 µM [Whi3];50 nM BNI1', '150 mM KCl', '20 mM Tris, pH 7.4, 1 mM DTT', '-', 'RT', '-', '', '0.01-0.07 mg/ml dextran 10-155 kD ', 'Microscopy', 'Yes', '', 'droplet', 'The smaller 10 kDa dextranpartitions favourably into P granu', '29064502.0', '', 'Yes', '1', '9.0', '150.0', '7.4', '25.0', 'True', '51']
+  auto-detected: label_col = 31 (label), seq_col = 12 (Sequence)
+  species source: FASTA header inside seq cell
+
+[PHASE 1] CENSUS -- train
+  UNKNOWN excluded: 0 (expected 15) ** MISMATCH **
+  valid rows: 2554 (expected 2539) ** MISMATCH **
+  positives: 1749 (expected 1734) ** MISMATCH **
+  negatives: 805 (expected 805) OK
+  human = 1338 | non-human = 1216 | SARS-CoV-2 = 253
+
+[PHASE 2] STRATIFIED AUROC -- train (bootstrap 2000 iters, seed 424242)
+  [train/all] n=2554 (pos 1749/neg 805) | AUROC = 0.5969 | HM SE = 0.0117 | boot SE = 0.0118 | boot 95% CI [0.5742, 0.6206] | ledger n=2539 -> ** DIFFERS from ledger 0.6010 by -0.0041 **
+  [train/human] n=1338 (pos 915/neg 423) | AUROC = 0.6306 | HM SE = 0.0157 | boot SE = 0.0162 | boot 95% CI [0.6005, 0.6625] | ledger n=1302 -> ** DIFFERS from ledger 0.5898 by +0.0408 **
+  [train/nonhuman] n=1216 (pos 834/neg 382) | AUROC = 0.5634 | HM SE = 0.0174 | boot SE = 0.0171 | boot 95% CI [0.5304, 0.5975] | ledger n=1237 -> ** DIFFERS from ledger 0.6173 by -0.0539 **
+  [train/sars2] n=253 (pos 180/neg 73) | AUROC = 0.5839 | HM SE = 0.0385 | boot SE = 0.0318 | boot 95% CI [0.5212, 0.6442] | ledger n=253 -> ** DIFFERS from ledger 0.6406 by -0.0567 **
+
+[PHASE 0] SCHEMA DIAGNOSTICS -- val : C:/Project/AI/EquiPhase/data\val.tsv
+  sha256 = b7ef171dbcc094c31c779ba358a61f6b56a3f8b4c16137b1cd06a5feb325e74c | size = 962644
+  columns (38): ['PSID', 'Entry ID', 'Components type', 'Protein ID', 'Protein name', 'Protein type (N/D)', 'Fusion', 'Cleaved', 'Repeat', 'Mutation', 'PTM', 'Sequence length', 'Sequence', 'Protein structure type', 'Nucleic acid', 'Solute concentration', 'Salt concentration', 'Buffer', 'Crowding agent', 'Temperature', 'Pressure', 'Incubation time', 'other molecules', 'Detection method', 'Phase separation', 'Phase diagram', 'Morphology', 'Description', 'PMID', 'DOI', 'In vivo/In cell', 'label', 'parsed_c_sat', 'parsed_salt', 'parsed_ph', 'parsed_temp', 'is_complete', 'cluster_id']
+  raw data rows = 697 (expected 697)
+  row 0: ['PS00000012', 'LLPS001033', 'protein(1) + RNA', 'p0225', 'xNPM1', 'N', '-', '-', '-', '-', '-', '[xNPM1]:299aa(1-299)', '>LLPS001033 sp|P07222|NPM_XENLA Nucleophosmin OS=Xenopus lae', 'fold', 'RNA', '25 µM [xNPM1];0.1 mg/ml rRNA', '150 mM NaCl', '20 mM Tris, pH 7.4, 1 mM DTT', '-', 'RT', '-', '', '0.01-0.07 mg/ml dextran 10-155 kD ', 'Microscopy', 'Yes', '', 'droplet', 'The smaller 10 kDa dextranpartitions favourably into P granu', '29064502.0', '', 'Yes', '1', '25.0', '150.0', '7.4', '25.0', 'True', '82']
+  row 1: ['PS00000057', 'LLPS000145', 'protein(1)', 'p0006', 'elF4GII_m', 'N', '-', '(IDR)', '-', '-', '-', '[elF4GII IDR]:85aa(13-97)', '>LLPS000145 sp|P39936|IF4F2_YEAST Eukaryotic initiation fact', 'IDR-fold', '-', '32.75 µM [elF4GII IDR]', '37.5 mM NaCl', '20 mM Tris pH 7.4, 1 mM DTT', '-', 'RT', '-', '', '-', 'Microscopy', 'Yes', '', 'droplet to irregular shapes', 'In all cases examined (Pub1 IDR, eIF4GII IDR, Lsm4 IDR, Tia1', '26412307.0', '', '', '1', '32.75', '37.5', '7.4', '25.0', 'True', '180']
+  auto-detected: label_col = 31 (label), seq_col = 12 (Sequence)
+  species source: FASTA header inside seq cell
+
+[PHASE 1] CENSUS -- val
+  UNKNOWN excluded: 41 (expected 41) OK
+  valid rows: 656 (expected 656) OK
+  positives: 441 (expected 441) OK
+  negatives: 215 (expected 215) OK
+  human = 483 | non-human = 173 | SARS-CoV-2 = 0
+
+[PHASE 2] STRATIFIED AUROC -- val (bootstrap 2000 iters, seed 424242)
+  [val/all] n=656 (pos 441/neg 215) | AUROC = 0.6017 | HM SE = 0.0229 | boot SE = 0.0237 | boot 95% CI [0.5558, 0.6483] | ledger n=656 -> OK
+  [val/human] n=483 (pos 321/neg 162) | AUROC = 0.5948 | HM SE = 0.0267 | boot SE = 0.0273 | boot 95% CI [0.5412, 0.6467] | ledger n=483 -> ** DIFFERS from ledger 0.5976 by -0.0028 **
+  [val/nonhuman] n=173 (pos 120/neg 53) | AUROC = 0.6076 | HM SE = 0.0451 | boot SE = 0.0465 | boot 95% CI [0.5171, 0.6969] | ledger n=173 -> ** DIFFERS from ledger 0.6225 by -0.0149 **
+
+[PHASE 2b] INTERACTION TEST (train, human vs non-human)
+  Delta = 0.5634 - 0.6306 = -0.0671 | SE_diff = 0.0236 | MDD = 0.0462 | significant: YES (ledger: Delta=+0.0275, MDD=0.0465, not significant)
+
+[END] TOTAL WALL-CLOCK = 3.2 s
+========================================================================================
+=== END OF CLAUDE PAPER1 SEC4.1 STDOUT ===
+========================================================================================

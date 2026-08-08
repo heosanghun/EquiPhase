@@ -1,0 +1,74 @@
+========================================================================================
+=== CLAUDE PAPER 1 SEC 4.1 FINAL ADJUDICATION (v3) ===
+========================================================================================
+  script_version = v3.0-2026-08-08-claude-p1-sec41-final
+  script_sha256  = 925a2433984a550a83439101f36f4422d09a918ed9bbf378c6782df70b5ee06a
+  numpy = 2.2.6 | python = 3.12.10
+
+[LOAD] train: C:/Project/AI/EquiPhase/data\train.tsv
+  sha256 = ecda4a8b9e4b141f55d9cc2e31b9b6a995972c86da2ff9b0c055f41a88f0c4f4 | size = 3545972
+  raw rows = 2554 | bare-UNKNOWN = 0 | contains 'unknown' text = 15
+
+[CENSUS] train (expected valid/pos/neg = (2539, 1734, 805))
+  FULL     : n=2554 pos=1749 neg=805 | human_res=1338 | human_naive=1331 | sars2=253 
+  UNK_TEXT : n=2539 pos=1734 neg=805 | human_res=1334 | human_naive=1327 | sars2=253 << MATCHES LEDGER CENSUS
+
+[MATRIX] train (A_h | A_nh | Delta | match, tol 0.0025)
+  excl      species   score      n_h  n_nh      A_h    A_nh    Delta  match
+  FULL      RESOLVED  COMPLEN   1338  1216   0.6306  0.5634  -0.0671  V1
+  FULL      RESOLVED  RAWLEN    1338  1216   0.6339  0.5685  -0.0654  NONE
+  FULL      NAIVE     COMPLEN   1331  1223   0.6310  0.5637  -0.0673  V1
+  FULL      NAIVE     RAWLEN    1331  1223   0.6343  0.5688  -0.0655  NONE
+  [train/all FULL COMPLEN] n=2554 (pos 1749/neg 805) AUROC = 0.5969
+  [train/all FULL RAWLEN] n=2554 (pos 1749/neg 805) AUROC = 0.5998
+  [train/sars2 FULL COMPLEN] n=253 (pos 180/neg 73) AUROC = 0.5839 (ledger 0.6406)
+  [train/sars2 FULL RAWLEN] n=253 (pos 180/neg 73) AUROC = 0.6230 (ledger 0.6406)
+  UNK_TEXT  RESOLVED  COMPLEN   1334  1205   0.6323  0.5698  -0.0626  NONE
+  UNK_TEXT  RESOLVED  RAWLEN    1334  1205   0.6351  0.5739  -0.0611  NONE
+  UNK_TEXT  NAIVE     COMPLEN   1327  1212   0.6328  0.5700  -0.0628  NONE
+  UNK_TEXT  NAIVE     RAWLEN    1327  1212   0.6355  0.5742  -0.0613  NONE
+  [train/all UNK_TEXT COMPLEN] n=2539 (pos 1734/neg 805) AUROC = 0.6010
+  [train/all UNK_TEXT RAWLEN] n=2539 (pos 1734/neg 805) AUROC = 0.6034
+  [train/sars2 UNK_TEXT COMPLEN] n=253 (pos 180/neg 73) AUROC = 0.5839 (ledger 0.6406)
+  [train/sars2 UNK_TEXT RAWLEN] n=253 (pos 180/neg 73) AUROC = 0.6230 (ledger 0.6406)
+
+[CANONICAL] train: UNK_TEXT + RESOLVED + COMPLEN (bootstrap 2000, seed 424242)
+  all       n=2539 (pos 1734/neg 805) AUROC=0.6010 HM_SE=0.0117 boot_SE=0.0116 CI95=[0.5788,0.6236]
+  human     n=1334 (pos 911/neg 423) AUROC=0.6323 HM_SE=0.0157 boot_SE=0.0158 CI95=[0.6019,0.6636]
+  nonhuman  n=1205 (pos 823/neg 382) AUROC=0.5698 HM_SE=0.0174 boot_SE=0.0174 CI95=[0.5358,0.6039]
+  sars2     n=253 (pos 180/neg 73) AUROC=0.5839 HM_SE=0.0385 boot_SE=0.0312 CI95=[0.5211,0.6418]
+  interaction: Delta=-0.0626 SE_diff=0.0235 MDD=0.0461 significant=YES
+
+[LOAD] val: C:/Project/AI/EquiPhase/data\val.tsv
+  sha256 = b7ef171dbcc094c31c779ba358a61f6b56a3f8b4c16137b1cd06a5feb325e74c | size = 962644
+  raw rows = 697 | bare-UNKNOWN = 41 | contains 'unknown' text = 41
+
+[CENSUS] val (expected valid/pos/neg = (656, 441, 215))
+  FULL     : n=656 pos=441 neg=215 | human_res=483 | human_naive=467 | sars2=0 << MATCHES LEDGER CENSUS
+  UNK_TEXT : n=656 pos=441 neg=215 | human_res=483 | human_naive=467 | sars2=0 << MATCHES LEDGER CENSUS
+
+[MATRIX] val (A_h | A_nh | Delta | match, tol 0.0025)
+  excl      species   score      n_h  n_nh      A_h    A_nh    Delta  match
+  FULL      RESOLVED  COMPLEN    483   173   0.5948  0.6076  +0.0128  V1
+  FULL      RESOLVED  RAWLEN     483   173   0.6261  0.6172  -0.0089  NONE
+  FULL      NAIVE     COMPLEN    467   189   0.5810  0.6361  +0.0551  NONE
+  FULL      NAIVE     RAWLEN     467   189   0.6151  0.6382  +0.0231  NONE
+  [val/all FULL COMPLEN] n=656 (pos 441/neg 215) AUROC = 0.6017
+  [val/all FULL RAWLEN] n=656 (pos 441/neg 215) AUROC = 0.6221
+  UNK_TEXT  RESOLVED  COMPLEN    483   173   0.5948  0.6076  +0.0128  V1
+  UNK_TEXT  RESOLVED  RAWLEN     483   173   0.6261  0.6172  -0.0089  NONE
+  UNK_TEXT  NAIVE     COMPLEN    467   189   0.5810  0.6361  +0.0551  NONE
+  UNK_TEXT  NAIVE     RAWLEN     467   189   0.6151  0.6382  +0.0231  NONE
+  [val/all UNK_TEXT COMPLEN] n=656 (pos 441/neg 215) AUROC = 0.6017
+  [val/all UNK_TEXT RAWLEN] n=656 (pos 441/neg 215) AUROC = 0.6221
+
+[CANONICAL] val: UNK_TEXT + RESOLVED + COMPLEN (bootstrap 2000, seed 424242)
+  all       n=656 (pos 441/neg 215) AUROC=0.6017 HM_SE=0.0229 boot_SE=0.0234 CI95=[0.5566,0.6470]
+  human     n=483 (pos 321/neg 162) AUROC=0.5948 HM_SE=0.0267 boot_SE=0.0268 CI95=[0.5408,0.6455]
+  nonhuman  n=173 (pos 120/neg 53) AUROC=0.6076 HM_SE=0.0451 boot_SE=0.0473 CI95=[0.5148,0.7006]
+  interaction: Delta=+0.0128 SE_diff=0.0544 MDD=0.1066 significant=NO
+
+[END] TOTAL WALL-CLOCK = 2.8 s
+========================================================================================
+=== END OF CLAUDE PAPER1 SEC4.1 V3 STDOUT ===
+========================================================================================

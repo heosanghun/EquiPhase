@@ -1,0 +1,5 @@
+=== STAGE 11 VERIFICATION RESULTS ===
+Loaded samples: 697
+Dynamic AUROC: 0.5753
+Dynamic Permuted AUROC: 0.4968
+Partial Correlation: r=0.0186, p-value=6.242355e-01
