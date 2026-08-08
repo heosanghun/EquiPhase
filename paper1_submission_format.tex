@@ -1,0 +1,94 @@
+\documentclass[submittal,11pt]{article}
+\usepackage[utf8]{utf8}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+
+\title{\textbf{Auditing Data Leakage, Confounders, and Provenance Artifacts in AI for Science Benchmarks: The UPAF Cryptographic Framework}}
+\author{\textbf{Sanghoon Huh}\\[0.5em]
+Cogni-OS AI Research Laboratory\\
+\texttt{contact@cogni-os.ai}}
+\date{August 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Machine learning benchmarks in computational biology and clinical medicine often exhibit inflated performance estimates due to hidden data leakage, baseline confounders, and undocumented dataset provenance artifacts. In this work, we propose the Unified Provenance and Audit Framework (UPAF), a cryptographic auditing framework that seals dataset provenance, split rules, runtime environments, code execution, and holdout predictions. We apply UPAF to audit two primary domain benchmarks: (1) a multi-species intrinsically disordered protein liquid-liquid phase separation (LLPS) prediction benchmark (Task B) and (2) a multi-center leave-one-site-out clinical heart disease dataset (Task F), while presenting a retrospective forensic case study on a third (Task A). We further report five real-world case studies detailing provenance leakage in our benchmark, dataset parsing artifacts (including non-breaking space Unicode misclassification and unparseable length columns), an audit-log overwrite incident, numerical manuscript provenance failures, and deep equilibrium network specification discrepancies. Our empirical audits reveal that baseline sequence length alone achieves an AUROC of 0.6017 [0.5566, 0.6470] on the validation split ($n=656$) and 0.6010 [0.5788, 0.6236] on the training split ($n=2539$), while metadata text annotation length yields an independent literature bias of 0.5762 [0.5306, 0.6218]. Evaluating sequence length bias across taxonomic strata within the training split ($n=2539$) reveals a statistically significant taxonomic interaction ($\Delta = -0.0626 > \text{MDD}=0.0461$), where human proteins exhibit stronger length bias (AUROC 0.6323 [0.6019, 0.6636]) than non-human organisms (AUROC 0.5698 [0.5358, 0.6039]), while viral SARS-CoV-2 proteins showed no significant signal (AUROC 0.5839 [0.5211, 0.6418], $n=253$), an interaction not replicated in the smaller validation split ($\Delta=+0.0128$, n.s.), indicating split heterogeneity. In multi-center clinical auditing, our 3-axis protocol indicates model discriminative power beyond demographic chance (permutation $p = 0.0010$, demographic gain $\Delta = +0.1287$) while identifying severe regional degradation at sites with missing measurements (Switzerland AUROC 0.5967).
+\end{abstract}
+
+\section{Introduction}
+The rapid growth of AI for Science (AI4Sci) has accelerated model development across proteomics, structural biology, and digital health. However, recent retrospective evaluations have called into question whether reported performance gains reflect genuine biological learning or subtle shortcuts exploited by high-capacity neural networks. Data leakage—whether arising from shared sequence homology across splits, unreported metadata artifacts, or demographic confounders—remains a pervasive barrier to clinical and biological deployment.
+
+In this work, we make three main contributions:
+\begin{enumerate}
+    \item \textbf{The UPAF Cryptographic Seal Protocol}: A 5-layer hash sealing and append-only audit framework for benchmarks.
+    \item \textbf{The 3-Axis Audit Evaluation Protocol}: Disentangling model learning from demographic and confounder baselines.
+    \item \textbf{Empirical Benchmarking Case Studies}: Uncovering sequence length bias, taxonomic interaction, FASTA and Unicode parsing artifacts, multi-site clinical degradation, audit log immutability lessons, and numerical manuscript provenance checks.
+\end{enumerate}
+
+\section{The UPAF Cryptographic Auditing Framework}
+UPAF establishes a 5-layer cryptographic seal:
+\begin{enumerate}
+    \item \textbf{Data Layer}: SHA-256 canonical array and raw file hashing (\texttt{X}, \texttt{y}, \texttt{confounds}, \texttt{raw\_files}).
+    \item \textbf{Split Layer}: Integer-pinned fold indices and split policy pinning.
+    \item \textbf{Code \& Environment Layer}: Exact entry script hashing, module state, and runtime dependencies.
+    \item \textbf{Execution Layer}: Model configuration, hyperparameter seeds, and metric definitions.
+    \item \textbf{Output Layer}: Raw holdout prediction persistence (\texttt{sample\_id}, \texttt{y\_true}, \texttt{y\_score}, \texttt{y\_pred}).
+\end{enumerate}
+Post-GENESIS audit records link sequentially via cryptographic hash chaining (\texttt{prev\_manifest\_self\_sha256}) anchored by an external repository tip hash (\texttt{ledger\_tip.sha256}).
+
+\section{The 3-Axis Audit Evaluation Protocol}
+To distinguish genuine model learning from artifact exploitation, holdout predictions are subjected to a 3-axis evaluation:
+\begin{itemize}
+    \item \textbf{Axis B1 (Permutation Significance)}: Shuffling labels and re-training models ($1,000+$ fits per fold) to construct empirical null distributions.
+    \item \textbf{Axis B2 (Demographic Baseline Gain)}: Comparing holdout predictions against leak-free demographic baselines (e.g., Age baseline).
+    \item \textbf{Axis B3 (Score-Confound Correlation)}: Quantifying residual correlation between prediction scores and demographic variables.
+\end{itemize}
+
+\section{Empirical Audits across Domain Benchmarks}
+
+\subsection{Sequence Length Confound, Taxonomic Strata, and Annotation Bias (Task B)}
+Auditing the multi-species intrinsically disordered protein dataset (\texttt{val.tsv} $n=656$; \texttt{train.tsv} $n=2539$) established exact species distributions and baseline sequence length confound AUROCs.
+
+\begin{table}[htbp]
+\centering
+\caption{\textbf{Canonical LLPS Benchmark Audit Results (Task B)}.}
+\label{tab:task_b}
+\small
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Split / Stratum} & \textbf{Feature Evaluated} & \textbf{$n$} & \textbf{Positives} & \textbf{AUROC} & \textbf{95\% CI} \\
+\midrule
+Validation Split & Sequence Length & 656 & 441 (67.2\%) & 0.6017 & [0.5566, 0.6470] \\
+Validation Split & FASTA Header Text & 656 & 441 (67.2\%) & 0.5762 & [0.5306, 0.6218] \\
+Validation Split & Species Identity & 656 & 441 (67.2\%) & 0.4872 & [0.4398, 0.5359] \\
+Training Split & Sequence Length & 2539 & 1734 (68.3\%) & 0.6010 & [0.5788, 0.6236] \\
+Training Strata: Human & Sequence Length & 1334 & 911 (68.3\%) & 0.6323 & [0.6019, 0.6636] \\
+Training Strata: Non-Human & Sequence Length & 1205 & 823 (68.3\%) & 0.5698 & [0.5358, 0.6039] \\
+Training Strata: Viral & Sequence Length & 253 & 180 (71.1\%) & 0.5839 & [0.5211, 0.6418] \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Multi-Site Clinical Generalization Protocol (Task F)}
+Auditing the combined UCI Heart Disease dataset ($n=920$, 4 clinical sites) under Leave-One-Site-Out (LOSO) validation yielded a mean holdout AUROC of $0.7191 \pm 0.0814$ (Cleveland 0.7902, Hungarian 0.7956, VA Long Beach 0.6939, Switzerland 0.5967). Demographic age baseline gain was $\Delta = +0.1287$ over the age baseline ($0.5904 \pm 0.0340$).
+
+\section{Case Studies of Benchmark Artifacts and Provenance Leakage}
+We report five forensic case studies:
+\begin{enumerate}
+    \item \textbf{Fold-Switching Protein Pair Benchmark (Task A)}: RMSD alignment artifacts yielding 0.7981 baseline AUROC.
+    \item \textbf{FASTA and Unicode Parsing Artifacts (Task B)}: UNKNOWN missingness conversion, \texttt{\textbackslash xa0} space confounder, and \texttt{RAWLEN} text columns.
+    \item \textbf{Audit Log Overwrite Incident}: File overwrite mode risks and cryptographic hash chaining.
+    \item \textbf{Numerical Manuscript Provenance}: Reclassification of conversation records and legacy orphan values.
+    \item \textbf{Deep Equilibrium Network Specifications}: Pattern 2 static log literals, Pattern 14 IFT unrolling deviation, and Pattern 13 reporting transmission channel vulnerability.
+\end{enumerate}
+
+\section{Conclusion}
+UPAF provides a practical blueprint for identifying baseline confounders, structural alignment artifacts, and dataset leakage in AI for Science benchmarks.
+
+\end{document}
