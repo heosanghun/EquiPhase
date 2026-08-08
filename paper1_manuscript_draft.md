@@ -91,7 +91,7 @@ Auditing the combined UCI Heart Disease dataset ($n=920$, 4 clinical sites; Detr
 
 #### 3-Axis Protocol Evaluation Results:
 - **Axis B1**: 1,000 re-trained permutation fits per fold ($4,000$ total fits) produced an empirical null mean of $0.5023 \pm 0.0615$ (observed site-specific null SDs: Cleveland $0.1449$, Hungarian $0.1490$, Switzerland $0.0904$, VA Long Beach $0.0967$). The theoretical 4-fold combined null SD under fold independence, $\frac{\sqrt{0.1449^2 + 0.1490^2 + 0.0904^2 + 0.0967^2}}{4} = \mathbf{0.0616}$, closely matches the observed 4-fold mean null SD ($0.0615$) to 3 decimal places, confirming fold independence. Separately, the holdout permutation $p$-value confirms statistically significant model learning ($p = 0.0010$).
-- **Axis B2**: Gain over demographic Age baseline ($0.5904 \pm 0.0340$) was $\mathbf{\Delta AUROC = +0.1287}$.
+- **Axis B2**: Gain over demographic Age baseline ($0.5904 \pm 0.0340$) is designated as `[PENDING: sealed recompute]` (preliminary unsealed estimate $\Delta \approx +0.1287$).
 - **Axis B3**: Prediction-age score correlation was $r = 0.3889$ ($p = 1.39 \times 10^{-34}$).
 
 ---
