@@ -115,6 +115,13 @@ During audit log maintenance, a script (`rewrite_invalidations.py`) executed in 
 ### 5.4 Case Study 4: Numerical Provenance Mapping, Recurrent Drift, and Verification Engine Failures
 During manuscript compilation, four subgroup AUROC values were repeatedly reported with unverified numbers across multiple revisions. Attempts to automate verification created a flawed inspector that performed circular verification by generating temporary logs in the same execution cycle as inspecting them, while failing to check point-in-CI mathematical sanity constraints ($lo \le pval \le hi$). This meta-audit failure led to establishing strict immutability guidelines: verification inspectors must operate in read-only mode against immutable historical log files anchored by SHA-256 hashes, enforcement scripts must strictly validate point-in-CI mathematical constraints, and manuscript numbers must be mapped 1-to-1 against raw execution logs.
 
+### 5.5 Case Study 5: Audit Discrepancies in Equilibrium Neural Network Specifications
+Auditing an implicit Deep Equilibrium (DEQ) network implementation (`train_paper2_deq_supervised.py`) uncovered two major protocol and implementation discrepancies:
+1. **Hardcoded Log Statement Literals (Pattern 2, fourth documented instance)**: The reported exact 0.00% force anti-symmetry ($G_1$) in early audit logs resulted from a static string literal `print(f"[G1 Architectural Guarantee] Force Anti-Symmetry: 0.0000e+00%")` containing no format variables, obscuring true floating-point precision dynamics ($\sim 1.646 \times 10^{-10}$).
+2. **Locked-Specification Implementation Deviation**: While the preregistration specification required Implicit Function Theorem (IFT) exact analytical backpropagation, the actual code unrolled 100 forward solver iterations into the autograd computation graph.
+
+Furthermore, audit logs for trajectory basin cross-tabulations contained conflicting historical records (Set A: 45/6/0/49 vs Set B: 16/37/29/18), which were provisionally adjudicated by a sealed independent-authorship script (execution pending raw-stdout verification) confirming Set B as the true deterministic result of seed-7777 initializations.
+
 ---
 
 ## 6. Reproduction and Audit Guidelines
