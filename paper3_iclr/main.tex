@@ -74,8 +74,14 @@ implementation error (an invalid contraction in the first monotone run) is
 documented and corrected in the record.
 \end{itemize}
 
+% ------------------------------------------------------ RELATED WORK -------
+\input{related_work}
+
+% --------------------------------------------- METHOD, THEORY, & EXP 1 -----
+\input{method_theory_toy}
+
 % ------------------------------------------------------ EXPERIMENT 2 -------
-\section{Experiment 2: Alanine Dipeptide}
+\section{Experiment 2: Alanine Dipeptide Real Molecular Benchmark}
 \label{sec:ala2}
 
 \textbf{Setup.} We use the mdshare alanine dipeptide backbone-dihedral
@@ -88,12 +94,26 @@ seeds. Attractors are found by deterministic gradient descent from a
 $24\times24$ grid; basins are assigned to macrostates
 ($\beta$, $\alpha_R$, $\alpha_L$) by preregistered angular regions.
 
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.48\textwidth]{fig1_ala2_density_attractors.png}
+  \caption{Alanine Dipeptide $750{,}000$-frame $(\phi, \psi)$ dihedral density histogram with 5-seed EquiPhase DEQ attractor overlays ($\beta, \alpha_R, \alpha_L$).}
+  \label{fig:ala2_density}
+\end{figure}
+
 \textbf{Preregistered gates.} R1: attractors in both $\beta$ and $\alpha_R$;
 R2: locations within $\pm25^\circ$ (per axis, periodic) of data-derived
 anchors $(-72.5^\circ,+152.5^\circ)$ and $(-72.5^\circ,-17.5^\circ)$;
 R3: $V(\beta)<V(\alpha_R)$ with a $0.05\,k_BT$ margin; R4: baseline
 separation; R5 (exploratory): detection of the rare $\phi>0$ state.
 Aggregation (fixed before execution): pass requires $\geq 4/5$ seeds.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.48\textwidth]{fig2_ala2_vnet_contours.png}
+  \caption{Learned potential surface $V_{\text{net}}(\phi, \psi)$ contour map (Seed 7777) showing clear energy wells for $\beta, \alpha_R,$ and rare $\alpha_L$ macrostates.}
+  \label{fig:vnet_contours}
+\end{figure}
 
 \textbf{Results.} EquiPhase passes R1, R2, and R3 in 5/5 seeds. Recovered
 basins reproduce the fine structure of the landscape: both $\beta$-branch
@@ -111,6 +131,13 @@ $72\times72$ density EDA; a second, high-$V$ attractor near
 $(+58^\circ,+175^\circ)$ appears in all seeds and is disclosed as a probable
 shallow artifact.
 
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.96\textwidth]{fig3_monotone_vs_equiphase.png}
+  \caption{Contrast between Monotone DEQ (Left: 576 grid initializations collapsing to a single non-physical fixed point $N=1$) and EquiPhase DEQ (Right: 576 initializations branching into physical metastable basins).}
+  \label{fig:monotone_vs_equiphase}
+\end{figure}
+
 \textbf{Baselines, reported in full.} The vanilla score network (same
 budget, seed 7777) also places attractors near the physical basins, so the
 preregistered gate R4b fails, and we report this: in a two-dimensional
@@ -125,5 +152,12 @@ requires: every one of 576 initializations converges (residual
 $0.0$) to one non-physical fixed point, with training loss frozen at
 $0.712$. Uniqueness guarantees and multistable physics are not jointly
 achievable; our results quantify what each side of that trade costs.
+
+% ----------------------------------------------- LIMITATIONS & DISCLOSURES -
+\input{limitations_disclosures}
+
+% ----------------------------------------------------------- BIBLIOGRAPHY -
+\bibliographystyle{iclr2026_conference}
+\bibliography{references}
 
 \end{document}

@@ -1,0 +1,98 @@
+% --------------------------------------------------------------- METHOD ----
+\section{Method: EquiPhase DEQ}
+\label{sec:method}
+
+\paragraph{Learned potential with structural guarantees.}
+EquiPhase DEQ represents a system by a scalar potential and reaches
+equilibria by integrating damped conservative dynamics. We describe the
+model in three deliberately separated layers, so that the reader can always
+tell which properties are \emph{guaranteed by construction}, which are
+\emph{inherited from an analytical prior}, and which are \emph{empirical}.
+(i)~\textit{Structure:} the potential is a function of an embedding chosen
+so that required invariances hold exactly — in the synthetic system, the
+symmetry and identity properties are architectural (gates G1/G2$'$ below);
+on dihedral data, the embedding
+$[\sin\phi,\cos\phi,\sin\psi,\cos\psi]$ makes $V_\theta$ exactly
+$2\pi$-periodic. (ii)~\textit{Prior:} where an analytical potential
+$V_{\mathrm{base}}$ exists (synthetic system) we learn a residual,
+$V_{\mathrm{total}}=V_{\mathrm{base}}+v_{\mathrm{net}}$; where none exists
+(molecular data) $V_\theta$ is learned alone, and we disclose that the
+prior layer is only partially applicable. (iii)~\textit{Empirics:} all
+remaining claims are established by preregistered gates.
+
+\paragraph{Damped velocity Verlet dynamics.}
+States are phase-space pairs $(q,p)$. One step of the model applies
+\begin{align}
+q_{1/2} &= q_t + \tfrac{\Delta t}{2m}\,p_t, \\
+p_{t+1} &= (1-\eta)\,p_t - \Delta t\,\nabla_q V(q_{1/2}),
+\qquad \eta = \gamma \Delta t / m, \\
+q_{t+1} &= q_{1/2} + \tfrac{\Delta t}{2m}\,p_{t+1}.
+\end{align}
+With $\eta=0$ this is the classical velocity Verlet integrator; with
+$\eta\in(0,1)$ it contracts phase-space volume at a fixed, known rate while
+retaining the integrator's geometric stability. Equilibria of the map are
+exactly the pairs $(q^\star, 0)$ with $\nabla_q V(q^\star)=0$: fixed points
+of the dynamics coincide with critical points of the learned potential, so
+counting attractors of the model is counting metastable states of $V$.
+
+% --------------------------------------------------------------- THEORY ----
+\section{Why uniqueness guarantees exclude multistability}
+\label{sec:theory}
+
+\begin{proposition}[Dissipative structure]
+\label{prop:dissipative}
+Let $J$ be the Jacobian of one damped velocity Verlet step with damping
+$\eta$, and $\Omega$ the canonical symplectic form. Then
+$J^\top \Omega J = (1-\eta)\,\Omega$.
+\end{proposition}
+The step is therefore not symplectic (it does not conserve energy — by
+design) but \emph{conformally} so: phase-space volume shrinks by the
+constant factor $(1-\eta)$ per step, which is what drives trajectories into
+the basins of $V$ rather than orbiting them. In the synthetic system this
+identity is verified numerically to the reported gate tolerance rather than
+assumed.
+
+\begin{proposition}[Banach collapse]
+\label{prop:banach}
+If a DEQ update map $g$ is a contraction, $\mathrm{Lip}(g)\le c<1$, on a
+complete metric space, then $g$ admits exactly one fixed point, and every
+initialization converges to it.
+\end{proposition}
+
+\begin{corollary}
+A DEQ whose well-posedness is certified via global contraction (or strong
+monotonicity implying it) has attractor count $N=1$ independent of the data
+it was trained on. Representing $N\ge2$ metastable states requires forgoing
+the global uniqueness certificate.
+\end{corollary}
+EquiPhase forgoes exactly that certificate and replaces it with a weaker,
+physically meaningful one: dissipativity (Proposition~\ref{prop:dissipative})
+plus empirical convergence diagnostics reported per run. Section~\ref{sec:ala2}
+shows both halves of this trade empirically: our verified-contraction
+baseline collapses precisely as Proposition~\ref{prop:banach} mandates,
+while EquiPhase recovers the multistable structure of real molecular data.
+
+% ------------------------------------------------------- EXPERIMENT 1 ------
+\section{Experiment 1: Synthetic Double-Well with Analytical Ground Truth}
+\label{sec:toy}
+
+We first validate on a 32-dimensional anisotropic double-well potential
+whose minima ($\pm\sqrt{\alpha}\,e_1$), saddle points, and barrier height
+($0.2275$) are known in closed form, so every empirical claim can be scored
+against an analytical answer. The residual network $v_{\mathrm{net}}$ is a
+small MLP ($34{\to}64{\to}1$; $2305$ parameters). Under a preregistered
+gate battery (seed 7777): the structural symmetry and identity gates hold to
+tolerances of order $10^{-9}$; two attractors are recovered
+($N=2$) with contraction factors $\rho = 0.9626/0.9628$ against the
+corrected theoretical value $0.96273$; and the measured escape barrier
+$0.230111$ exceeds the analytical barrier $0.2275$, consistent with the
+learned residual steepening the well walls. Two preregistered stress
+disclosures accompany these results: at the boundary setting $\alpha=1.2$
+one gate exceeds its per-$\alpha$ limit by $1.0\times10^{-5}$, and $1$ of
+$100$ novel-seed initializations diverges; both are reported as limits of
+the method rather than removed. Under the same protocol, an unconstrained
+vanilla DEQ fails to converge ($0/100$ initializations; residual
+$\approx5.9\times10^{-3}$, $\rho\approx0.9999$), and a monotone DEQ
+collapses to a single attractor with its training loss frozen — the same
+qualitative signature that reappears on molecular data in
+Section~\ref{sec:ala2}.
