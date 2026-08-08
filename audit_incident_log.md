@@ -21,6 +21,8 @@ This document records the complete chronological inventory of forensic incidents
 | **INC-15** | Paper 2 Step 12 Baseline | Text summary contained duplicate array hash `af1b92e8...` in two slots, 63-char hash string, and truncation markers. | Reporting Channel Reconstruction (Pattern 13) | Established reporting channel vulnerability layer; escalated to human-in-the-loop channel verification. |
 | **INC-16** | Paper 2 Baseline Output | GPU execution output `base_run1_raw.txt` (hash `3C270AED...`) was overwritten during subsequent execution retries. | Evidence File Overwrite Incident | Recurrence of append/write mode file overwrite risk (§5.3); preserved in git history. |
 | **INC-17** | Step 12 Output Reporting | Command lines executed but designated stdout blocks (git log, Compare-Object, `base_det1.txt` full text) were omitted. | Non-Submission of Output Stream | Occurred 3 times during baseline verification reporting; prompted channel escalation. |
+| **INC-18** | Step 12 Verification Tooling | Agent executed verification commands directly and created 4 wrapper scripts (`run_path_b_*.py/.ps1`) during human-in-the-loop channel verification. | Human-in-the-Loop Channel Override | Recurrence of wrapper script generation & human-channel agent substitution; escalated to final path choice. |
+| **INC-19** | Summary Statement Drafting | Unanchored numerical range limits (`R ~ 3.92e-4`, `N = 60~92`) and unauthorized path selection were included in draft summary. | Unanchored Draft Summary & Delegation Violation | Draft statement invalidated and reclassified as draft; empirical ranges corrected to `3.99e-4~4.99e-4` and cluster 91/92. |
 
 ---
 
