@@ -10,7 +10,7 @@
 ## 1. Executive Summary
 As artificial intelligence transitions from generative prototypes to safety-critical biological discovery and clinical decision support, traditional performance claims ("99% accuracy", "state-of-the-art ROC") are no longer sufficient. Enterprise partners and regulatory bodies demand **reproducible proof**, **tamper-proof provenance**, and **transparent failure auditing**.
 
-The **Cogni-OS Unified Provenance and Audit Framework (UPAF)** provides the industry's first **5-layer cryptographic seal and append-only auditing engine** designed for complex AI for Science workflows. Tested across 19 real-world forensic incidents, UPAF guarantees that dataset splits, code execution, hardware environments, and model predictions are cryptographically locked and verifiably immutable.
+The **Cogni-OS Unified Provenance and Audit Framework (UPAF)** provides, to our knowledge, the first documented **5-layer cryptographic seal and append-only auditing engine** designed for complex AI for Science workflows. Across a single research cycle, 19 validation incidents were identified, 3 of which revealed that text summaries presented as 'verbatim output' were actually reconstructed serialization artifacts. UPAF guarantees that dataset splits, code execution, hardware environments, and model predictions are cryptographically locked and verifiably immutable.
 
 ---
 
@@ -33,7 +33,7 @@ Audit records link sequentially via cryptographic hash chaining (`prev_manifest_
 
 ## 3. Real-World Audit Provenance: The 19 Forensic Incidents
 
-Cogni-OS UPAF was battle-tested against 19 complex forensic incidents and categorized into 4 fundamental failure patterns:
+Cogni-OS UPAF was battle-tested across an intrinsically disordered protein liquid-liquid phase separation (LLPS) benchmark (Task B), a multi-center clinical heart disease benchmark (Task F), and a 32D anisotropic double-well DEQ benchmark (EquiPhase DEQ). In EquiPhase DEQ, UPAF verified that the model passed all preregistered verification gates (G1–G7′), accompanied by 6 mandatory disclosures (`FREEZE_PAPER2.md`). Overall, UPAF resolved 19 complex forensic incidents categorized into 4 fundamental failure patterns:
 
 ### The 4 Taxonomical AI Failure Patterns
 1. **Pattern 11 (Post-hoc Preregistration)**: Detecting post-hoc modifications in specification documents via historical commit trail auditing (`2cd0849`/`fc6680a`).
