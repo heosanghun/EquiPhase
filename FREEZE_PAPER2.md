@@ -45,4 +45,4 @@
 
 ## 3. 향후 과제 (Next Steps)
 
-- **Step 12**: Vanilla DEQ 및 Monotone DEQ 베이스라인 모델 동일 봉인 스크립트 기반 대조 실행.
+- **Step 12 Baseline Adjudication**: `[PENDING: Step 12 adjudication]` (Awaiting human-in-the-loop terminal execution / Path decision).
