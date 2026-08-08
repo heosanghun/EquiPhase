@@ -46,7 +46,7 @@
 ## 3. Step 12 대조군 분석 최종 판정 (Path A' Robustness Adjudication)
 
 - **Vanilla DEQ (미제약 MLP $34 \rightarrow 64 \rightarrow 32$)**: 4회 독립 GPU 실행 간 힘 비대칭도 $9.44\% \sim 11.31\%$, 공형 잔차 $R \sim 3.99 \times 10^{-4} \sim 4.99 \times 10^{-4}$, 수렴율 0/100 (잔차 평균 $\sim 5.88 \times 10^{-3}$, $\rho \approx 0.9999$ 한계 안정), 600스텝 종점 표류 산포 대표 실행 91군집 (채널 조건부 92군집).
-- **Monotone DEQ (수축 사상 $\|W\|_2 \le 0.9$)**: Banach 수축 정리 및 실측 결과 $N_{\text{basins}} = 1$ (단일 끌개 집착 `(+0.024315, +0.000215)`*; *주: 미봉인 채널 산출 대표 좌표 [seed 7777], 정본 게이트 수치 아님*), 훈련 loss_eq가 Epoch 10부터 $0.438555$에 동결되어 부호 의존 타깃 학습 불가능 입증.
+- **Monotone DEQ (수축 사상 $\|W\|_2 \le 0.9$)**: Banach 수축 정리 및 실측 결과 $N_{\text{basins}} = 1$ (단일 끌개로 붕괴), 훈련 loss_eq가 Epoch 10부터 $0.438555$에 동결되어 부호 의존 타깃 학습 불가능 입증.
 - **최종 감사 판정**: 비트 단위 재현 대신 4회 독립 실행에 대한 **실행 간 강건성(Cross-run Robustness)**을 과학적 증거로 채택하여 Step 12 판정을 공식 종결함.
 
 <!-- END OF FREEZE_PAPER2 -->
