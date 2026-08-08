@@ -15,24 +15,115 @@ Paper under double-blind review}
 
 \maketitle
 
+% ---------------------------------------------------------------- ABSTRACT --
 \begin{abstract}
-Machine learning models for dynamical systems often enforce strict contraction mappings to guarantee solver convergence, yet this structural constraint fundamentally eliminates their capacity to represent multistable physical energy landscapes. In this work, we propose EquiPhase DEQ, a deep equilibrium architecture combining periodicity-preserving encodings, energy-conserving neural potentials, and damped velocity Verlet dynamics. We audit EquiPhase DEQ across synthetic benchmarks and empirical molecular dynamics dihedrals of Alanine Dipeptide ($n=750,000$). Our empirical evaluation demonstrates that EquiPhase DEQ robustly captures all physical metastable states ($\beta$, $C_5$, $\alpha_R$) and discovers rare transition states ($\alpha_L$) across 5/5 independent seeds, whereas Monotone DEQs collapse to a single non-physical attractor ($N=1$).
+Deep equilibrium models (DEQs) typically purchase convergence guarantees
+through monotone-operator or contraction constraints that force a unique
+fixed point. We argue this design choice is not free: physical systems are
+multistable, and a model that provably admits one attractor cannot represent
+two metastable states, let alone their relative free energies. We introduce
+EquiPhase DEQ, an equilibrium model whose dynamics are damped velocity Verlet
+steps on a learned conservative potential with periodicity built into the
+architecture. On a 32-dimensional synthetic double-well system with known
+analytical structure, the model passes a preregistered battery of structural
+and empirical gates. We then evaluate on real molecular data: 750{,}000
+frames of alanine dipeptide backbone dihedrals. Under a preregistered
+protocol with sealed evaluation scripts, EquiPhase recovers the
+$\beta$ and $\alpha_R$ metastable basins in 5/5 independent seeds, with
+attractor locations within $\pm25^\circ$ of data-derived anchors and the
+correct free-energy ordering, and additionally locates the rare
+$\alpha_L$ state that occupies only 3.0\% of the data in 5/5 seeds. We report
+our negative results in full: an unconstrained score-matching baseline also
+locates the basins, so the contribution of structure is not localization but
+the existence of a consistent scalar potential (the baseline field has
+non-zero curl and admits no free-energy readout), while a verified Banach
+contraction baseline collapses to a single non-physical fixed point exactly
+as theory predicts. All quantitative claims trace to hash-sealed,
+preregistered evaluation runs.
 \end{abstract}
 
+% ------------------------------------------------ INTRO & CONTRIBUTIONS ----
 \section{Introduction}
-Deep Equilibrium Models (DEQs) replace explicit depth with implicit fixed-point iterations.
+Deep equilibrium models (DEQs) have emerged as a powerful paradigm by expressing neural implicit layers through fixed-point solutions. However, standard DEQ formulations enforce global contraction mappings ($\text{Lip} < 1$) or monotone operators to guarantee mathematical convergence to a single unique state. In physical dynamics—such as protein folding, conformational transitions, and multistable dynamical systems—this global uniqueness constraint represents a fundamental physical contradiction: a system with a unique attractor cannot represent multiple metastable basins or their barrier heights.
 
-\section{Related Work}
-Hamiltonian Neural Networks and Neural ODEs.
+\paragraph{Contributions.}
+\begin{itemize}
+\item \textbf{A multistable equilibrium architecture.} EquiPhase DEQ couples
+a learned conservative potential (periodicity guaranteed by construction)
+with damped velocity Verlet dynamics, deliberately forgoing global
+fixed-point uniqueness to retain multistability.
+\item \textbf{An impossibility observation made empirical.} We verify at run
+time that our monotone baseline is a genuine contraction (empirical Lipschitz
+maximum $0.788 < 1$) and observe the Banach-mandated collapse: all 576 grid
+initializations converge to a single fixed point at
+$(\phi,\psi)=(-50.1^\circ, +18.5^\circ)$ — a location corresponding to no
+metastable state of the data — with training loss frozen at $0.712$ versus
+$0.019$ for EquiPhase.
+\item \textbf{Real-data validation with preregistered gates.} On alanine
+dipeptide (750k frames), EquiPhase passes location, identity, and
+free-energy-ordering gates in 5/5 seeds and detects the rare
+$\alpha_L$ state (3.0\% occupancy) in 5/5 seeds — a state our own
+coarse density EDA failed to isolate.
+\item \textbf{Honest baselines and full disclosure.} A vanilla score network
+matches basin locations (our preregistered gate R4b therefore fails, and we
+report it); its field, however, has mean absolute curl $1.67$ and thus no
+consistent potential. The differentiating claim is calibrated: structure buys
+a free-energy readout, not localization. All experiments follow a
+preregistration with sealed scripts and hash-anchored data; one auditor-side
+implementation error (an invalid contraction in the first monotone run) is
+documented and corrected in the record.
+\end{itemize}
 
-\section{Methodology}
-EquiPhase DEQ architecture and damped velocity Verlet integrator.
+% ------------------------------------------------------ EXPERIMENT 2 -------
+\section{Experiment 2: Alanine Dipeptide}
+\label{sec:ala2}
 
-\section{Empirical Audits}
-\subsection{Alanine Dipeptide Real Molecular Benchmark}
-Empirical findings across 5 independent seeds.
+\textbf{Setup.} We use the mdshare alanine dipeptide backbone-dihedral
+dataset (three independent 250\,ns trajectories; 750{,}000 frames of
+$(\phi,\psi)$ in radians), pinned by SHA-256 and re-verified at every run.
+The potential $V_\theta$ is a small MLP over the periodic embedding
+$[\sin\phi,\cos\phi,\sin\psi,\cos\psi]$, trained by denoising score matching
+($\sigma=0.15$\,rad, 3000 Adam steps, batch 4096) on five preregistered
+seeds. Attractors are found by deterministic gradient descent from a
+$24\times24$ grid; basins are assigned to macrostates
+($\beta$, $\alpha_R$, $\alpha_L$) by preregistered angular regions.
 
-\section{Discussion}
-Analysis of scalar potential fields vs non-conservative vector fields.
+\textbf{Preregistered gates.} R1: attractors in both $\beta$ and $\alpha_R$;
+R2: locations within $\pm25^\circ$ (per axis, periodic) of data-derived
+anchors $(-72.5^\circ,+152.5^\circ)$ and $(-72.5^\circ,-17.5^\circ)$;
+R3: $V(\beta)<V(\alpha_R)$ with a $0.05\,k_BT$ margin; R4: baseline
+separation; R5 (exploratory): detection of the rare $\phi>0$ state.
+Aggregation (fixed before execution): pass requires $\geq 4/5$ seeds.
+
+\textbf{Results.} EquiPhase passes R1, R2, and R3 in 5/5 seeds. Recovered
+basins reproduce the fine structure of the landscape: both $\beta$-branch
+sub-modes (near $(-73^\circ,+153^\circ)$ and $(-141^\circ,+158^\circ)$) and
+the $\alpha_R$ basin (near $(-78^\circ,-15^\circ)$) appear consistently
+across seeds. The learned free-energy gap
+$\Delta F(\alpha_R{-}\beta)$ ranges over $0.54$--$0.84\,k_BT$ across seeds.
+[POST-HOC] This bracket contains the value $0.71\,k_BT$ obtained by an
+independent histogram estimate on the same data; we report this agreement as
+an observational analysis, as it was not a preregistered gate.
+In 5/5 seeds the model additionally places an attractor in the rare
+$\alpha_L$ region at approximately $(+53^\circ,+31^\circ)$ (R5), although
+this region holds only 3.0\% of frames and was not isolated as a mode by our
+$72\times72$ density EDA; a second, high-$V$ attractor near
+$(+58^\circ,+175^\circ)$ appears in all seeds and is disclosed as a probable
+shallow artifact.
+
+\textbf{Baselines, reported in full.} The vanilla score network (same
+budget, seed 7777) also places attractors near the physical basins, so the
+preregistered gate R4b fails, and we report this: in a two-dimensional
+collective-variable space, localization is easy. What the unconstrained
+field cannot provide is a potential: its mean absolute curl is $1.67$, so no
+scalar $V$ exists whose gradient matches it, and gate R3 is undefined for
+it. The monotone baseline, after correcting an auditor-side implementation
+error (documented in the audit ledger; the first version scaled its
+correction by $0.9\pi$ and was not a contraction), is a verified contraction
+(empirical Lipschitz max $0.788$) and behaves exactly as Banach's theorem
+requires: every one of 576 initializations converges (residual
+$0.0$) to one non-physical fixed point, with training loss frozen at
+$0.712$. Uniqueness guarantees and multistable physics are not jointly
+achievable; our results quantify what each side of that trade costs.
 
 \end{document}
