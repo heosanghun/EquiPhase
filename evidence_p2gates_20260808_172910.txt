@@ -1,0 +1,66 @@
+P2GATES_BEGIN
+48DE453DA3F66D7FDB6F715304DC00C55AEBCF6C4CC9797862A7CD21A9AC4616
+GATES_BEGIN
+script=claude_ala2_phase2_train_gates_sealed.py run_id=20260808_172910
+torch=2.11.0+cu128 cuda=True
+data_sha256=F5AD30768A7CF3451B3061CB2ECB7F7D1DE8C13044534376D26A6653D4CD5717
+anchor_check=PASS
+total_samples=750000 sigma=0.1500 batch=4096 lr=0.00100 steps=3000
+SEED 7777 | final_loss=0.018687 | attractors=5
+  ATTR phi=  -77.55 psi=  -14.97 n=209 state=alphaR V=-9.6387
+  ATTR phi=  -72.82 psi= +153.38 n=105 state=beta   V=-10.4514
+  ATTR phi=  +52.31 psi=  +32.76 n=105 state=alphaL V=-3.4098
+  ATTR phi= -142.37 psi= +157.81 n= 99 state=beta   V=-9.7750
+  ATTR phi=  +59.74 psi= +170.93 n= 58 state=alphaL V=-0.0273
+  dF(alphaR-beta)=+0.8128 kT
+  R1=True R2=True R3=True R5(exploratory)=True
+SEED 1234 | final_loss=0.018423 | attractors=5
+  ATTR phi=  -78.82 psi=  -13.79 n=194 state=alphaR V=-6.9799
+  ATTR phi=  +53.73 psi=  +31.82 n=125 state=alphaL V=-2.5767
+  ATTR phi= -142.75 psi= +156.15 n=100 state=beta   V=-7.4021
+  ATTR phi=  -73.44 psi= +151.45 n= 92 state=beta   V=-7.8209
+  ATTR phi=  +57.94 psi= +175.21 n= 65 state=alphaL V=+0.9172
+  dF(alphaR-beta)=+0.8411 kT
+  R1=True R2=True R3=True R5(exploratory)=True
+SEED 2026 | final_loss=0.018219 | attractors=6
+  ATTR phi=  +52.72 psi=  +31.85 n=144 state=alphaL V=-3.0958
+  ATTR phi= -142.74 psi= +157.43 n=103 state=beta   V=-7.2434
+  ATTR phi=  -78.74 psi=  -15.04 n=102 state=alphaR V=-6.8788
+  ATTR phi=  -72.41 psi= +153.29 n= 96 state=beta   V=-7.6282
+  ATTR phi= -129.28 psi=   +0.65 n= 82 state=alphaR V=-6.0424
+  ATTR phi=  +57.57 psi= +170.73 n= 49 state=alphaL V=+1.9416
+  dF(alphaR-beta)=+0.7495 kT
+  R1=True R2=True R3=True R5(exploratory)=True
+SEED 31415 | final_loss=0.018988 | attractors=5
+  ATTR phi=  -76.59 psi=  -14.89 n=187 state=alphaR V=-6.0123
+  ATTR phi=  +54.00 psi=  +30.56 n=139 state=alphaL V=-1.6298
+  ATTR phi= -141.61 psi= +158.14 n=108 state=beta   V=-6.2527
+  ATTR phi=  -73.15 psi= +152.73 n= 93 state=beta   V=-6.6689
+  ATTR phi=  +57.96 psi= +176.94 n= 49 state=alphaL V=+3.1916
+  dF(alphaR-beta)=+0.6566 kT
+  R1=True R2=True R3=True R5(exploratory)=True
+SEED 65537 | final_loss=0.018069 | attractors=5
+  ATTR phi=  -77.79 psi=  -14.67 n=184 state=alphaR V=-5.3811
+  ATTR phi=  +52.57 psi=  +30.42 n=136 state=alphaL V=-1.0543
+  ATTR phi= -140.59 psi= +157.77 n=108 state=beta   V=-5.4388
+  ATTR phi=  -74.01 psi= +152.84 n= 92 state=beta   V=-5.9228
+  ATTR phi=  +58.93 psi= +176.89 n= 56 state=alphaL V=+3.7942
+  dF(alphaR-beta)=+0.5417 kT
+  R1=True R2=True R3=True R5(exploratory)=True
+EQUIPHASE aggregate: 5/5 seeds pass R1&R2&R3 -> PASS
+VANILLA seed7777 | final_loss=0.018666 | attractors=5
+  ATTR phi=  -76.28 psi=  -15.54 n=182 state=alphaR
+  ATTR phi=  +53.29 psi=  +31.03 n=124 state=alphaL
+  ATTR phi= -140.63 psi= +157.73 n=105 state=beta
+  ATTR phi=  -73.85 psi= +153.54 n= 98 state=beta
+  ATTR phi=  +59.12 psi= +176.36 n= 67 state=alphaL
+  vanilla_R1andR2=True (R4b requires False) | curl_diag=1.6717e+00 (exploratory, not a gate)
+MONOTONE seed7777 | final_loss=0.173732 | attractors=4
+  ATTR phi=  +37.50 psi=  -55.17 n=204
+  ATTR phi=  +36.91 psi= +128.11 n=180
+  ATTR phi= -117.26 psi= +129.05 n= 97
+  ATTR phi= -119.93 psi=  -42.57 n= 95
+R4a(monotone N=1)=False R4b(vanilla fails R1&R2)=False -> R4=False
+OVERALL: R1-R4 FAIL (R5 exploratory reported above per seed)
+GATES_END
+P2GATES_END

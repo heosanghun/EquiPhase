@@ -1,0 +1,17 @@
+M2RUN_BEGIN
+F548E129100FDD7B3B2319C267004AE71F9801B15F94B3660A5E5CB227F60635
+MONO2_BEGIN
+script=claude_ala2_monotone_r4a_sealed_v2.py run_id=20260808_173543
+torch=2.11.0+cu128 cuda=True
+data_sha256=F5AD30768A7CF3451B3061CB2ECB7F7D1DE8C13044534376D26A6653D4CD5717
+anchor_check=PASS
+total_samples=750000 seed=7777 sigma=0.1500 batch=4096 lr=0.00100 steps=3000
+final_loss=0.712295
+lipschitz_bound_theory=0.9500 lipschitz_empirical_max=0.788283 contraction=True
+fixed_point_residual_max=0.000e+00
+attractors=1
+  ATTR phi=  -50.07 psi=  +18.51 n=576
+R4a(monotone N=1)=True
+note: R4b (vanilla) verdict from run 20260808_172910 stands unchanged (FAIL, preregistered as-is)
+MONO2_END
+M2RUN_END
