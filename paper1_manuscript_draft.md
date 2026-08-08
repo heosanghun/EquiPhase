@@ -152,14 +152,8 @@ Establishing trustworthy AI for Science and Healthcare requires transparent, tam
 ## References
 - Bai, S., Kolter, J. Z., & Koltun, V. (2019). Deep equilibrium models. *Advances in Neural Information Processing Systems*, 32.
 - Chakravarty, D., & Porter, L. L. (2022). AlphaFold2 fails to predict protein fold switching. *Protein Science*, 31(6), e4353. https://doi.org/10.1002/pro.4353
-- Dehghani, M. et al. (2019). Universal transformers. *ICLR*.
-- Detrano, R. et al. (1989). International application of a new probability algorithm for the diagnosis of coronary artery disease. *American Journal of Cardiology*, 64(5), 304-310.
-- Geiping, J. et al. (2025). Scaling up test-time compute with latent reasoning. *arXiv:2502.05171*.
-- Giannou, A. et al. (2023). Looped transformers as programmable computers. *ICML*.
-- Hao, L. et al. (2024). Training large language models to reason in a continuous latent space. *arXiv:2412.06769*.
-- Krotov, D., & Hopfield, J. J. (2016). Dense associative memory for pattern recognition. *NIPS*.
-- Li, Q. et al. (2020). LLPSDB: a database of proteins undergoing liquid-liquid phase separation in vitro. *Nucleic Acids Research*, 48(D1), D320-D327. https://doi.org/10.1093/nar/gkz780
-- Ramsauer, H. et al. (2020). Hopfield networks is all you need. *ICLR*.
-- Saunshi, N. et al. (2025). Reasoning with latent thoughts: On the power of looped transformers. *arXiv:2502.17416*.
+- Detrano, R., Janosi, A., Steinbrunn, W., Pfisterer, M., Schmid, J. J., Sandhu, S., Guppy, K. H., Lee, S., & Froelicher, V. (1989). International application of a new probability algorithm for the diagnosis of coronary artery disease. *American Journal of Cardiology*, 64(5), 304-310.
+- Hanley, J. A., & McNeil, B. J. (1982). The meaning and use of the area under a receiver operating characteristic (ROC) curve. *Radiology*, 143(1), 29-36.
+- Li, Q., Peng, X., Li, Y., Tang, W., Zhu, J., Huang, J., Qi, Y., & Zhang, Z. (2020). LLPSDB: a database of proteins undergoing liquid-liquid phase separation in vitro. *Nucleic Acids Research*, 48(D1), D320-D327. https://doi.org/10.1093/nar/gkz780
+- Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., ... & Duchesnay, E. (2011). Scikit-learn: Machine learning in Python. *Journal of Machine Learning Research*, 12, 2825-2830.
 - You, K., Huang, Q., Yu, C., Shen, B., Sevilla, C., Shi, M., Hermjakob, H., Chen, Y., & Li, T. (2020). PhaSepDB: a database of liquid–liquid phase separation related proteins. *Nucleic Acids Research*, 48(D1), D354-D359. https://doi.org/10.1093/nar/gkz847
-- Zhu, Y. et al. (2025). Scaling latent reasoning via looped language models. *arXiv preprint*.
