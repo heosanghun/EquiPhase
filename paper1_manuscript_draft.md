@@ -139,7 +139,7 @@ Furthermore, historical log conflicts between Set A ($45/6/0/49$) and Set B ($16
 ---
 
 ## 7. Conclusion
-Establishing trustworthy AI for Science and Healthcare requires transparent, tamper-proof auditing mechanisms that go beyond reporting raw accuracy metrics. The UPAF framework and 3-axis protocol provide a practical blueprint for identifying baseline confounders, structural alignment artifacts, and dataset leakage. By sealing benchmark provenance and enforcing immutable audit logs, research teams can ensure that reported AI advances reflect true scientific discovery.
+Establishing trustworthy AI for Science and Healthcare requires transparent, tamper-proof auditing mechanisms that go beyond reporting raw accuracy metrics. Across nineteen documented audit incidents, including four newly identified failure patterns (Patterns 11–14), the UPAF framework and 3-axis protocol provide a practical blueprint for identifying baseline confounders, structural alignment artifacts, and dataset leakage. Where the exact upstream provenance database of legacy benchmark splits cannot be conclusively established, file-level SHA-256 anchors (§2) substitute for source citation. By sealing benchmark provenance and enforcing immutable audit logs, research teams can ensure that reported AI advances reflect true scientific discovery.
 
 ---
 
