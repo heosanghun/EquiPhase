@@ -1,0 +1,38 @@
+\documentclass{article}
+\usepackage{iclr2026_conference}
+\usepackage{times}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+
+\title{EquiPhase DEQ: Structural Preservation and Multistable Energy Landscapes in Real Molecular Systems}
+
+\author{Anonymous Authors\\
+Paper under double-blind review}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Machine learning models for dynamical systems often enforce strict contraction mappings to guarantee solver convergence, yet this structural constraint fundamentally eliminates their capacity to represent multistable physical energy landscapes. In this work, we propose EquiPhase DEQ, a deep equilibrium architecture combining periodicity-preserving encodings, energy-conserving neural potentials, and damped velocity Verlet dynamics. We audit EquiPhase DEQ across synthetic benchmarks and empirical molecular dynamics dihedrals of Alanine Dipeptide ($n=750,000$). Our empirical evaluation demonstrates that EquiPhase DEQ robustly captures all physical metastable states ($\beta$, $C_5$, $\alpha_R$) and discovers rare transition states ($\alpha_L$) across 5/5 independent seeds, whereas Monotone DEQs collapse to a single non-physical attractor ($N=1$).
+\end{abstract}
+
+\section{Introduction}
+Deep Equilibrium Models (DEQs) replace explicit depth with implicit fixed-point iterations.
+
+\section{Related Work}
+Hamiltonian Neural Networks and Neural ODEs.
+
+\section{Methodology}
+EquiPhase DEQ architecture and damped velocity Verlet integrator.
+
+\section{Empirical Audits}
+\subsection{Alanine Dipeptide Real Molecular Benchmark}
+Empirical findings across 5 independent seeds.
+
+\section{Discussion}
+Analysis of scalar potential fields vs non-conservative vector fields.
+
+\end{document}
