@@ -7,10 +7,20 @@
 \usepackage{geometry}
 \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
 
-\title{\textbf{Auditing Data Leakage, Confounders, and Provenance Artifacts in AI for Science Benchmarks: The UPAF Cryptographic Framework}}
-\author{\textbf{Sanghoon Huh}\\[0.5em]
-Cogni-OS AI Research Laboratory\\
-\texttt{contact@cogni-os.ai}}
+% Double-blind review toggle
+\newif\ifanonymous
+\anonymoustrue % Set to \anonymousfalse for camera-ready
+
+\ifanonymous
+  \title{\textbf{Auditing Data Leakage, Confounders, and Provenance Artifacts in AI for Science Benchmarks: The UPAF Cryptographic Framework}}
+  \author{\textbf{Anonymous Authors}\\[0.5em]
+  Paper under Double-Blind Review}
+\else
+  \title{\textbf{Auditing Data Leakage, Confounders, and Provenance Artifacts in AI for Science Benchmarks: The UPAF Cryptographic Framework}}
+  \author{\textbf{Sanghoon Huh}\\[0.5em]
+  Cogni-OS AI Research Laboratory\\
+  \texttt{contact@cogni-os.ai}}
+\fi
 \date{August 2026}
 
 \begin{document}
@@ -53,7 +63,7 @@ To distinguish genuine model learning from artifact exploitation, holdout predic
 \section{Empirical Audits across Domain Benchmarks}
 
 \subsection{Sequence Length Confound, Taxonomic Strata, and Annotation Bias (Task B)}
-Auditing the multi-species intrinsically disordered protein dataset (\texttt{val.tsv} $n=656$; \texttt{train.tsv} $n=2539$) established exact species distributions and baseline sequence length confound AUROCs.
+Auditing the multi-species intrinsically disordered protein dataset (\texttt{<repo>/data/val.tsv} $n=656$; \texttt{<repo>/data/train.tsv} $n=2539$) established exact species distributions and baseline sequence length confound AUROCs.
 
 \begin{table}[htbp]
 \centering
@@ -76,7 +86,7 @@ Training Strata: Viral & Sequence Length & 253 & 180 (71.1\%) & 0.5839 & [0.5211
 \end{table}
 
 \subsection{Multi-Site Clinical Generalization Protocol (Task F)}
-Auditing the combined UCI Heart Disease dataset ($n=920$, 4 clinical sites) under Leave-One-Site-Out (LOSO) validation yielded a mean holdout AUROC of $0.7191 \pm 0.0814$ (Cleveland 0.7902, Hungarian 0.7956, VA Long Beach 0.6939, Switzerland 0.5967). Demographic age baseline gain was $\Delta = +0.1287$ over the age baseline ($0.5904 \pm 0.0340$).
+Auditing the combined UCI Heart Disease dataset (\texttt{<repo>/data/uci_heart/}, $n=920$, 4 clinical sites) under Leave-One-Site-Out (LOSO) validation yielded a mean holdout AUROC of $0.7191 \pm 0.0814$ (Cleveland 0.7902, Hungarian 0.7956, VA Long Beach 0.6939, Switzerland 0.5967). Demographic age baseline gain was $\Delta = +0.1287$ over the age baseline ($0.5904 \pm 0.0340$).
 
 \section{Case Studies of Benchmark Artifacts and Provenance Leakage}
 We report five forensic case studies:
@@ -85,10 +95,13 @@ We report five forensic case studies:
     \item \textbf{FASTA and Unicode Parsing Artifacts (Task B)}: UNKNOWN missingness conversion, \texttt{\textbackslash xa0} space confounder, and \texttt{RAWLEN} text columns.
     \item \textbf{Audit Log Overwrite Incident}: File overwrite mode risks and cryptographic hash chaining.
     \item \textbf{Numerical Manuscript Provenance}: Reclassification of conversation records and legacy orphan values.
-    \item \textbf{Deep Equilibrium Network Specifications}: Pattern 2 static log literals, Pattern 14 IFT unrolling deviation, and Pattern 13 reporting transmission channel vulnerability.
+    \item \textbf{Deep Equilibrium Network Specifications}: Pattern 2 static log literals, Pattern 14 IFT unrolling deviation, and Pattern 13 reporting transmission channel vulnerability (where an independent auditor LLM—architecturally separated from the executing agent—authored sealed verification scripts).
 \end{enumerate}
 
+\section{Reproducibility Statement}
+All datasets, sealed audit execution scripts, trained model checkpoints, and holdout predictions are hash-anchored and tracked in an anonymized code repository to be made publicly accessible upon acceptance.
+
 \section{Conclusion}
-UPAF provides a practical blueprint for identifying baseline confounders, structural alignment artifacts, and dataset leakage in AI for Science benchmarks.
+Establishing trustworthy AI for Science and Healthcare requires transparent, tamper-proof auditing mechanisms that go beyond reporting raw accuracy metrics. Across nineteen documented audit incidents, including four newly identified failure patterns (Patterns 11–14), UPAF provides a practical blueprint for identifying baseline confounders, structural alignment artifacts, and dataset leakage. Where the exact upstream provenance database of legacy benchmark splits cannot be conclusively established, file-level SHA-256 anchors substitute for source citation.
 
 \end{document}
