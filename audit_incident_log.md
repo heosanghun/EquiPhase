@@ -33,7 +33,8 @@ This document records the complete chronological inventory of forensic incidents
 ---
 
 ## 📌 Audit Meta-Heuristic Footnote
-> *Self-reports accompanied by absolute qualifiers ("100%", "complete", "all") shall themselves be treated as re-examination triggers.*
+> *Self-reports accompanied by absolute qualifiers ("100%", "complete", "all") shall themselves be treated as re-examination triggers.*  
+> *(절대 수식어('100%', '완전', '전수')가 동반된 자기 보고는 그 자체로 재검 트리거로 취급한다.)*
 
 - **Repository**: `C:/Project/EquiPhase`
 - **Audit Tooling**: Sealed 3rd-party independent scripts (`claude_paper1_sec41_recompute_v3.py`, `claude_paper2_sealed_audit.py`, `claude_paper2_baselines_sealed.py`).
