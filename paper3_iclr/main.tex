@@ -96,8 +96,8 @@ $24\times24$ grid; basins are assigned to macrostates
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.48\textwidth]{fig1_ala2_density_attractors.png}
-  \caption{Alanine Dipeptide $750{,}000$-frame $(\phi, \psi)$ dihedral density histogram with 5-seed EquiPhase DEQ attractor overlays ($\beta, \alpha_R, \alpha_L$).}
+  \includegraphics[width=0.48\textwidth]{fig1_ala2_density_attractors_v2.png}
+  \caption{MD dihedral density (750k frames) with all five seed-7777 EquiPhase attractors overlaid. Filled markers: physical states ($\beta$, $C_5/\beta$ sub-mode, $\alpha_R$, $\alpha_L$); hollow marker: disclosed high-V artifact.}
   \label{fig:ala2_density}
 \end{figure}
 
@@ -111,7 +111,7 @@ Aggregation (fixed before execution): pass requires $\geq 4/5$ seeds.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.48\textwidth]{fig2_ala2_vnet_contours.png}
-  \caption{Learned potential surface $V_{\text{net}}(\phi, \psi)$ contour map (Seed 7777) showing clear energy wells for $\beta, \alpha_R,$ and rare $\alpha_L$ macrostates.}
+  \caption{Learned potential $V_\theta(\phi,\psi)$, seed 7777. Basin depths reproduce the data ordering: $V(\beta)=-10.45 < V(\alpha_R)=-9.64\,k_BT$ ($\Delta F=+0.81\,k_BT$); the rare $\alpha_L$ state (3.0\% occupancy) forms a distinct local minimum.}
   \label{fig:vnet_contours}
 \end{figure}
 
@@ -133,8 +133,8 @@ shallow artifact.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.96\textwidth]{fig3_monotone_vs_equiphase.png}
-  \caption{Contrast between Monotone DEQ (Left: 576 grid initializations collapsing to a single non-physical fixed point $N=1$) and EquiPhase DEQ (Right: 576 initializations branching into physical metastable basins).}
+  \includegraphics[width=0.96\textwidth]{fig3_monotone_vs_equiphase_v2.png}
+  \caption{Verified Banach contraction (empirical Lip max 0.788): all 576 initializations collapse to one non-physical fixed point ($-50.1^\circ, +18.5^\circ$) (left), versus EquiPhase multistable branching to physical basins (right; all five attractors shown).}
   \label{fig:monotone_vs_equiphase}
 \end{figure}
 
