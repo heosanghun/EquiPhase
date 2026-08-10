@@ -182,3 +182,12 @@ Python 3.10+ 환경에서 연산 정확도와 재현 속도를 확보하기 위�
 1. **규정 R1 (사전 등록 계획 고정):** 예측 타겟과 설정값은 JSON 파일로 사전 동결되며, 부득이한 사정으로 변경 사항이 발생할 시 상세 사유와 시각을 `DEVIATIONS.md` 파일에 기록하여 사후 조작을 방지합니다.
 2. **규정 R2 (통계적 신뢰 한계 검증):** 모든 최종 성능 보고치는 단순히 평균값만 표기하는 것을 금지하며, 가문별 상관관계를 고려한 **1,000회 반복 블록 부트스트랩 분석**을 거친 95% 신뢰구간 하한선을 기준으로 통과 여부를 엄밀히 판정합니다.
 3. **규정 R3 (결과 재활용 및 위조 원천 차단):** 평가 하네스(Harness) 연산 도중, 성능 수치나 손실값의 중복 복제 혹은 사후 복사-붙여넣기 꼼수 감지 시 즉각 연산을 강제 중지하고 예외(`RecyclingFabricationException`)를 터트려 조작 시도를 격리합니다.
+
+
+## EquiPhase Explorer (Authoring Tool)
+
+To interactively explore the learned multi-basin energy landscape of Alanine Dipeptide, use the new Streamlit dashboard:
+
+`ash
+uv run --with streamlit streamlit run equiphase_explorer.py
+`
