@@ -1,0 +1,36 @@
+WP3_SIGMA_SWEEP_BEGIN
+SEED 7777 | SIGMA=0.0500 | final_loss=0.002422 | attractors=6
+  ATTR phi=  -76.78 psi=  -14.98 n=204 state=alphaR V=-8.9876
+  ATTR phi=  -73.64 psi= +155.28 n=108 state=beta   V=-10.0221
+  ATTR phi= -144.77 psi= +158.57 n= 94 state=beta   V=-9.6545
+  ATTR phi=  +65.99 psi= +122.30 n= 89 state=alphaL V=+1.7295
+  ATTR phi=  +41.77 psi=  +26.69 n= 44 state=alphaL V=+0.9582
+  ATTR phi=  +64.13 psi=  +32.01 n= 37 state=alphaL V=+0.6859
+  dF(alphaR-beta)=+1.0345 kT
+  R1=True R2=True R3=True alphaL_detect=True artifact_presence=False
+SEED 7777 | SIGMA=0.1000 | final_loss=0.009071 | attractors=5
+  ATTR phi=  -77.22 psi=  -15.70 n=202 state=alphaR V=-10.1827
+  ATTR phi= -143.97 psi= +158.50 n=106 state=beta   V=-10.1909
+  ATTR phi=  -73.28 psi= +154.22 n=106 state=beta   V=-10.9198
+  ATTR phi=  +52.76 psi=  +32.44 n= 99 state=alphaL V=-2.6045
+  ATTR phi=  +59.68 psi= +162.63 n= 63 state=alphaL V=+0.9247
+  dF(alphaR-beta)=+0.7371 kT
+  R1=True R2=True R3=True alphaL_detect=True artifact_presence=False
+SEED 7777 | SIGMA=0.1500 | final_loss=0.018687 | attractors=5
+  ATTR phi=  -77.55 psi=  -14.97 n=209 state=alphaR V=-9.6387
+  ATTR phi=  -72.82 psi= +153.38 n=105 state=beta   V=-10.4514
+  ATTR phi=  +52.31 psi=  +32.76 n=105 state=alphaL V=-3.4098
+  ATTR phi= -142.37 psi= +157.81 n= 99 state=beta   V=-9.7750
+  ATTR phi=  +59.74 psi= +170.93 n= 58 state=alphaL V=-0.0273
+  dF(alphaR-beta)=+0.8128 kT
+  R1=True R2=True R3=True alphaL_detect=True artifact_presence=False
+  [Note: SIGMA=0.15 results should perfectly match the sealed baseline.]
+SEED 7777 | SIGMA=0.2500 | final_loss=0.042768 | attractors=5
+  ATTR phi=  -79.61 psi=  -14.28 n=186 state=alphaR V=-7.4336
+  ATTR phi=  +52.70 psi=  +31.55 n=130 state=alphaL V=-4.5561
+  ATTR phi= -139.24 psi= +157.19 n= 99 state=beta   V=-7.6127
+  ATTR phi=  -74.50 psi= +152.99 n= 98 state=beta   V=-8.1447
+  ATTR phi=  +59.72 psi= +169.85 n= 63 state=alphaL V=-0.9593
+  dF(alphaR-beta)=+0.7111 kT
+  R1=True R2=True R3=True alphaL_detect=True artifact_presence=False
+WP3_SIGMA_SWEEP_END

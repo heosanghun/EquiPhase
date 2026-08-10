@@ -1,0 +1,9 @@
+WP2_HELMHOLTZ_BEGIN
+Training VanillaScore to recreate seed 7777 model...
+Performing FFT-based Helmholtz projection...
+Projection residual (norm of rotational component): 1.766638e+00
+V_proj at beta basin (approx -73.85, 153.54): -8.5445
+V_proj at alphaR basin (approx -76.28, -15.54): -7.1327
+Delta F(alphaR - beta) = 1.4119 kT
+R3 criterion on V_proj (beta < alphaR - 0.05): True
+WP2_HELMHOLTZ_END

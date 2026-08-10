@@ -1,0 +1,38 @@
+WP4_ETA_SWEEP_BEGIN
+Training VNet (Seed 7777, Sigma 0.15) for Symplectic Euler integration...
+ETA=0.05 | Prop1_Diff_Norm=1.22e-07 | ConvRate=100.0% | attractors=5
+  ATTR phi=  -77.55 psi=  -14.97 n=208 state=alphaR V=-9.6387
+  ATTR phi=  -72.82 psi= +153.38 n=134 state=beta   V=-10.4514
+  ATTR phi=  +52.31 psi=  +32.76 n=105 state=alphaL V=-3.4098
+  ATTR phi= -142.37 psi= +157.81 n= 76 state=beta   V=-9.7750
+  ATTR phi=  +59.74 psi= +170.93 n= 53 state=alphaL V=-0.0273
+  R1=True R2=True R3=True
+ETA=0.10 | Prop1_Diff_Norm=1.83e-07 | ConvRate=100.0% | attractors=5
+  ATTR phi=  -77.55 psi=  -14.97 n=208 state=alphaR V=-9.6387
+  ATTR phi=  -72.82 psi= +153.38 n=145 state=beta   V=-10.4514
+  ATTR phi=  +52.31 psi=  +32.76 n=105 state=alphaL V=-3.4098
+  ATTR phi= -142.37 psi= +157.81 n= 60 state=beta   V=-9.7750
+  ATTR phi=  +59.74 psi= +170.93 n= 58 state=alphaL V=-0.0273
+  R1=True R2=True R3=True
+ETA=0.20 | Prop1_Diff_Norm=3.11e-08 | ConvRate=100.0% | attractors=5
+  ATTR phi=  -77.55 psi=  -14.97 n=208 state=alphaR V=-9.6387
+  ATTR phi=  -72.82 psi= +153.38 n=106 state=beta   V=-10.4514
+  ATTR phi=  +52.31 psi=  +32.76 n=105 state=alphaL V=-3.4098
+  ATTR phi= -142.37 psi= +157.81 n= 99 state=beta   V=-9.7750
+  ATTR phi=  +59.74 psi= +170.93 n= 58 state=alphaL V=-0.0273
+  R1=True R2=True R3=True
+ETA=0.50 | Prop1_Diff_Norm=1.04e-07 | ConvRate=100.0% | attractors=5
+  ATTR phi=  -77.55 psi=  -14.97 n=210 state=alphaR V=-9.6387
+  ATTR phi=  -72.82 psi= +153.38 n=105 state=beta   V=-10.4514
+  ATTR phi=  +52.31 psi=  +32.76 n=104 state=alphaL V=-3.4098
+  ATTR phi= -142.37 psi= +157.81 n= 99 state=beta   V=-9.7750
+  ATTR phi=  +59.74 psi= +170.93 n= 58 state=alphaL V=-0.0273
+  R1=True R2=True R3=True
+ETA=0.90 | Prop1_Diff_Norm=3.50e-08 | ConvRate=100.0% | attractors=5
+  ATTR phi=  -77.55 psi=  -14.97 n=211 state=alphaR V=-9.6387
+  ATTR phi=  -72.82 psi= +153.38 n=104 state=beta   V=-10.4514
+  ATTR phi=  +52.31 psi=  +32.76 n=104 state=alphaL V=-3.4098
+  ATTR phi= -142.37 psi= +157.81 n= 99 state=beta   V=-9.7750
+  ATTR phi=  +59.74 psi= +170.93 n= 58 state=alphaL V=-0.0273
+  R1=True R2=True R3=True
+WP4_ETA_SWEEP_END
