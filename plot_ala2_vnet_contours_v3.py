@@ -47,11 +47,17 @@ fig.colorbar(cp, ax=ax, label=r'Learned Potential $V_{\mathrm{net}}$ ($k_B T$)')
 
 # Annotate macrostates with exact sealed coordinates and values
 ax.annotate(r'$\beta$ Basin (-10.45 $k_BT$)' + '\n(-72.8°, +153.4°)', xy=(-72.82, 153.38), xytext=(-120, 120),
-            arrowprops=dict(facecolor='white', shrink=0.05, width=1.2, headwidth=6), color='white', fontweight='bold', fontsize=10)
+            arrowprops=dict(facecolor='white', shrink=0.05, width=1.2, headwidth=6), 
+            color='black', fontweight='bold', fontsize=10,
+            bbox=dict(boxstyle="round,pad=0.3", fc="white", ec="white", lw=1.5))
 ax.annotate(r'$\alpha_R$ Basin (-9.64 $k_BT$)' + '\n(-77.6°, -15.0°)', xy=(-77.55, -14.97), xytext=(-140, -60),
-            arrowprops=dict(facecolor='white', shrink=0.05, width=1.2, headwidth=6), color='white', fontweight='bold', fontsize=10)
+            arrowprops=dict(facecolor='white', shrink=0.05, width=1.2, headwidth=6), 
+            color='black', fontweight='bold', fontsize=10,
+            bbox=dict(boxstyle="round,pad=0.3", fc="white", ec="white", lw=1.5))
 ax.annotate(r'$\alpha_L$ Rare State (-3.41 $k_BT$)' + '\n(+52.3°, +32.8°)', xy=(52.31, 32.76), xytext=(75, 55),
-            arrowprops=dict(facecolor='cyan', shrink=0.05, width=1.2, headwidth=6), color='cyan', fontweight='bold', fontsize=10)
+            arrowprops=dict(facecolor='cyan', shrink=0.05, width=1.2, headwidth=6), 
+            color='black', fontweight='bold', fontsize=10,
+            bbox=dict(boxstyle="round,pad=0.3", fc="white", ec="cyan", lw=1.5))
 
 ax.set_xlim(-180, 180)
 ax.set_ylim(-180, 180)

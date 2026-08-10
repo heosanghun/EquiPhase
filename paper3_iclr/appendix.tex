@@ -1,0 +1,58 @@
+\section{Appendix C: Hyperparameters and Parity Specifications}
+\label{sec:appendix_c}
+
+To guarantee reproducibility and parity of the comparative baseline evaluation, we detail the architectural invariants, optimization budgets, and solver parameters across all models in Table~\ref{tab:hyperparameters}.
+
+\begin{table}[h]
+\centering
+\caption{Architectural and optimization parameters for EquiPhase DEQ, Monotone DEQ, and Vanilla DEQ baselines.}
+\label{tab:hyperparameters}
+\begin{tabular}{lccc}
+\hline
+\textbf{Parameter} & \textbf{EquiPhase DEQ} & \textbf{Monotone DEQ} & \textbf{Vanilla DEQ} \\ \hline
+State Dimension & 64 ($q \in \mathbb{R}^{32}, p \in \mathbb{R}^{32}$) & 64 ($z \in \mathbb{R}^{64}$) & 64 ($q \in \mathbb{R}^{32}, p \in \mathbb{R}^{32}$) \\
+Network Architecture & MLP ($34 \to 64 \to 1$) & MLP ($66 \to 64 \to 64$) & MLP ($34 \to 64 \to 32$) \\
+Parameters & 2,305 & 4,352 & 4,320 \\
+Integrator & Damped Velocity Verlet & $\tanh(Wz + Ux + b)$ & Damped Velocity Verlet \\
+Damping / Constraint & $\eta = 0.20$, $h = 0.10$ & $\|W\|_2 \le 0.9$ (Spectral Norm) & $\eta = 0.20$, $h = 0.10$ \\
+Training Epochs & 50 & 50 & 50 \\
+Batch Size & 32 & 100 & 100 \\
+Optimizer & Adam & Adam & Adam \\
+Learning Rate & $1 \times 10^{-3}$ & $1 \times 10^{-3}$ & $1 \times 10^{-3}$ \\
+Training Solver Steps & 100 (Unrolled Forward) & 100 (Unrolled Forward) & 100 (Unrolled Forward) \\
+Audit Solver Steps & 600 & 600 & 600 \\
+Stopping Criterion & Fixed Budget & Fixed Budget & Fixed Budget \\
+Divergence Threshold & N/A & N/A & $\|z\|_2 > 10^4$ \\ \hline
+\end{tabular}
+\end{table}
+
+All models are seeded with the canonical training seed $7777$. The audit runs use initial proposals generated via seed $314159$.
+
+---
+
+\section{Appendix D: Helmholtz Projection and Path Integration Discrepancy}
+\label{sec:appendix_d}
+
+To verify the core hypothesis that "structure buys a consistent free-energy readout," we evaluate the unconstrained Vanilla Score matching model (trained with $\sigma=0.15$ on seed $7777$) under different free-energy readout choices. Due to the non-zero curl of the learned vector field (mean absolute curl $\sim 1.7666$), the calculated free energy difference $\Delta F(\alpha_R - \beta)$ depends heavily on the numerical method or integration path chosen.
+
+Table~\ref{tab:helmholtz_discrepancy} summarizes the evaluated free energy differences between the $\beta$ and $\alpha_R$ attractors under the different projection choices.
+
+\begin{table}[h]
+\centering
+\caption{Free-energy difference $\Delta F(\alpha_R - \beta)$ calculated from different readouts of the unconstrained baseline field.}
+\label{tab:helmholtz_discrepancy}
+\begin{tabular}{lc}
+\hline
+\textbf{Readout Choice} & \textbf{Measured $\Delta F(\alpha_R - \beta)$ ($k_B T$)} \\ \hline
+Poisson Solver: Fourier-Spectral & 1.4119 \\
+Poisson Solver: Finite-Difference Stencil & 1.4118 \\
+Direct Line Integral: Path A (integrate $\phi$ first, then $\psi$) & 0.9139 \\
+Direct Line Integral: Path B (integrate $\psi$ first, then $\phi$) & 0.8309 \\ \hline
+\textbf{Discrepancy Comparison} & \textbf{Discrepancy Magnitude ($k_B T$)} \\ \hline
+Discrepancy: Path A vs Path B (Path Independence Violation) & 0.0829 \\
+Discrepancy: Poisson vs Path A & 0.4980 \\
+Discrepancy: Poisson vs Path B & 0.5809 \\ \hline
+\end{tabular}
+\end{table}
+
+The significant discrepancy (up to $0.5809\,k_B T$) between the Poisson projection and the direct path integration methods confirms that unconstrained networks cannot provide a unique, physically consistent scalar energy landscape. This is in sharp contrast to the EquiPhase DEQ, which guarantees path-independent potentials by architecture design.

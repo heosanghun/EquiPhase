@@ -7,11 +7,12 @@ import torch.nn as nn
 DATA_PATH = os.path.join("data", "ala2", "alanine-dipeptide-3x250ns-backbone-dihedrals.npz")
 SEED = 7777
 SIGMAS = [0.05, 0.10, 0.15, 0.25]
+ETAS = [0.05, 0.10, 0.20, 0.50, 0.90]
 BATCH = 4096
 LR = 1e-3
 STEPS = 3000
 GRID = 24
-DESC_LR = 0.05
+DESC_DT = 0.05
 DESC_STEPS = 2000
 CLUSTER_TOL_DEG = 10.0
 MIN_CLUSTER = 3
@@ -96,39 +97,71 @@ def cluster(points_deg):
     out.sort(key=lambda d: -d["n"])
     return out
 
-def basins_from_field(step_fn, dev):
-    x = grid_inits(dev)
+def evaluate_equiphase_symplectic(vnet, eta, dev):
+    q = grid_inits(dev)
+    p = torch.zeros_like(q)
+    dt = DESC_DT
+    
+    # 576 points integration
     for _ in range(DESC_STEPS):
-        x = step_fn(x)
-    pts = torch.rad2deg(wrap(x)).cpu().numpy().tolist()
-    return cluster(pts)
-
-def evaluate_equiphase(vnet, dev):
-    def step(x):
-        return wrap(x - DESC_LR * grad_v(vnet, x))
-    at = basins_from_field(step, dev)
-    rows, match = [], {}
+        q.requires_grad_(True)
+        v = vnet(q).sum()
+        (grad_q,) = torch.autograd.grad(v, q)
+        p_next = (1.0 - eta) * p - dt * grad_q.detach()
+        q_next = wrap(q.detach() + dt * p_next)
+        q, p = q_next, p_next
+        
+    # Check divergence
+    nan_mask = torch.isnan(q).any(dim=-1)
+    inf_mask = torch.isinf(q).any(dim=-1)
+    p_div_mask = (p.abs() > 1e4).any(dim=-1)
+    diverged = nan_mask | inf_mask | p_div_mask
+    
+    q_conv = q[~diverged]
+    converged_count = int((~diverged).sum().item())
+    conv_rate = converged_count / (GRID * GRID)
+    
+    pts = torch.rad2deg(wrap(q_conv)).cpu().numpy().tolist()
+    at = cluster(pts)
+    
+    raw_rows = []
     for a in at:
-        ms = macrostate(a["c"][0], a["c"][1])
         with torch.no_grad():
-            vv = float(vnet(torch.deg2rad(torch.tensor([a["c"]],
-                       dtype=torch.float32)).to(dev)).item())
-        rows.append((a["c"][0], a["c"][1], a["n"], ms, vv))
+            vv = float(vnet(torch.deg2rad(torch.tensor([a["c"]], dtype=torch.float32)).to(dev)).item())
+        raw_rows.append((a["c"][0], a["c"][1], a["n"], vv))
+        
+    if len(raw_rows) > 0:
+        v_min = min(r[3] for r in raw_rows)
+    else:
+        v_min = 0.0
+        
+    rows, match = [], {}
+    for (phi_deg, psi_deg, n, vv) in raw_rows:
+        ms = macrostate(phi_deg, psi_deg)
+        is_artifact = (vv - v_min > 10.0)
+        if is_artifact:
+            ms = "artifact"
+        rows.append((phi_deg, psi_deg, n, ms, vv))
+        
     for name, (ap, asx) in ANCHORS_DEG.items():
         best = None
-        for (p, s, n, ms, vv) in rows:
-            dp, ds = per_axis_dist_deg(p, ap), per_axis_dist_deg(s, asx)
+        for (pos_phi, pos_psi, n, ms, vv) in rows:
+            if ms == "artifact":
+                continue
+            dp, ds = per_axis_dist_deg(pos_phi, ap), per_axis_dist_deg(pos_psi, asx)
             if dp <= R2_TOL_DEG and ds <= R2_TOL_DEG:
                 if best is None or n > best[2]:
-                    best = (p, s, n, ms, vv)
+                    best = (pos_phi, pos_psi, n, ms, vv)
         match[name] = best
-    states = {ms for (_, _, _, ms, _) in rows}
+        
+    states = {ms for (_, _, _, ms, _) in rows if ms != "artifact"}
     r1 = ("beta" in states) and ("alphaR" in states)
     r2 = (match["beta"] is not None) and (match["alphaR"] is not None)
     r3 = (r2 and (match["beta"][4] < match["alphaR"][4] - R3_MARGIN))
-    r5 = any(ms == "alphaL" for (_, _, _, ms, _) in rows)
-    artifacts = any(ms == "other" for (_, _, _, ms, _) in rows)
-    return rows, r1, r2, r3, r5, artifacts, match
+    r5 = any(ms == "alphaL" for (_, _, _, ms, _) in rows if ms != "artifact")
+    artifacts = any(ms == "artifact" or ms == "other" for (_, _, _, ms, _) in rows)
+    
+    return rows, r1, r2, r3, r5, artifacts, conv_rate, match
 
 def main():
     print("WP3_SIGMA_SWEEP_BEGIN")
@@ -139,21 +172,19 @@ def main():
     data = torch.tensor(X, dtype=torch.float32)
     
     for sig in SIGMAS:
+        print("Training VNet for SIGMA=%.4f..." % sig)
         net, fl = train_dsm_v(data, SEED, sig, dev)
-        rows, r1, r2, r3, r5, artifacts, match = evaluate_equiphase(net, dev)
-        
-        print("SEED %d | SIGMA=%.4f | final_loss=%.6f | attractors=%d" % (SEED, sig, fl, len(rows)))
-        for (p, s, n, ms, vv) in rows:
-            print("  ATTR phi=%+8.2f psi=%+8.2f n=%3d state=%-6s V=%+.4f" % (p, s, n, ms, vv))
-        
-        if match["beta"] and match["alphaR"]:
-            dF = match["alphaR"][4] - match["beta"][4]
-            print("  dF(alphaR-beta)=%+.4f kT" % dF)
-        
-        print("  R1=%s R2=%s R3=%s alphaL_detect=%s artifact_presence=%s" % (r1, r2, r3, r5, artifacts))
-        if abs(sig - 0.15) < 1e-4:
-            print("  [Note: SIGMA=0.15 results should perfectly match the sealed baseline.]")
-
+        for eta in ETAS:
+            rows, r1, r2, r3, r5, artifacts, conv_rate, match = evaluate_equiphase_symplectic(net, eta, dev)
+            print("SEED %d | SIGMA=%.4f | ETA=%.2f | final_loss=%.6f | ConvRate=%.1f%% | attractors=%d" % (
+                SEED, sig, eta, fl, conv_rate*100, len(rows)))
+            for (p, s, n, ms, vv) in rows:
+                print("  ATTR phi=%+8.2f psi=%+8.2f n=%3d state=%-8s V=%+.4f" % (p, s, n, ms, vv))
+            if match["beta"] and match["alphaR"]:
+                dF = match["alphaR"][4] - match["beta"][4]
+                print("  dF(alphaR-beta)=%+.4f kT" % dF)
+            print("  R1=%s R2=%s R3=%s alphaL_detect=%s artifact_presence=%s" % (r1, r2, r3, r5, artifacts))
+            
     print("WP3_SIGMA_SWEEP_END")
 
 if __name__ == "__main__":

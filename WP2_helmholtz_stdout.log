@@ -1,9 +1,20 @@
-WP2_HELMHOLTZ_BEGIN
-Training VanillaScore to recreate seed 7777 model...
-Performing FFT-based Helmholtz projection...
-Projection residual (norm of rotational component): 1.766638e+00
-V_proj at beta basin (approx -73.85, 153.54): -8.5445
-V_proj at alphaR basin (approx -76.28, -15.54): -7.1327
-Delta F(alphaR - beta) = 1.4119 kT
-R3 criterion on V_proj (beta < alphaR - 0.05): True
-WP2_HELMHOLTZ_END
+﻿WP2_HELMHOLTZ_BEGIN
+Training VanillaScore to recreate seed 7777 model...
+Performing FFT-based Helmholtz projection...
+Projection residual (norm of rotational component): 1.766638e+00
+Performing Finite-Difference Poisson solver...
+V_proj (Spectral) at beta basin: -8.5445
+V_proj (Spectral) at alphaR basin: -7.1327
+Delta F (Spectral) = 1.4119 kT
+V_proj (FD) at beta basin: -8.5434
+V_proj (FD) at alphaR basin: -7.1316
+Delta F (FD) = 1.4118 kT
+Discrepancy in Delta F: 0.0001 kT
+Performing Path-based Line Integrals...
+Delta F (Path A) = 0.9139 kT
+Delta F (Path B) = 0.8309 kT
+Discrepancy (Path A vs Path B) = 0.0829 kT
+Discrepancy (Poisson vs Path A) = 0.4980 kT
+Discrepancy (Poisson vs Path B) = 0.5809 kT
+R3 criterion on V_proj (beta < alphaR - 0.05): True
+WP2_HELMHOLTZ_END

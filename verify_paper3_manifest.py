@@ -26,6 +26,6 @@ for line in lines:
         all_pass = False
 
 if all_pass:
-    print("\n>>> ALL 10 MANIFEST FILES VERIFIED 100% PASS <<<")
+    print(f"\n>>> ALL {len(lines)} MANIFEST FILES VERIFIED 100% PASS <<<")
 else:
     print("\n>>> MANIFEST VERIFICATION FAILED <<<")
