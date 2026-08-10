@@ -57,7 +57,7 @@ ax.annotate(r'$\alpha_R$ Basin (-9.64 $k_BT$)' + '\n(-77.6°, -15.0°)', xy=(-77
 ax.annotate(r'$\alpha_L$ Rare State (-3.41 $k_BT$)' + '\n(+52.3°, +32.8°)', xy=(52.31, 32.76), xytext=(75, 55),
             arrowprops=dict(facecolor='cyan', shrink=0.05, width=1.2, headwidth=6), 
             color='black', fontweight='bold', fontsize=10,
-            bbox=dict(boxstyle="round,pad=0.3", fc="white", ec="cyan", lw=1.5))
+            bbox=dict(facecolor='white', edgecolor='none', alpha=0.8))
 
 ax.set_xlim(-180, 180)
 ax.set_ylim(-180, 180)
