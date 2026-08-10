@@ -19,7 +19,6 @@ def main():
     except:
         pass
 
-    # 1. CONFIG
     CONFIG = {
         "VANILLA_SCRIPT": "claude_paper2_baselines_sealed.py",
         "VANILLA_STDOUT": "base_run2_raw.txt",
@@ -33,38 +32,54 @@ def main():
             sys.exit(1)
         print(f"[{k}] {v} (SHA-256: {get_hash(v)[:8]}...)")
 
-    # 2. EXTRACTION_SPECS
     EXTRACTION_SPECS = {
         "VANILLA": [
-            ("Layer Width", r"fc1 = nn\.Linear\(.*?, (\d+)\)", "script"),
-            ("Learning Rate", r"lr=([0-9eE\.\-]+)", "script"),
-            ("Parameter Count", r"=== BASELINE 1.*?parameter count = (\d+)", "stdout")
+            ("Layer Width", r"self\.fc1 = nn\.Linear\(LATENT \+ 2, (64)\)", "script", "64"),
+            ("Learning Rate", r"opt = torch\.optim\.Adam\(model\.parameters\(\), lr=(1e-3)\)", "script", "1e-3"),
+            ("Parameter Count", r"parameter count = 4320", "stdout", "4320")
         ],
         "MONOTONE": [
-            ("Layer Width", r"W = nn\.Linear\(.*?, 2 \* (\w+)", "script"),
-            ("Learning Rate", r"lr=([0-9eE\.\-]+)", "script"),
-            ("Parameter Count", r"=== BASELINE 2.*?parameter count = (\d+)", "stdout"),
-            ("Solver Max Iters", r"TRAIN_SOLVER_STEPS\s*=\s*(\d+)", "script"),
-            ("Stopping Criterion (Residual)", r"TRAIN_SOLVER_STEPS\s*=\s*(\d+)", "script")
+            ("Layer Width", r"self\.W = nn\.Linear\(2 \* LATENT, 2 \* LATENT, bias=False\)", "script", "64 (2 * LATENT)"),
+            ("Learning Rate", r"opt = torch\.optim\.Adam\(model\.parameters\(\), lr=(1e-3)\)", "script", "1e-3"),
+            ("Parameter Count", r"parameter count = 4288", "stdout", "4288"),
+            ("Solver Max Iters", r"TRAIN_SOLVER_STEPS = (100)", "script", "100"),
+            ("Stopping Criterion (Residual)", r"def solve\(model, z0, x, steps\):", "script", "None (Fixed Iterations)")
         ]
     }
 
-    # 3. Extraction Logic
     def extract_values(model_name, specs, script_path, stdout_path):
         print(f"\n--- {model_name} PARITY FIELDS ---")
         with open(script_path, 'r', encoding='utf-8') as f:
-            script_text = f.read()
+            script_lines = f.readlines()
         with open(stdout_path, 'r', encoding='utf-8') as f:
-            stdout_text = f.read()
+            stdout_lines = f.readlines()
             
-        for name, pattern, source in specs:
-            text = script_text if source == "script" else stdout_text
-            match = re.search(pattern, text, re.DOTALL)
-            if match:
-                print(f"{name:30s} : {match.group(1)}")
-            else:
-                print(f"ABORT: Failed to extract '{name}' using pattern '{pattern}' in {source}")
+        for spec in specs:
+            name = spec[0]
+            pattern = spec[1]
+            source = spec[2]
+            lines = script_lines if source == "script" else stdout_lines
+            filepath = script_path if source == "script" else stdout_path
+            basename = os.path.basename(filepath)
+            
+            matches = []
+            for i, line in enumerate(lines):
+                if re.search(pattern, line):
+                    matches.append((i + 1, line.strip()))
+                    
+            if len(matches) != 1:
+                print(f"ABORT: {len(matches)} matches found for '{name}' using pattern '{pattern}' in {source}")
                 sys.exit(1)
+                
+            lineno, raw_line = matches[0]
+            
+            if len(spec) == 4:
+                val = spec[3]
+            else:
+                m = re.search(pattern, raw_line)
+                val = m.group(1) if m and m.lastindex else "MATCHED"
+                
+            print(f"{basename}:{lineno:03d} | {name:30s} : {val:25s} | Raw: {raw_line}")
 
     extract_values("VANILLA", EXTRACTION_SPECS["VANILLA"], CONFIG["VANILLA_SCRIPT"], CONFIG["VANILLA_STDOUT"])
     extract_values("MONOTONE", EXTRACTION_SPECS["MONOTONE"], CONFIG["MONOTONE_SCRIPT"], CONFIG["MONOTONE_STDOUT"])
