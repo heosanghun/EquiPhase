@@ -23,7 +23,8 @@ CLUSTER_TOL_DEG = 10.0
 MIN_CLUSTER = 3
 ANCHORS_DEG = {"beta": (-72.5, +152.5), "alphaR": (-72.5, -17.5)}
 R2_TOL_DEG = 25.0
-R3_MARGIN = 0.5  # PI-approved depth-margin
+R3_MARGIN = 0.5
+DEPTH_MARGIN_THRESHOLD = 0.5
 PI = math.pi
 
 def wrap(x):
@@ -59,9 +60,6 @@ def train_dsm_v(data, seed, sigma, dev):
     for _ in range(STEPS):
         idx = torch.randint(0, n, (BATCH,), generator=g)
         q = data[idx].to(dev)
-        # We generate eps on cpu first if g is cpu generator, but let's just use torch.randn and move it.
-        # Actually it's fine to just generate eps on dev if we don't care about strict determinism across devices.
-        # To maintain strict determinism, better generate on CPU then move.
         eps = torch.randn((BATCH, 2), generator=g, device="cpu").to(dev) * sigma
         qt = wrap(q + eps).requires_grad_(True)
         v = net(qt).sum()
@@ -108,7 +106,7 @@ def evaluate_symplectic_eta(vnet, eta, dev):
         q_next = wrap(q.detach() + dt * p_next)
         q, p = q_next, p_next
         if torch.isnan(q).any() or torch.isinf(q).any():
-            return None, False, False, False, 0.0
+            return None, False, False, False, 0.0, None, None
             
     pts = torch.rad2deg(wrap(q)).cpu().numpy().tolist()
     at = cluster(pts)
@@ -135,11 +133,43 @@ def evaluate_symplectic_eta(vnet, eta, dev):
     
     converged_pts = sum(a["n"] for a in at)
     convergence_rate = converged_pts / (GRID * GRID)
-    return rows, r1, r2, r3, convergence_rate
+    
+    # Depth-margin rescoring
+    v_global_min = min([vv for (_, _, _, _, vv) in rows]) if rows else 0.0
+    rescored_rows = []
+    
+    for (pos_phi, pos_psi, n, ms, vv) in rows:
+        diff = abs(vv - v_global_min)
+        is_physical = (diff <= DEPTH_MARGIN_THRESHOLD)
+        # Original logic: 4 specific states are physical, others are artifacts.
+        # Here we just check if it matches the depth-margin classification.
+        # Let's say if ms != "other" it is conventionally physical.
+        orig_physical = (ms != "other")
+        matched = (is_physical == orig_physical)
+        match_str = "Matched" if matched else "Mismatched"
+        class_str = "State" if is_physical else "Artifact"
+        rescored_rows.append((pos_phi, pos_psi, n, ms, vv, diff, f"{class_str} ({match_str})"))
+        
+    df = None
+    if r2:
+        df = match["alphaR"][4] - match["beta"][4]
+        
+    return rescored_rows, r1, r2, r3, convergence_rate, df, v_global_min
 
 def main():
     print("SEAL_EB_SIGMA_ETA_SWEEP_BEGIN")
     print(f"Platform: {platform.platform()} | Python: {sys.version.split()[0]}")
+    
+    print("--- CONSTANTS ECHO ---")
+    print(f"SEEDS: {SEEDS}")
+    print(f"SIGMAS: {SIGMAS}")
+    print(f"ETAS: {ETAS}")
+    print(f"STEPS: {STEPS}")
+    print(f"BATCH: {BATCH}")
+    print(f"DEPTH_MARGIN_THRESHOLD: {DEPTH_MARGIN_THRESHOLD}")
+    print(f"ANCHORS_DEG: {ANCHORS_DEG}")
+    print("----------------------\n")
+    
     dev = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
     npz = np.load(DATA_PATH)
@@ -147,19 +177,42 @@ def main():
     data = torch.tensor(X, dtype=torch.float32)
     
     diverging_cases = []
+    df_by_sigma = {s: [] for s in SIGMAS}
     
     for seed in SEEDS:
         for sigma in SIGMAS:
             print(f"\n--- SEED {seed} | SIGMA {sigma:.2f} ---")
+            t0 = time.time()
             net = train_dsm_v(data, seed, sigma, dev)
             for eta in ETAS:
-                rows, r1, r2, r3, conv_rate = evaluate_symplectic_eta(net, eta, dev)
+                t1 = time.time()
+                rows, r1, r2, r3, conv_rate, df, vmin = evaluate_symplectic_eta(net, eta, dev)
+                t2 = time.time()
+                
+                print(f"  ETA={eta:.2f} | Wall-clock: desc={(t2-t1):.2f}s (train={t1-t0:.2f}s)")
+                
                 if rows is None:
-                    print(f"  ETA={eta:.2f} | DIVERGED (NaN/Inf)")
+                    print(f"    -> DIVERGED (NaN/Inf)")
                     diverging_cases.append((seed, sigma, eta))
                 else:
-                    print(f"  ETA={eta:.2f} | ConvRate={conv_rate*100:.1f}% | attractors={len(rows)} | R1={r1} R2={r2} R3={r3}")
+                    print(f"    ConvRate={conv_rate*100:.1f}% | attractors={len(rows)} | R1={r1} R2={r2} R3={r3}")
+                    if df is not None:
+                        print(f"    dF(alphaR - beta) = {df:.4f} k_BT")
+                        # We record df for the bracket. Since df should be stable over eta, we record one per (seed, sigma).
+                        # Let's record the average df over stable etas or just one. The problem says "sigma별 dF 브래킷".
+                        df_by_sigma[sigma].append(df)
                     
+                    for (phi, psi, n, ms, vv, diff, match_str) in rows:
+                        print(f"    * Attractor: phi={phi:6.1f}, psi={psi:6.1f}, n={n:4d}, ms={ms:6s}, V={vv:8.3f} | diff={diff:5.3f} -> {match_str}")
+            
+    print("\n--- dF(alphaR - beta) BRACKETS PER SIGMA ---")
+    for sigma in SIGMAS:
+        dfs = df_by_sigma[sigma]
+        if dfs:
+            print(f"SIGMA {sigma:.2f}: min={min(dfs):.4f} k_BT, max={max(dfs):.4f} k_BT (over seeds/etas)")
+        else:
+            print(f"SIGMA {sigma:.2f}: None")
+
     print(f"\n--- DIVERGING CASES (Total: {len(diverging_cases)}) ---")
     for (s, sig, e) in diverging_cases:
         print(f"Seed={s}, Sigma={sig:.2f}, Eta={e:.2f}")
