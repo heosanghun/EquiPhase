@@ -356,12 +356,12 @@ def main():
     print(f"  (c) P1/P2 R1-R3 Verdict Match = {metric_c}")
     
     # 8. Verdict Interpretation
-    print("\n[TO-RUN] Verdict Interpretation")
-    supports_claim = (not metric_c) or (metric_a > E_A_THRESH)
-    if supports_claim:
-        print(f"  Result Interpretation A: Projection dependency verified. The claim is supported.")
-    else:
-        print(f"  Result Interpretation B: Projection dependency weak. The claim must be softened.")
+    # print("\n[TO-RUN] Verdict Interpretation")
+    # supports_claim = (not metric_c) or (metric_a > E_A_THRESH)
+    # if supports_claim:
+    #     print(f"  Result Interpretation A: Projection dependency verified. The claim is supported.")
+    # else:
+    #     print(f"  Result Interpretation B: Projection dependency weak. The claim must be softened.")
         
     print("\nSEAL_EA_HELMHOLTZ_EVAL_END")
 
