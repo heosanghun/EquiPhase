@@ -191,3 +191,6 @@ To interactively explore the learned multi-basin energy landscape of Alanine Dip
 `ash
 uv run --with streamlit streamlit run equiphase_explorer.py
 `
+
+### Protocol Integrity Rule
+**봉인 산출물 불가침. 익명화 필요 시 원본 보존 + 변환 사본 분리 + 변환 기록 동반**
