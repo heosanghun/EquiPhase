@@ -2,7 +2,7 @@ import subprocess
 import hashlib
 import os
 
-repo = r"C:\Project\EquiPhase"
+repo = r"/home/user/EquiPhase"
 
 files = [
     "paper1_manuscript_draft.md",

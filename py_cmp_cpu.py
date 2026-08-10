@@ -1,7 +1,7 @@
 import os
 
-f1_path = r"C:\Project\EquiPhase\base_det1.txt"
-f2_path = r"C:\Project\EquiPhase\base_det2.txt"
+f1_path = r"/home/user/EquiPhase\base_det1.txt"
+f2_path = r"/home/user/EquiPhase\base_det2.txt"
 
 def read_filtered(p):
     with open(p, "r", encoding="utf-8") as f:

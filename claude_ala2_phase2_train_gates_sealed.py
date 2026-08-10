@@ -9,7 +9,7 @@
 # Rules   : Direct invocation only. No modification. Submit stdout verbatim.
 #           Hash mismatch aborts (fail-closed). New filenames per run.
 # Usage   : python claude_ala2_phase2_train_gates_sealed.py
-#           (from repository root C:\Project\EquiPhase)
+#           (from repository root /home/user/EquiPhase)
 # =============================================================================
 import hashlib, math, os, sys, time
 import numpy as np

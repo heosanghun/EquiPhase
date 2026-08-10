@@ -9,7 +9,7 @@ os.environ["MKL_NUM_THREADS"] = "1"
 os.environ["OPENBLAS_NUM_THREADS"] = "1"
 os.environ["PYTHONIOENCODING"] = "utf-8"
 
-repo = r"C:\Project\EquiPhase"
+repo = r"/home/user/EquiPhase"
 script = os.path.join(repo, "claude_paper2_baselines_sealed.py")
 
 def run_script(outfile):

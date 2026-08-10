@@ -1,7 +1,7 @@
 import hashlib
 import os
 
-repo = r"C:\Project\EquiPhase"
+repo = r"/home/user/EquiPhase"
 f1_path = os.path.join(repo, "base_run1_raw.txt")
 f2_path = os.path.join(repo, "base_run2_raw.txt")
 

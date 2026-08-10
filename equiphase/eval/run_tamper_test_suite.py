@@ -13,7 +13,7 @@ print("=" * 80)
 print("=== UPAF MANIFEST SPECIFICATION V1: 11 PHYSICAL MUTATION TAMPER TESTS SUITE (T0~T10) ===")
 print("=" * 80)
 
-scratch_dir = r"C:\Users\wwwhu\.gemini\antigravity\brain\217c14e4-fe62-43ea-af3e-e1ef4c536e8f\scratch"
+scratch_dir = r"/home/user\.gemini\antigravity\brain\217c14e4-fe62-43ea-af3e-e1ef4c536e8f\scratch"
 test_ledger_path = os.path.join(scratch_dir, "test_manifest_ledger_suite.jsonl")
 temp_pred_path = os.path.join(scratch_dir, "predictions", "temp_pred.csv")
 temp_mod_path = os.path.join(scratch_dir, "temp_module.py")

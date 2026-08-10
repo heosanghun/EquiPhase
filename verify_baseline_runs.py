@@ -1,7 +1,7 @@
 import os
 
 files = ["base_run1_raw.txt", "base_run2_raw.txt"]
-repo = r"C:\Project\EquiPhase"
+repo = r"/home/user/EquiPhase"
 
 print("=== BASELINE FILE INTEGRITY CHECK ===")
 for fname in files:

@@ -5,7 +5,7 @@ import sys
 os.environ["PYTHONUNBUFFERED"] = "1"
 os.environ["PYTHONIOENCODING"] = "utf-8"
 
-repo = r"C:\Project\EquiPhase"
+repo = r"/home/user/EquiPhase"
 script = os.path.join(repo, "claude_paper2_baselines_sealed.py")
 outfile = os.path.join(repo, "base_run2_raw.txt")
 

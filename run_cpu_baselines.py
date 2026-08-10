@@ -11,7 +11,7 @@ import sys
 
 def run_instance(outfile):
     print(f"Starting execution for {outfile}...")
-    cmd = [sys.executable, r"C:\Project\EquiPhase\claude_paper2_baselines_sealed.py"]
+    cmd = [sys.executable, r"/home/user/EquiPhase\claude_paper2_baselines_sealed.py"]
     env = dict(os.environ)
     env["PYTHONIOENCODING"] = "utf-8"
     with open(outfile, "w", encoding="utf-8") as f:
@@ -20,13 +20,13 @@ def run_instance(outfile):
     if res.stderr:
         print(f"Stderr: {res.stderr[:200]}")
 
-run_instance(r"C:\Project\EquiPhase\base_cpu1.txt")
-run_instance(r"C:\Project\EquiPhase\base_cpu2.txt")
+run_instance(r"/home/user/EquiPhase\base_cpu1.txt")
+run_instance(r"/home/user/EquiPhase\base_cpu2.txt")
 
 print("Both CPU runs complete. Checking diff...")
-with open(r"C:\Project\EquiPhase\base_cpu1.txt", "r", encoding="utf-8") as f:
+with open(r"/home/user/EquiPhase\base_cpu1.txt", "r", encoding="utf-8") as f:
     l1 = [line for line in f.read().splitlines() if "WALL-CLOCK" not in line and "mtime" not in line]
-with open(r"C:\Project\EquiPhase\base_cpu2.txt", "r", encoding="utf-8") as f:
+with open(r"/home/user/EquiPhase\base_cpu2.txt", "r", encoding="utf-8") as f:
     l2 = [line for line in f.read().splitlines() if "WALL-CLOCK" not in line and "mtime" not in line]
 
 diffs = [i for i, (a, b) in enumerate(zip(l1, l2)) if a != b]

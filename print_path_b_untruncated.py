@@ -1,7 +1,7 @@
 import subprocess
 import os
 
-repo = r"C:\Project\EquiPhase"
+repo = r"/home/user/EquiPhase"
 
 def run_cmd(cmd, label):
     print(f"\n========================================================================================")

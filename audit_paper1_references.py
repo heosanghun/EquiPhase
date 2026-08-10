@@ -1,6 +1,6 @@
 import re
 
-path = r"C:\Project\EquiPhase\paper1_manuscript_draft.md"
+path = r"/home/user/EquiPhase\paper1_manuscript_draft.md"
 with open(path, "r", encoding="utf-8") as f:
     content = f.read()
 

@@ -2,7 +2,7 @@ import os
 import re
 
 files = ["run1_raw.txt", "run2_raw.txt", "run3_raw.txt"]
-repo = r"C:\Project\EquiPhase"
+repo = r"/home/user/EquiPhase"
 
 print("=== FILE INTEGRITY CHECK ===")
 for fname in files:

@@ -1,7 +1,7 @@
 import subprocess
 import os
 
-repo = r"C:\Project\EquiPhase"
+repo = r"/home/user/EquiPhase"
 
 def exec_print(cmd_str):
     print(f"\n$ {cmd_str}")

@@ -28,7 +28,7 @@ The anonymous mirror will contain the complete cryptographic proof chain:
 
 ## 2. Anonymization Protocol
 Prior to pushing to the anonymous mirror platform:
-1. Run automated path scrubber to convert all Windows local drive paths (`C:\Project\EquiPhase\...`) into repository-relative paths (`./...`).
+1. Run automated path scrubber to convert all Windows local drive paths (`/home/user/EquiPhase\...`) into repository-relative paths (`./...`).
 2. Strip explicit author name (`Sanghoon Huh`), GitHub handles, and lab identifiers from text logs and TeX author fields.
 3. Validate bitwise SHA-256 hash preservation of all python scripts and data arrays.
 

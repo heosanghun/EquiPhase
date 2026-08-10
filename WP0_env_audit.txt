@@ -4,7 +4,7 @@
 
 2. 실행 명령어 + exit code
 명령어 1: uv run --with torch python -c "import torch; import sys; import platform; print(f'Python: {sys.version.split()[0]}'); print(f'PyTorch: {torch.__version__}'); print(f'CUDA: {torch.version.cuda}'); print(f'OS: {platform.system()} {platform.release()}')" (Exit Code 0)
-명령어 2: Get-FileHash -Algorithm SHA256 C:\Project\EquiPhase\data\ala2\alanine-dipeptide-3x250ns-backbone-dihedrals.npz (Exit Code 0)
+명령어 2: Get-FileHash -Algorithm SHA256 /home/user/EquiPhase\data\ala2\alanine-dipeptide-3x250ns-backbone-dihedrals.npz (Exit Code 0)
 
 3. stdout/stderr 전문 (첨부 파일명 + 해시)
 - 환경 정보: Python 3.14.7, PyTorch 2.13.0+cpu, OS Windows 11

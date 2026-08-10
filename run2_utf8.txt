@@ -1,107 +1,214 @@
-﻿python.exe : C:\Project\Deep Equilibrium8\python_dist\Lib\site-packages\torch\autograd\graph.py:869: UserWarning: Attem
-pting to run cuBLAS, but there was no current CUDA context! Attempting to set the primary context... (Triggered interna
-lly at C:\actions-runner\_work\pytorch\pytorch\pytorch\aten\src\ATen\cuda\CublasHandlePool.cpp:335.)
-위치 줄:1 문자:1
-+ & 'C:\Project\Deep Equilibrium8\python_dist\python.exe' C:\Project\Eq ...
-+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : NotSpecified: (C:\Project\Deep...ePool.cpp:335.):String) [], RemoteException
-    + FullyQualifiedErrorId : NativeCommandError
- 
-  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
-========================================================================================
-=== CLAUDE SEALED AUDIT (Paper 2 / seed-7777 checkpoint) ===
-========================================================================================
-
-[SEC 0] ENVIRONMENT & INTEGRITY
-  script_version = v1.0-2026-08-08-claude-seal
-  script_path    = C:\Project\EquiPhase\claude_paper2_sealed_audit.py
-  script_sha256  = 68a2991e043984cd1ca7637441883a3fb1d82c08fc21b2b43538932028894833
-  python  = 3.12.10 | torch = 2.11.0+cu128 | cuda_available = True
-  platform = Windows-11-10.0.26200-SP0
-  primary device = cuda
-  file inventory:
-  C:/Project/EquiPhase/supervised_deq_model_seed7777.pt
-    sha256 = c6b64ec3961f31bc8c9758f80b91b9168ed2d06d9df0a07c3b6989f8f699ba97
-    size   = 12025 bytes | mtime = 2026-08-08 08:30:04
-  C:/Project/EquiPhase/trajectory_basins_seed7777.csv
-    sha256 = 4cf32e4208465e8b6173a5b325e50169e37d51d5067277852b0034d8cfefbd16
-    size   = 8278 bytes | mtime = 2026-08-08 08:33:39
-  C:/Project/EquiPhase/train_paper2_deq_supervised.py
-    sha256 = 4e0d418db5e2aa0cdf0922c0b1c01ca1caa63a0b409abdb1aa6475f8a1756866
-    size   = 11593 bytes | mtime = 2026-08-08 08:29:37
-  C:/Project/EquiPhase/run_paper2_rigorous_gates.py
-    sha256 = c2b307452267c1b2263fec8d3817062e4d5d0eab2c9a98ba92675e2541113349
-    size   = 13001 bytes | mtime = 2026-08-08 08:49:34
-  C:/Project/EquiPhase/run_raw_stdout_audit.py
-    sha256 = 4378521f8620f406b55bd951bbad272597176c91b61e446587d9f3f2ea02dc1a
-    size   = 11088 bytes | mtime = 2026-08-08 09:01:15
-  C:/Project/EquiPhase/prereg_1d_double_well.md
-    sha256 = 961b2d4a126f0e240bdcdf1402fd83f277eb994d7fcd7ae95d9c768ff03c9b38
-    size   = 7333 bytes | mtime = 2026-08-08 08:29:23
-  git log --graph --format='%H %ci %s' -n 12 :
-    * e148866811aef03ac77cc3281a2df42606779e4c 2026-08-08 08:33:46 +0900 feat(paper2): complete Task (c) confirmation run under seed 7777 and verify all prereg v3 gates
-    * 97cd2b56381716370c7eaaf59e5c687538cf4611 2026-08-08 08:29:29 +0900 docs(prereg): lock Paper 2 Preregistration Specification v3 prior to new-seed execution
-    * 97a315b17a8166103596495cf45de6e0cab7029f 2026-08-08 02:13:19 +0900 fix(paper2): strictly separate preregistration v3 specs from post-hoc audit results & resolve G3'/G4b' metrics
-    * 86a827102da5179f1f9ad90e47a5ce1932d184ad 2026-08-08 02:03:16 +0900 feat(paper2): implement sign-paired Task (c) DEQ supervised learning & lock preregistration v3
-    * a48bcde261811e54ffa344240548de92fbb5ee1d 2026-08-08 01:58:32 +0900 feat(paper2): implement Task (c) DEQ Supervised Learning & update preregistration document
-    * 39e27761f1eda6b1276cd684a84e8520047d0fda 2026-08-08 01:54:16 +0900 feat(paper2): add official baseline audit script comparing EquiPhase vs Vanilla DEQ vs monDEQ
-    * fc6680ae375c3c4c02c7c1673cfa0de47de6f3fe 2026-08-08 01:48:06 +0900 feat(paper2): complete training of AnisotropicDoubleWellDEQ and 100% 7-gate preregistration verification
-    * 2cd08499ff0881f708891304820a256e555051ca 2026-08-08 01:35:02 +0900 Paper 2 Official Preregistration: 100% Pass across all 7 Extended Preregistration Gates (G1-G7) for Anisotropic Double-Well Damped Momentum DEQ
-    * a24c261ac6365d7f0a33ba0ca41a3d5514e571bd 2026-08-08 01:16:01 +0900 Fix PotentialDampedDEQ graph trace: Preserve q tensor autograd graph without detach, proving non-zero Hessian ||J_c||_F = 0.0166 and exact non-symplectic residual R = 5.43e-8 (strictly passing R < 1e-6 threshold)
-    * 55d71eb621a81f685639f157d2433a7bb92764bd 2026-08-08 01:12:47 +0900 Paper 2 Architecture Breakthrough: Implement PotentialDampedDEQ F=-grad_q V_theta. Eliminates 141% force anti-symmetry to exact 0.00%, fixes 500-step trajectory divergence, and reduces non-symplectic residual R from 1.12% to exact 0.0000%
-    * 0487f986de34432de014b5434508a3e73f7ede1c 2026-08-08 01:03:13 +0900 Implement exact normalized sigmoid gate (k=50) in DampedMomentumDEQ: Fixes max gamma_0 = 0.20 at ||p||=0 and guarantees C-infinity autograd gradient flow
-    * 3dc7192046c9cc7a22b2329ab7ef0683b39e1590 2026-08-08 00:55:59 +0900 Paper 2 Refactoring and Momentum-Gated Damping Audit: Rename SymplecticDEQ to DampedMomentumDEQ, fix hardcoded string to dynamic mean_r_pct f-string. Fix Standard DEQ baseline non-determinism via pre-instantiation seed setting. Audit momentum-gated damping across 200 states confirming state-dependent conformality c(z)
-  git show --stat 97cd2b5 :
-    97cd2b56381716370c7eaaf59e5c687538cf4611 2026-08-08 08:29:29 +0900 docs(prereg): lock Paper 2 Preregistration Specification v3 prior to new-seed execution
-    
-     prereg_1d_double_well.md | 87 +++++++++++++++++++++++++++++-------------------
-     1 file changed, 53 insertions(+), 34 deletions(-)
-  git show --stat e148866 :
-    e148866811aef03ac77cc3281a2df42606779e4c 2026-08-08 08:33:46 +0900 feat(paper2): complete Task (c) confirmation run under seed 7777 and verify all prereg v3 gates
-    
-     supervised_deq_model_seed7777.pt | Bin 0 -> 12025 bytes
-     train_paper2_deq_supervised.py   | 100 +++++++++++++++++++++++++++++++-------
-     trajectory_basins_seed7777.csv   | 101 +++++++++++++++++++++++++++++++++++++++
-     3 files changed, 184 insertions(+), 17 deletions(-)
-
-[SEC 1] CHECKPOINT INTEGRITY GATE
-  expected sha256 = c6b64ec3961f31bc8c9758f80b91b9168ed2d06d9df0a07c3b6989f8f699ba97
-  actual   sha256 = c6b64ec3961f31bc8c9758f80b91b9168ed2d06d9df0a07c3b6989f8f699ba97
-  RESULT: MATCH -> proceeding.
-  state_dict keys = ['fc1.bias', 'fc1.weight', 'fc2.bias', 'fc2.weight']
-
-[SEC 2] G1 FORCE ANTI-SYMMETRY (measured at 3 seeded points)
-  seed 101: asym_norm = 0.0000000000e+00 | norm_JF = 2.6987554932e+02 | ratio = 0.000000e+00 %
-  seed 202: asym_norm = 0.0000000000e+00 | norm_JF = 2.1305062866e+02 | ratio = 0.000000e+00 %
-  seed 303: asym_norm = 2.6341779868e-09 | norm_JF = 1.7571937561e+02 | ratio = 1.499082e-09 %
-  SetA raw was (0.0 / 11.568) ; SetB raw was (1.646e-10 / 127.56)
-
-[SEC 3] G2 CONFORMAL SYMPLECTIC (measured at 3 seeded points)
-  seed 101: c = 0.80000001 | R = 1.2827658744e-07
-  seed 202: c = 0.79999995 | R = 1.1282231822e-07
-  seed 303: c = 0.79999995 | R = 1.4814598432e-07
-  [theory] damped Verlet cell satisfies J^T Omega J = (1-eta) Omega identically -> c = 0.80000000, R at float32 eps
-
-[SEC 4] TRAJECTORY AUDIT - ORIGINAL SCHEME (seeds 9000+i, device=cuda)
-
-[SEC4-origscheme] per-trajectory table (idx | q1_init | status | q1_fin | q2_fin | residual | exact_rho)
-    0 | -1.205493 | CONVERGED | -0.999161 | -0.002451 | 8.537615e-14 | 0.962837
-    1 | -0.630041 | CONVERGED | +1.000832 | -0.002450 | 1.224357e-09 | 0.962617
-    2 | -3.965685 | CONVERGED | -0.999161 | -0.002451 | 9.436896e-16 | 0.962837
-    3 | -3.284960 | CONVERGED | +1.000832 | -0.002450 | 1.337819e-14 | 0.962617
-    4 | -2.360434 | CONVERGED | -0.999160 | -0.002451 | 4.975282e-10 | 0.962837
-    5 | +1.192984 | CONVERGED | +1.000831 | -0.002450 | 0.000000e+00 | 0.962617
-    6 | +1.031711 | CONVERGED | -0.999160 | -0.002451 | 3.330669e-16 | 0.962837
-    7 | +0.416702 | CONVERGED | +1.000832 | -0.002450 | 1.681988e-14 | 0.962617
-    8 | -1.259255 | CONVERGED | -0.999161 | -0.002451 | 8.548717e-14 | 0.962837
-    9 | -2.583033 | CONVERGED | +1.000832 | -0.002450 | 1.387779e-15 | 0.962617
-   10 | +0.456567 | CONVERGED | -0.999160 | -0.002451 | 4.852796e-10 | 0.962837
-   11 | +2.028253 | CONVERGED | -0.999161 | -0.002451 | 2.826955e-11 | 0.962837
-   12 | +1.252119 | CONVERGED | -0.999161 | -0.002451 | 1.665335e-16 | 0.962837
-   13 | -4.364930 | CONVERGED | +1.000831 | -0.002450 | 0.000000e+00 | 0.962617
-   14 | -2.168588 | CONVERGED | +1.000831 | -0.002450 | 1.221411e-09 | 0.962617
-   15 | +1.653610 | CONVERGED | -0.999160 | -0.002451 | 4.440892e-16 | 0.962837
-   16 | -0.855527 | CONVERGED | +1.000832 | -0.002450 | 0.000000e+00 | 0.962617
-   17 | +2.401088 | CONVERGED | +1.000832 | -0.002450 | 0.000000e+00 | 0.962617
-   18 | -1.707230 | CONVERGED | -0.999161 | -0.002451 | 4.742928e-12 | 0.962837
-   19 | -0.557324 | CONVERGED | +1.000831 | -0.002450 | 7.410683e-12 | 0.962617
+﻿python.exe : C:\Project\Deep Equilibrium8\python_dist\Lib\site-packages\torch\autograd\graph.py:869: UserWarning: Attem
+
+pting to run cuBLAS, but there was no current CUDA context! Attempting to set the primary context... (Triggered interna
+
+lly at C:\actions-runner\_work\pytorch\pytorch\pytorch\aten\src\ATen\cuda\CublasHandlePool.cpp:335.)
+
+위치 줄:1 문자:1
+
++ & 'C:\Project\Deep Equilibrium8\python_dist\python.exe' C:\Project\Eq ...
+
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    + CategoryInfo          : NotSpecified: (C:\Project\Deep...ePool.cpp:335.):String) [], RemoteException
+
+    + FullyQualifiedErrorId : NativeCommandError
+
+ 
+
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+
+========================================================================================
+
+=== CLAUDE SEALED AUDIT (Paper 2 / seed-7777 checkpoint) ===
+
+========================================================================================
+
+
+
+[SEC 0] ENVIRONMENT & INTEGRITY
+
+  script_version = v1.0-2026-08-08-claude-seal
+
+  script_path    = /home/user/EquiPhase\claude_paper2_sealed_audit.py
+
+  script_sha256  = 68a2991e043984cd1ca7637441883a3fb1d82c08fc21b2b43538932028894833
+
+  python  = 3.12.10 | torch = 2.11.0+cu128 | cuda_available = True
+
+  platform = Windows-11-10.0.26200-SP0
+
+  primary device = cuda
+
+  file inventory:
+
+  C:/Project/EquiPhase/supervised_deq_model_seed7777.pt
+
+    sha256 = c6b64ec3961f31bc8c9758f80b91b9168ed2d06d9df0a07c3b6989f8f699ba97
+
+    size   = 12025 bytes | mtime = 2026-08-08 08:30:04
+
+  C:/Project/EquiPhase/trajectory_basins_seed7777.csv
+
+    sha256 = 4cf32e4208465e8b6173a5b325e50169e37d51d5067277852b0034d8cfefbd16
+
+    size   = 8278 bytes | mtime = 2026-08-08 08:33:39
+
+  C:/Project/EquiPhase/train_paper2_deq_supervised.py
+
+    sha256 = 4e0d418db5e2aa0cdf0922c0b1c01ca1caa63a0b409abdb1aa6475f8a1756866
+
+    size   = 11593 bytes | mtime = 2026-08-08 08:29:37
+
+  C:/Project/EquiPhase/run_paper2_rigorous_gates.py
+
+    sha256 = c2b307452267c1b2263fec8d3817062e4d5d0eab2c9a98ba92675e2541113349
+
+    size   = 13001 bytes | mtime = 2026-08-08 08:49:34
+
+  C:/Project/EquiPhase/run_raw_stdout_audit.py
+
+    sha256 = 4378521f8620f406b55bd951bbad272597176c91b61e446587d9f3f2ea02dc1a
+
+    size   = 11088 bytes | mtime = 2026-08-08 09:01:15
+
+  C:/Project/EquiPhase/prereg_1d_double_well.md
+
+    sha256 = 961b2d4a126f0e240bdcdf1402fd83f277eb994d7fcd7ae95d9c768ff03c9b38
+
+    size   = 7333 bytes | mtime = 2026-08-08 08:29:23
+
+  git log --graph --format='%H %ci %s' -n 12 :
+
+    * e148866811aef03ac77cc3281a2df42606779e4c 2026-08-08 08:33:46 +0900 feat(paper2): complete Task (c) confirmation run under seed 7777 and verify all prereg v3 gates
+
+    * 97cd2b56381716370c7eaaf59e5c687538cf4611 2026-08-08 08:29:29 +0900 docs(prereg): lock Paper 2 Preregistration Specification v3 prior to new-seed execution
+
+    * 97a315b17a8166103596495cf45de6e0cab7029f 2026-08-08 02:13:19 +0900 fix(paper2): strictly separate preregistration v3 specs from post-hoc audit results & resolve G3'/G4b' metrics
+
+    * 86a827102da5179f1f9ad90e47a5ce1932d184ad 2026-08-08 02:03:16 +0900 feat(paper2): implement sign-paired Task (c) DEQ supervised learning & lock preregistration v3
+
+    * a48bcde261811e54ffa344240548de92fbb5ee1d 2026-08-08 01:58:32 +0900 feat(paper2): implement Task (c) DEQ Supervised Learning & update preregistration document
+
+    * 39e27761f1eda6b1276cd684a84e8520047d0fda 2026-08-08 01:54:16 +0900 feat(paper2): add official baseline audit script comparing EquiPhase vs Vanilla DEQ vs monDEQ
+
+    * fc6680ae375c3c4c02c7c1673cfa0de47de6f3fe 2026-08-08 01:48:06 +0900 feat(paper2): complete training of AnisotropicDoubleWellDEQ and 100% 7-gate preregistration verification
+
+    * 2cd08499ff0881f708891304820a256e555051ca 2026-08-08 01:35:02 +0900 Paper 2 Official Preregistration: 100% Pass across all 7 Extended Preregistration Gates (G1-G7) for Anisotropic Double-Well Damped Momentum DEQ
+
+    * a24c261ac6365d7f0a33ba0ca41a3d5514e571bd 2026-08-08 01:16:01 +0900 Fix PotentialDampedDEQ graph trace: Preserve q tensor autograd graph without detach, proving non-zero Hessian ||J_c||_F = 0.0166 and exact non-symplectic residual R = 5.43e-8 (strictly passing R < 1e-6 threshold)
+
+    * 55d71eb621a81f685639f157d2433a7bb92764bd 2026-08-08 01:12:47 +0900 Paper 2 Architecture Breakthrough: Implement PotentialDampedDEQ F=-grad_q V_theta. Eliminates 141% force anti-symmetry to exact 0.00%, fixes 500-step trajectory divergence, and reduces non-symplectic residual R from 1.12% to exact 0.0000%
+
+    * 0487f986de34432de014b5434508a3e73f7ede1c 2026-08-08 01:03:13 +0900 Implement exact normalized sigmoid gate (k=50) in DampedMomentumDEQ: Fixes max gamma_0 = 0.20 at ||p||=0 and guarantees C-infinity autograd gradient flow
+
+    * 3dc7192046c9cc7a22b2329ab7ef0683b39e1590 2026-08-08 00:55:59 +0900 Paper 2 Refactoring and Momentum-Gated Damping Audit: Rename SymplecticDEQ to DampedMomentumDEQ, fix hardcoded string to dynamic mean_r_pct f-string. Fix Standard DEQ baseline non-determinism via pre-instantiation seed setting. Audit momentum-gated damping across 200 states confirming state-dependent conformality c(z)
+
+  git show --stat 97cd2b5 :
+
+    97cd2b56381716370c7eaaf59e5c687538cf4611 2026-08-08 08:29:29 +0900 docs(prereg): lock Paper 2 Preregistration Specification v3 prior to new-seed execution
+
+    
+
+     prereg_1d_double_well.md | 87 +++++++++++++++++++++++++++++-------------------
+
+     1 file changed, 53 insertions(+), 34 deletions(-)
+
+  git show --stat e148866 :
+
+    e148866811aef03ac77cc3281a2df42606779e4c 2026-08-08 08:33:46 +0900 feat(paper2): complete Task (c) confirmation run under seed 7777 and verify all prereg v3 gates
+
+    
+
+     supervised_deq_model_seed7777.pt | Bin 0 -> 12025 bytes
+
+     train_paper2_deq_supervised.py   | 100 +++++++++++++++++++++++++++++++-------
+
+     trajectory_basins_seed7777.csv   | 101 +++++++++++++++++++++++++++++++++++++++
+
+     3 files changed, 184 insertions(+), 17 deletions(-)
+
+
+
+[SEC 1] CHECKPOINT INTEGRITY GATE
+
+  expected sha256 = c6b64ec3961f31bc8c9758f80b91b9168ed2d06d9df0a07c3b6989f8f699ba97
+
+  actual   sha256 = c6b64ec3961f31bc8c9758f80b91b9168ed2d06d9df0a07c3b6989f8f699ba97
+
+  RESULT: MATCH -> proceeding.
+
+  state_dict keys = ['fc1.bias', 'fc1.weight', 'fc2.bias', 'fc2.weight']
+
+
+
+[SEC 2] G1 FORCE ANTI-SYMMETRY (measured at 3 seeded points)
+
+  seed 101: asym_norm = 0.0000000000e+00 | norm_JF = 2.6987554932e+02 | ratio = 0.000000e+00 %
+
+  seed 202: asym_norm = 0.0000000000e+00 | norm_JF = 2.1305062866e+02 | ratio = 0.000000e+00 %
+
+  seed 303: asym_norm = 2.6341779868e-09 | norm_JF = 1.7571937561e+02 | ratio = 1.499082e-09 %
+
+  SetA raw was (0.0 / 11.568) ; SetB raw was (1.646e-10 / 127.56)
+
+
+
+[SEC 3] G2 CONFORMAL SYMPLECTIC (measured at 3 seeded points)
+
+  seed 101: c = 0.80000001 | R = 1.2827658744e-07
+
+  seed 202: c = 0.79999995 | R = 1.1282231822e-07
+
+  seed 303: c = 0.79999995 | R = 1.4814598432e-07
+
+  [theory] damped Verlet cell satisfies J^T Omega J = (1-eta) Omega identically -> c = 0.80000000, R at float32 eps
+
+
+
+[SEC 4] TRAJECTORY AUDIT - ORIGINAL SCHEME (seeds 9000+i, device=cuda)
+
+
+
+[SEC4-origscheme] per-trajectory table (idx | q1_init | status | q1_fin | q2_fin | residual | exact_rho)
+
+    0 | -1.205493 | CONVERGED | -0.999161 | -0.002451 | 8.537615e-14 | 0.962837
+
+    1 | -0.630041 | CONVERGED | +1.000832 | -0.002450 | 1.224357e-09 | 0.962617
+
+    2 | -3.965685 | CONVERGED | -0.999161 | -0.002451 | 9.436896e-16 | 0.962837
+
+    3 | -3.284960 | CONVERGED | +1.000832 | -0.002450 | 1.337819e-14 | 0.962617
+
+    4 | -2.360434 | CONVERGED | -0.999160 | -0.002451 | 4.975282e-10 | 0.962837
+
+    5 | +1.192984 | CONVERGED | +1.000831 | -0.002450 | 0.000000e+00 | 0.962617
+
+    6 | +1.031711 | CONVERGED | -0.999160 | -0.002451 | 3.330669e-16 | 0.962837
+
+    7 | +0.416702 | CONVERGED | +1.000832 | -0.002450 | 1.681988e-14 | 0.962617
+
+    8 | -1.259255 | CONVERGED | -0.999161 | -0.002451 | 8.548717e-14 | 0.962837
+
+    9 | -2.583033 | CONVERGED | +1.000832 | -0.002450 | 1.387779e-15 | 0.962617
+
+   10 | +0.456567 | CONVERGED | -0.999160 | -0.002451 | 4.852796e-10 | 0.962837
+
+   11 | +2.028253 | CONVERGED | -0.999161 | -0.002451 | 2.826955e-11 | 0.962837
+
+   12 | +1.252119 | CONVERGED | -0.999161 | -0.002451 | 1.665335e-16 | 0.962837
+
+   13 | -4.364930 | CONVERGED | +1.000831 | -0.002450 | 0.000000e+00 | 0.962617
+
+   14 | -2.168588 | CONVERGED | +1.000831 | -0.002450 | 1.221411e-09 | 0.962617
+
+   15 | +1.653610 | CONVERGED | -0.999160 | -0.002451 | 4.440892e-16 | 0.962837
+
+   16 | -0.855527 | CONVERGED | +1.000832 | -0.002450 | 0.000000e+00 | 0.962617
+
+   17 | +2.401088 | CONVERGED | +1.000832 | -0.002450 | 0.000000e+00 | 0.962617
+
+   18 | -1.707230 | CONVERGED | -0.999161 | -0.002451 | 4.742928e-12 | 0.962837
+
+   19 | -0.557324 | CONVERGED | +1.000831 | -0.002450 | 7.410683e-12 | 0.962617
+

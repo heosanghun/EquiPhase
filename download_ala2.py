@@ -1,7 +1,7 @@
 import os
 import mdshare
 
-target_dir = r"C:\Project\EquiPhase\data\ala2"
+target_dir = r"/home/user/EquiPhase\data\ala2"
 os.makedirs(target_dir, exist_ok=True)
 
 files_to_fetch = [
