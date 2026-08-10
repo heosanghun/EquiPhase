@@ -10,7 +10,7 @@ def get_hash(filepath):
     return h.hexdigest()
 
 DATA_PATH = os.path.join("data", "ala2", "alanine-dipeptide-3x250ns-backbone-dihedrals.npz")
-SEEDS = [7777, 8888, 9999, 1111, 2222]
+SEEDS = [7777, 1234, 2026, 31415, 65537]
 SIGMAS = [0.05, 0.10, 0.15, 0.25]
 BATCH = 4096
 LR = 1e-3
