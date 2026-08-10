@@ -9,7 +9,7 @@
 # Rules   : Direct invocation only. No modification. Submit stdout verbatim.
 #           Any hash mismatch aborts the run (fail-closed).
 # Usage   : python claude_ala2_phase1_eda_sealed.py
-#           (run from repository root /home/user/EquiPhase)
+#           (run from repository root C:\Project\EquiPhase)
 # =============================================================================
 import hashlib
 import math
